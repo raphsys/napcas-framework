@@ -1,82 +1,77 @@
-// napcas.cpp
 #include "napcas.h"
-#include <random>
-#include <cmath>
+#include <Eigen/Dense>
+#include <stdexcept>
 
-NAPCAS::NAPCAS(int in_features, int out_features)
-    : weights_(std::vector<int>{out_features, in_features}),
-      connections_(std::vector<int>{out_features, in_features}, std::vector<float>(out_features * in_features, 1.0f)),
-      threshold_(std::vector<int>{out_features}, std::vector<float>(out_features, 0.5f)),
-      alpha_(std::vector<int>{out_features}, std::vector<float>(out_features, 0.6f)),
-      memory_paths_(std::vector<int>{out_features}, std::vector<float>(out_features, 0.0f)),
-      grad_weights_(std::vector<int>{out_features, in_features}, std::vector<float>(out_features * in_features, 0.0f)),
-      grad_connections_(std::vector<int>{out_features, in_features}, std::vector<float>(out_features * in_features, 0.0f)),
-      grad_threshold_(std::vector<int>{out_features}, std::vector<float>(out_features, 0.0f)),
-      grad_alpha_(std::vector<int>{out_features}, std::vector<float>(out_features, 0.0f)),
-      grad_memory_paths_(std::vector<int>{out_features}, std::vector<float>(out_features, 0.0f)),
-      learning_rate_(0.01f) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::normal_distribution<> dist(0.0f, 0.01f);
+NAPCAS::NAPCAS(int in_features, int out_features) : learning_rate_(0.0f) {
+    std::vector<int> weight_shape = {out_features, in_features};
+    std::vector<int> bias_shape = {out_features};
+    weights_ = Tensor(weight_shape);
+    bias_ = Tensor(bias_shape);
+    grad_weights_ = Tensor(weight_shape);
+    grad_bias_ = Tensor(bias_shape);
 
+    // Initialisation des poids (exemple : initialisation aléatoire simple)
     for (int i = 0; i < weights_.size(); ++i) {
-        weights_[i] = dist(gen);
+        weights_[i] = static_cast<float>(rand()) / RAND_MAX - 0.5f;
+    }
+    for (int i = 0; i < bias_.size(); ++i) {
+        bias_[i] = 0.0f;
     }
 }
 
 void NAPCAS::forward(Tensor& input, Tensor& output) {
-    if (input.shape()[1] != weights_.shape()[1]) {
-        throw std::invalid_argument("Input and weights dimensions do not match.");
+    if (input.ndim() != 2) {
+        throw std::invalid_argument("Input must be 2D (batch_size, in_features)");
+    }
+    int batch_size = input.shape()[0];
+    int in_features = input.shape()[1];
+    int out_features = weights_.shape()[0];
+
+    if (output.shape() != std::vector<int>{batch_size, out_features}) {
+        throw std::invalid_argument("Output shape mismatch");
     }
 
-    output.reshape({weights_.shape()[0]});
-    for (int i = 0; i < weights_.shape()[0]; ++i) {
-        float weighted_sum = 0.0f;
-        for (int j = 0; j < weights_.shape()[1]; ++j) {
-            if (connections_[i * weights_.shape()[1] + j] > 0.5f) {
-                weighted_sum += std::copysign(1.0f, weights_[i * weights_.shape()[1] + j]) * std::pow(std::abs(input[j]), alpha_[i]);
-            }
-        }
-        output[i] = (weighted_sum > threshold_[i]) ? 1.0f : 0.0f;
-    }
+    Eigen::Map<Eigen::MatrixXf> input_mat(input.data().data(), batch_size, in_features);
+    Eigen::Map<Eigen::MatrixXf> weights_mat(weights_.data().data(), out_features, in_features);
+    Eigen::Map<Eigen::MatrixXf> output_mat(output.data().data(), batch_size, out_features);
+    Eigen::Map<Eigen::VectorXf> bias_vec(bias_.data().data(), bias_.shape()[0]);
+
+    output_mat = input_mat * weights_mat.transpose();
+    output_mat.rowwise() += bias_vec.transpose();
 }
 
 void NAPCAS::backward(Tensor& grad_output, Tensor& grad_input) {
-    for (int i = 0; i < grad_output.size(); ++i) {
-        for (int j = 0; j < grad_input.size(); ++j) {
-            grad_input[j] += grad_output[i] * weights_[i * weights_.shape()[1] + j];
-        }
+    if (grad_output.ndim() != 2 || grad_input.ndim() != 2) {
+        throw std::invalid_argument("Gradients must be 2D");
+    }
+    int batch_size = grad_input.shape()[0];
+    int in_features = grad_input.shape()[1];
+    int out_features = weights_.shape()[0];
+
+    if (grad_output.shape() != std::vector<int>{batch_size, out_features}) {
+        throw std::invalid_argument("Gradient output shape mismatch");
     }
 
-    for (int i = 0; i < grad_output.size(); ++i) {
-        for (int j = 0; j < grad_input.size(); ++j) {
-            grad_weights_[i * weights_.shape()[1] + j] += grad_output[i] * grad_input[j];
-            grad_connections_[i * weights_.shape()[1] + j] += grad_output[i] * grad_input[j];
-        }
-        grad_threshold_[i] += grad_output[i];
-        grad_alpha_[i] += grad_output[i];
-    }
+    Eigen::Map<Eigen::MatrixXf> grad_output_mat(grad_output.data().data(), batch_size, out_features);
+    Eigen::Map<Eigen::MatrixXf> grad_input_mat(grad_input.data().data(), batch_size, in_features);
+    Eigen::Map<Eigen::MatrixXf> weights_mat(weights_.data().data(), out_features, in_features);
+    Eigen::Map<Eigen::MatrixXf> grad_weights_mat(grad_weights_.data().data(), out_features, in_features);
+    Eigen::Map<Eigen::VectorXf> grad_bias_vec(grad_bias_.data().data(), grad_bias_.shape()[0]);
+
+    grad_input_mat = grad_output_mat * weights_mat;
+    grad_weights_mat = grad_output_mat.transpose() * grad_input_mat;
+    grad_bias_vec = grad_output_mat.colwise().sum();
 }
 
 void NAPCAS::update(float lr) {
+    learning_rate_ = lr;
     for (int i = 0; i < weights_.size(); ++i) {
         weights_[i] -= lr * grad_weights_[i];
     }
-
-    for (int i = 0; i < connections_.size(); ++i) {
-        connections_[i] -= lr * grad_connections_[i];
+    for (int i = 0; i < bias_.size(); ++i) {
+        bias_[i] -= lr * grad_bias_[i];
     }
-
-    for (int i = 0; i < threshold_.size(); ++i) {
-        threshold_[i] -= lr * grad_threshold_[i];
-    }
-
-    for (int i = 0; i < alpha_.size(); ++i) {
-        alpha_[i] -= lr * grad_alpha_[i];
-    }
-
-    grad_weights_.zero_grad();
-    grad_connections_.zero_grad();
-    grad_threshold_.zero_grad();
-    grad_alpha_.zero_grad();
 }
+
+Tensor& NAPCAS::get_weights() { return weights_; }
+Tensor& NAPCAS::get_grad_weights() { return grad_weights_; }

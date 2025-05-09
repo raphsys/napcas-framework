@@ -10,14 +10,16 @@ public:
     void forward(Tensor& input, Tensor& output) override;
     void backward(Tensor& grad_output, Tensor& grad_input) override;
     void update(float lr) override;
+    Tensor& get_weights() override;
+    Tensor& get_grad_weights() override;
 
 private:
+    int kernel_size_;
     Tensor weights_;
     Tensor bias_;
     Tensor grad_weights_;
     Tensor grad_bias_;
     float learning_rate_;
-    int kernel_size_;
 };
 
 #endif // CONV2D_H

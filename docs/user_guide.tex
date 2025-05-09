@@ -1,0 +1,179 @@
+\documentclass[a4paper,11pt]{article}
+
+% Définir l'encodage et les polices
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% Packages pour la mise en forme
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{parskip}
+\usepackage{titling}
+
+% Configuration des listings pour le code
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red},
+    showstringspaces=false
+}
+
+% Configuration des hyperliens
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue
+}
+
+% Titre
+\title{NAPCAS User Guide}
+\author{NAPCAS Team}
+\date{May 2025}
+
+% Début du document
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+NAPCAS is a lightweight deep learning framework implemented in C++ with Python bindings, designed to mimic PyTorch's functionality. It supports neural network components such as linear layers, convolutional layers, activation functions, loss functions, optimizers, and a data loader.
+
+\section{Components}
+
+\subsection{Tensor}
+The \texttt{Tensor} class is the core data structure for storing multi-dimensional arrays. It supports operations like reshaping, indexing, and gradient computation.
+
+\begin{lstlisting}[language=Python]
+import napcas
+tensor = napcas.Tensor([2, 3], [1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
+print(tensor.shape())  # [2, 3]
+\end{lstlisting}
+
+\subsection{Linear Layer}
+The \texttt{Linear} layer performs a linear transformation: $y = xW + b$.
+
+\begin{lstlisting}[language=Python]
+linear = napcas.Linear(10, 5)
+input = napcas.Tensor([1, 10], [0.5] * 10)
+output = napcas.Tensor([1, 5])
+linear.forward(input, output)
+\end{lstlisting}
+
+\subsection{Conv2d Layer}
+The \texttt{Conv2d} layer applies a 2D convolution operation, optimized with Eigen and im2col.
+
+\begin{lstlisting}[language=Python]
+conv = napcas.Conv2d(1, 16, 3)
+input = napcas.Tensor([1, 1, 28, 28], [0.5] * 784)
+output = napcas.Tensor([1, 16, 26, 26])
+conv.forward(input, output)
+\end{lstlisting}
+
+\subsection{Activation Functions}
+Supported activation functions: \texttt{ReLU}, \texttt{Sigmoid}, \texttt{Tanh}.
+
+\begin{lstlisting}[language=Python]
+relu = napcas.ReLU()
+input = napcas.Tensor([1, 5], [-1.0, -0.5, 0.0, 0.5, 1.0])
+output = napcas.Tensor([1, 5])
+relu.forward(input, output)
+\end{lstlisting}
+
+\subsection{Loss Functions}
+Supported loss functions: \texttt{MSELoss}, \texttt{CrossEntropyLoss}.
+
+\begin{lstlisting}[language=Python]
+mse = napcas.MSELoss()
+y_pred = napcas.Tensor([1, 5], [0.5] * 5)
+y_true = napcas.Tensor([1, 5], [1.0] * 5)
+loss = mse.forward(y_pred, y_true)
+\end{lstlisting}
+
+\subsection{Optimizers}
+Supported optimizers: \texttt{SGD}, \texttt{Adam}.
+
+\begin{lstlisting}[language=Python]
+linear = napcas.Linear(10, 5)
+sgd = napcas.SGD([linear], lr=0.01)
+adam = napcas.Adam([linear], lr=0.001)
+sgd.step()
+\end{lstlisting}
+
+\subsection{DataLoader}
+The \texttt{DataLoader} loads data from a CSV file in batches.
+
+\begin{lstlisting}[language=Python]
+dataloader = napcas.DataLoader("dataset.csv", 64)
+inputs, targets = dataloader.next()
+\end{lstlisting}
+
+\section{Example: Training a Neural Network}
+\begin{lstlisting}[language=Python]
+import napcas
+from napcas import Linear, ReLU, MSELoss, SGD, DataLoader
+
+# Create model
+model = [
+    Linear(784, 128),
+    ReLU(),
+    Linear(128, 10)
+]
+
+# Initialize loss and optimizer
+criterion = MSELoss()
+optimizer = SGD(model, lr=0.01)
+
+# Load data
+dataloader = DataLoader("mnist.csv", 64)
+
+# Training loop
+for epoch in range(5):
+    total_loss = 0.0
+    for inputs, targets in dataloader.next():
+        output = inputs
+        for layer in model:
+            temp = napcas.Tensor(inputs.shape())
+            layer.forward(output, temp)
+            output = temp
+        loss = criterion.forward(output, targets)
+        grad = criterion.backward(output, targets)
+        grad_input = grad
+        for layer in reversed(model):
+            temp = napcas.Tensor(inputs.shape())
+            layer.backward(grad_input, temp)
+            grad_input = temp
+        optimizer.step()
+        total_loss += loss
+    print(f"Epoch {epoch+1}, Loss: {total_loss}")
+\end{lstlisting}
+
+\section{Error Handling}
+NAPCAS includes strict shape checking in all \texttt{forward} and \texttt{backward} methods to prevent runtime errors. For example:
+\begin{itemize}
+    \item \texttt{Linear} checks that input shape is \texttt{[batch\_size, in\_features]}.
+    \item \texttt{Conv2d} checks that input is a 4D tensor \texttt{[batch, in\_channels, height, width]}.
+\end{itemize}
+
+\section{Performance Optimization}
+NAPCAS uses Eigen for matrix operations in \texttt{Linear} and \texttt{Conv2d} (with im2col for convolutions) to improve performance.
+
+\section{Testing}
+Run unit tests with:
+\begin{lstlisting}[language=bash]
+pytest tests/test_napcas_components.py
+pytest tests/test_dataloader_autograd.py
+\end{lstlisting}
+
+\end{document}

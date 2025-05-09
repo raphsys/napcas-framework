@@ -1,33 +1,29 @@
 #include "tensor.h"
-#include <numeric>
-#include <algorithm>
+#include <stdexcept>
 
-// Constructeur avec une forme donnée
-Tensor::Tensor(const std::vector<int>& shape)
-    : shape_(shape), data_(std::vector<float>(std::accumulate(shape.begin(), shape.end(), 1, std::multiplies<int>()), 0.0f)) {}
-
-// Constructeur avec une forme et des données
-Tensor::Tensor(const std::vector<int>& shape, const std::vector<float>& data)
-    : shape_(shape), data_(data) {
-    if (data_.size() != std::accumulate(shape.begin(), shape.end(), 1, std::multiplies<int>())) {
-        throw std::invalid_argument("Data size does not match tensor shape");
+Tensor::Tensor(const std::vector<int>& shape, const std::vector<float>& data) : shape_(shape) {
+    int expected_size = 1;
+    for (int dim : shape) {
+        if (dim <= 0) {
+            throw std::invalid_argument("Shape dimensions must be positive");
+        }
+        expected_size *= dim;
+    }
+    if (!data.empty() && data.size() != expected_size) {
+        throw std::invalid_argument("Data size does not match shape");
+    }
+    data_.resize(expected_size);
+    if (!data.empty()) {
+        data_ = data;
+    } else {
+        std::fill(data_.begin(), data_.end(), 0.0f);
     }
 }
 
-// Méthode pour redimensionner le tenseur
-void Tensor::reshape(const std::vector<int>& new_shape) {
-    if (std::accumulate(new_shape.begin(), new_shape.end(), 1, std::multiplies<int>()) != data_.size()) {
-        throw std::invalid_argument("New shape size does not match data size");
-    }
-    shape_ = new_shape;
-}
-
-// Méthode pour remplir le tenseur avec une valeur donnée
 void Tensor::fill(float value) {
     std::fill(data_.begin(), data_.end(), value);
 }
 
-// Méthode pour remettre à zéro les gradients
 void Tensor::zero_grad() {
-    std::fill(data_.begin(), data_.end(), 0.0f);
+    fill(0.0f);
 }

@@ -10,6 +10,8 @@ public:
     void forward(Tensor& input, Tensor& output) override;
     void backward(Tensor& grad_output, Tensor& grad_input) override;
     void update(float lr) override;
+    Tensor& get_weights() override;
+    Tensor& get_grad_weights() override;
 
 private:
     Tensor weights_;

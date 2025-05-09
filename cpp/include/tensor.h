@@ -2,25 +2,21 @@
 #define TENSOR_H
 
 #include <vector>
-#include <memory>
 #include <stdexcept>
 
 class Tensor {
 public:
-    Tensor() = default; // Constructeur par défaut
-    Tensor(const std::vector<int>& shape);
-    Tensor(const std::vector<int>& shape, const std::vector<float>& data);
-
-    int size() const { return static_cast<int>(data_.size()); }
-    int ndim() const { return static_cast<int>(shape_.size()); }
+    Tensor() = default;
+    Tensor(const std::vector<int>& shape, const std::vector<float>& data = {});
+    int size() const { return data_.size(); }
     const std::vector<int>& shape() const { return shape_; }
-
-    float& operator[](int index) { return data_[index]; }
-    const float& operator[](int index) const { return data_[index]; }
-
-    void reshape(const std::vector<int>& new_shape);
+    std::vector<float>& data() { return data_; }
+    const std::vector<float>& data() const { return data_; }
     void fill(float value);
     void zero_grad();
+    float& operator[](int i) { return data_[i]; }
+    const float& operator[](int i) const { return data_[i]; }
+    int ndim() const { return shape_.size(); }
 
 private:
     std::vector<int> shape_;

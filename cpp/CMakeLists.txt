@@ -11,31 +11,34 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fvisibility=hidden -fvisibility-i
 find_package(pybind11 REQUIRED)
 find_package(Python3 REQUIRED COMPONENTS Development)
 
+# Trouver Eigen
+find_package(Eigen3 REQUIRED)
+
 # Définir les sources de la bibliothèque C++
 set(NAPCAS_SRC
     src/activation.cpp
+    src/autograd.cpp
+    src/conv2d.cpp
+    src/data_loader.cpp
+    src/linear.cpp
+    src/loss.cpp
+    src/napcas.cpp
     src/nncell.cpp
     src/optimizer.cpp
-    src/autograd.cpp
-    src/linear.cpp
-    src/napcas.cpp
-    src/conv2d.cpp
-    src/loss.cpp
-    src/data_loader.cpp
     src/tensor.cpp
 )
 
 # Créer la bibliothèque statique
 add_library(libnapcas STATIC ${NAPCAS_SRC})
-target_include_directories(libnapcas PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(libnapcas PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${EIGEN3_INCLUDE_DIR})
+target_link_libraries(libnapcas PUBLIC Eigen3::Eigen)
 
-# Créer le module Python (ne contient que python_bindings.cpp)
+# Créer le module Python
 pybind11_add_module(napcas MODULE src/python_bindings.cpp)
-target_link_libraries(napcas PRIVATE libnapcas Python3::Python)
+target_link_libraries(napcas PRIVATE libnapcas Python3::Python Eigen3::Eigen)
 
 # Propriétés de visibilité
 set_target_properties(napcas PROPERTIES
     CXX_VISIBILITY_PRESET "hidden"
     VISIBILITY_INLINES_HIDDEN ON
 )
-

@@ -10,18 +10,14 @@ public:
     void forward(Tensor& input, Tensor& output) override;
     void backward(Tensor& grad_output, Tensor& grad_input) override;
     void update(float lr) override;
+    Tensor& get_weights() override;
+    Tensor& get_grad_weights() override;
 
 private:
     Tensor weights_;
-    Tensor connections_;
-    Tensor threshold_;
-    Tensor alpha_;
-    Tensor memory_paths_;
+    Tensor bias_;
     Tensor grad_weights_;
-    Tensor grad_connections_;
-    Tensor grad_threshold_;
-    Tensor grad_alpha_;
-    Tensor grad_memory_paths_;
+    Tensor grad_bias_;
     float learning_rate_;
 };
 
