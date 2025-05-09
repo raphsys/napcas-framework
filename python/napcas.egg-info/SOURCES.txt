@@ -1,6 +1,0 @@
-setup.py
-../cpp/src/python_bindings.cpp
-napcas.egg-info/PKG-INFO
-napcas.egg-info/SOURCES.txt
-napcas.egg-info/dependency_links.txt
-napcas.egg-info/top_level.txt
