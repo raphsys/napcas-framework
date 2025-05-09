@@ -1,2 +1,1 @@
-# python/__init__.py
-from .modules import Linear, ReLU, MSELoss, SGD, DataLoader
+from .napcas import Linear, Conv2d, ReLU, Sigmoid, Tanh, MSELoss, CrossEntropyLoss, SGD, Adam, DataLoader, Autograd, NAPCAS

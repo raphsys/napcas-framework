@@ -1,7 +1,7 @@
 import os
 import sys
 
-# Ajouter le chemin du module C++ (si nécessaire)
+# Ajouter le chemin du module C++
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'cpp', 'build'))
 
 try:
@@ -26,35 +26,49 @@ def create_model():
 def train(model, dataloader, criterion, optimizer, epochs=5):
     for epoch in range(epochs):
         total_loss = 0.0
-        for inputs, targets in dataloader:
-            outputs = model[0].forward(inputs)
-            outputs = model[1].forward(outputs)
-            outputs = model[2].forward(outputs)
+        batch_count = 0
+        for inputs, targets in dataloader.next():  # Correction: itérer sur les batches
+            # Forward pass
+            output = inputs
+            for layer in model:
+                temp = napcas.Tensor(inputs.shape())  # Tenseur temporaire pour stocker la sortie
+                layer.forward(output, temp)
+                output = temp
 
-            loss = criterion.forward(outputs, targets)
-            grad = criterion.backward(outputs, targets)
+            # Calcul de la perte
+            loss = criterion.forward(output, targets)
+            grad = criterion.backward(output, targets)
 
-            model[2].backward(grad)
-            model[1].backward(grad)
-            model[0].backward(grad)
+            # Backward pass
+            grad_input = grad
+            for layer in reversed(model):
+                temp = napcas.Tensor(inputs.shape())  # Tenseur temporaire pour le gradient
+                layer.backward(grad_input, temp)
+                grad_input = temp
 
+            # Mise à jour des paramètres
             optimizer.step()
 
             total_loss += loss
+            batch_count += 1
 
-        print(f"Epoch [{epoch+1}/{epochs}], Loss: {total_loss / len(dataloader):.4f}")
+        print(f"Epoch [{epoch+1}/{epochs}], Loss: {total_loss / batch_count:.4f}")
 
 # Fonction d'évaluation
 def evaluate(model, dataloader):
     correct = 0
     total = 0
-    for inputs, targets in dataloader:
-        outputs = model[0].forward(inputs)
-        outputs = model[1].forward(outputs)
-        outputs = model[2].forward(outputs)
+    for inputs, targets in dataloader.next():
+        # Forward pass
+        output = inputs
+        for layer in model:
+            temp = napcas.Tensor(inputs.shape())
+            layer.forward(output, temp)
+            output = temp
 
-        predicted = outputs.data.argmax()
-        label = targets.data.argmax()
+        # Prédictions
+        predicted = output.data().argmax()
+        label = targets.data().argmax()
 
         if predicted == label:
             correct += 1
