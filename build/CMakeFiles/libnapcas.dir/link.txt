@@ -1,2 +1,0 @@
-/usr/bin/ar qc liblibnapcas.a CMakeFiles/libnapcas.dir/cpp/src/activation.cpp.o CMakeFiles/libnapcas.dir/cpp/src/autograd.cpp.o CMakeFiles/libnapcas.dir/cpp/src/conv2d.cpp.o CMakeFiles/libnapcas.dir/cpp/src/data_loader.cpp.o CMakeFiles/libnapcas.dir/cpp/src/linear.cpp.o CMakeFiles/libnapcas.dir/cpp/src/loss.cpp.o CMakeFiles/libnapcas.dir/cpp/src/napcas.cpp.o CMakeFiles/libnapcas.dir/cpp/src/nncell.cpp.o CMakeFiles/libnapcas.dir/cpp/src/optimizer.cpp.o CMakeFiles/libnapcas.dir/cpp/src/tensor.cpp.o
-/usr/bin/ranlib liblibnapcas.a
