@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -fPIC -fvisibility=hidden -fvisibility-inlines-hidden -flto -Wl,--dependency-file=CMakeFiles/napcas.dir/link.d -shared  -o napcas.cpython-310-x86_64-linux-gnu.so CMakeFiles/napcas.dir/src/python_bindings.cpp.o  -Wl,-rpath,/home/raphael/anaconda3/envs/napPy/lib liblibnapcas.a /home/raphael/anaconda3/envs/napPy/lib/libpython3.10.so
