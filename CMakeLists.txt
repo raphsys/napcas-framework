@@ -44,6 +44,9 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/python_bindings.cpp")
     message(FATAL_ERROR "Source file cpp/src/python_bindings.cpp not found")
 endif()
 
+# Ajouter le chemin du répertoire contenant la bibliothèque
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../build)
+
 # Créer la bibliothèque statique
 add_library(libnapcas STATIC ${NAPCAS_SRC})
 target_include_directories(libnapcas PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include ${EIGEN3_INCLUDE_DIR})
