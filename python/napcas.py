@@ -2,7 +2,8 @@ import os
 import sys
 
 # Ajouter le chemin du module C++
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'cpp', 'build'))
+build_dir = os.path.join(os.path.dirname(__file__), '..', 'build')
+sys.path.append(build_dir)
 
 try:
     import napcas

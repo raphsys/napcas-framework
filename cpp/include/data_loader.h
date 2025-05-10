@@ -11,10 +11,11 @@ public:
     std::pair<Tensor, Tensor> next();
 
 private:
-    std::vector<Tensor> inputs_;
-    std::vector<Tensor> targets_;
+    std::vector<std::vector<float>> data_; // Stocke les données brutes
+    std::vector<Tensor> inputs_;           // Stocke les tenseurs d'entrée
+    std::vector<Tensor> targets_;          // Stocke les tenseurs cible
     int batch_size_;
-    int index_;
+    int current_index_;
 };
 
 #endif // DATA_LOADER_H

@@ -75,3 +75,7 @@ void Linear::update(float lr) {
 
 Tensor& Linear::get_weights() { return weights_; }
 Tensor& Linear::get_grad_weights() { return grad_weights_; }
+
+void Linear::set_weights(const Tensor& weights) {
+    this->weights_ = weights;
+}

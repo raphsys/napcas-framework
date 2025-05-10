@@ -12,6 +12,7 @@ public:
     void update(float lr) override;
     Tensor& get_weights() override;
     Tensor& get_grad_weights() override;
+    void set_weights(const Tensor& weights) override;
 
 private:
     Tensor weights_;

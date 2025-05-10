@@ -12,9 +12,7 @@ public:
     void update(float lr) override;
     Tensor& get_weights() override;
     Tensor& get_grad_weights() override;
-
-private:
-    Tensor input_;
+    void set_weights(const Tensor& weights) override;
 };
 
 class Sigmoid : public Module {
@@ -25,9 +23,7 @@ public:
     void update(float lr) override;
     Tensor& get_weights() override;
     Tensor& get_grad_weights() override;
-
-private:
-    Tensor input_;
+    void set_weights(const Tensor& weights) override;
 };
 
 class Tanh : public Module {
@@ -38,9 +34,7 @@ public:
     void update(float lr) override;
     Tensor& get_weights() override;
     Tensor& get_grad_weights() override;
-
-private:
-    Tensor input_;
+    void set_weights(const Tensor& weights) override;
 };
 
 #endif // ACTIVATION_H

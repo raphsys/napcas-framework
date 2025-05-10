@@ -75,3 +75,7 @@ void NAPCAS::update(float lr) {
 
 Tensor& NAPCAS::get_weights() { return weights_; }
 Tensor& NAPCAS::get_grad_weights() { return grad_weights_; }
+
+void NAPCAS::set_weights(const Tensor& weights) {
+    this->weights_ = weights;
+}

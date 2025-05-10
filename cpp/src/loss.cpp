@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <numeric>
 
-MSELoss::MSELoss() {}
+// MSELoss
 
 float MSELoss::forward(Tensor& y_pred, Tensor& y_true) {
     if (y_pred.shape() != y_true.shape()) {
@@ -28,7 +28,7 @@ Tensor MSELoss::backward(Tensor& y_pred, Tensor& y_true) {
     return grad;
 }
 
-CrossEntropyLoss::CrossEntropyLoss() {}
+// CrossEntropyLoss
 
 float CrossEntropyLoss::forward(Tensor& y_pred, Tensor& y_true) {
     if (y_pred.shape() != y_true.shape()) {

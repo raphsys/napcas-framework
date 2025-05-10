@@ -75,3 +75,7 @@ void NNCell::update(float lr) {
 
 Tensor& NNCell::get_weights() { return weights_; }
 Tensor& NNCell::get_grad_weights() { return grad_weights_; }
+
+void NNCell::set_weights(const Tensor& weights) {
+    this->weights_ = weights;
+}

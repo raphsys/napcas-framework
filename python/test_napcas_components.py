@@ -1,7 +1,5 @@
 import pytest
 import napcas
-import math
-import time
 
 # Fonction pour vérifier les gradients par différences finies
 def check_gradients(module, input_tensor, output_tensor, grad_output, epsilon=1e-5):
@@ -19,7 +17,7 @@ def check_gradients(module, input_tensor, output_tensor, grad_output, epsilon=1e
         loss_minus = output_tensor.data().sum()
         module.get_weights()[i] = original_weight
         numerical_grad = (loss_plus - loss_minus) / (2 * epsilon)
-        assert math.isclose(grad_weights[i], numerical_grad, rel_tol=1e-3), f"Gradient mismatch at index {i}"
+        assert pytest.approx(grad_weights[i], rel=1e-3) == numerical_grad
 
 def test_linear():
     linear = napcas.Linear(10, 5)
@@ -66,7 +64,7 @@ def test_relu():
     relu.forward(input_tensor, output_tensor)
     expected = [0.0, 0.0, 0.0, 0.5, 1.0]
     for i in range(5):
-        assert math.isclose(output_tensor[i], expected[i], rel_tol=1e-5)
+        assert pytest.approx(output_tensor[i], rel=1e-5) == expected[i]
 
 def test_mse_loss():
     mse = napcas.MSELoss()
@@ -75,7 +73,7 @@ def test_mse_loss():
     
     loss = mse.forward(y_pred, y_true)
     expected_loss = sum((p - t) ** 2 for p, t in zip(y_pred.data(), y_true.data())) / 5
-    assert math.isclose(loss, expected_loss, rel_tol=1e-5)
+    assert pytest.approx(loss, rel=1e-5) == expected_loss
 
 def test_cross_entropy_loss():
     ce = napcas.CrossEntropyLoss()
@@ -85,7 +83,7 @@ def test_cross_entropy_loss():
     loss = ce.forward(y_pred, y_true)
     softmax = [math.exp(y_pred[i]) / sum(math.exp(y_pred[j]) for j in range(3)) for i in range(3)]
     expected_loss = -math.log(softmax[2])
-    assert math.isclose(loss, expected_loss, rel_tol=1e-5)
+    assert pytest.approx(loss, rel=1e-5) == expected_loss
 
 def test_sgd():
     linear = napcas.Linear(10, 5)

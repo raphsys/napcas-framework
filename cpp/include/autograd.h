@@ -1,7 +1,11 @@
-#include "autograd.h"
+#ifndef AUTOGRAD_H
+#define AUTOGRAD_H
 
-void Autograd::zero_grad(std::vector<Tensor>& tensors) {
-    for (Tensor& tensor : tensors) {
-        tensor.zero_grad();
-    }
-}
+#include "tensor.h"
+
+class Autograd {
+public:
+    static void zero_grad(std::vector<Tensor>& tensors);
+};
+
+#endif // AUTOGRAD_H

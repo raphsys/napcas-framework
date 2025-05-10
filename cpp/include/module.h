@@ -12,6 +12,7 @@ public:
     virtual void update(float lr) = 0;
     virtual Tensor& get_weights() = 0;
     virtual Tensor& get_grad_weights() = 0;
+    virtual void set_weights(const Tensor& weights) = 0; // Ajout de cette méthode
     virtual ~Module() = default;
 
 protected:

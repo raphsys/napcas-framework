@@ -1,8 +1,8 @@
 #ifndef OPTIMIZER_H
 #define OPTIMIZER_H
 
-#include <memory>
 #include <vector>
+#include <memory>
 #include "module.h"
 #include "tensor.h"
 
@@ -13,8 +13,8 @@ public:
     void step();
 
 private:
+    float learning_rate_;
     std::vector<std::shared_ptr<Module>> modules_;
-    float lr_;
 };
 
 class Adam {
@@ -24,14 +24,12 @@ public:
     void step();
 
 private:
+    float learning_rate_;
+    float beta1_, beta2_, epsilon_;
+    int t_;
     std::vector<std::shared_ptr<Module>> modules_;
-    float lr_;
-    float beta1_;
-    float beta2_;
-    float epsilon_;
     std::vector<Tensor> m_; // Premier moment (moyenne)
     std::vector<Tensor> v_; // Second moment (variance)
-    int t_; // Compteur d'itérations
 };
 
 #endif // OPTIMIZER_H

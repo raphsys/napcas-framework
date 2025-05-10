@@ -147,3 +147,7 @@ void Conv2d::update(float lr) {
 
 Tensor& Conv2d::get_weights() { return weights_; }
 Tensor& Conv2d::get_grad_weights() { return grad_weights_; }
+
+void Conv2d::set_weights(const Tensor& weights) {
+    this->weights_ = weights;
+}

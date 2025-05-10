@@ -1,14 +1,14 @@
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include "activation.h"
-#include "conv2d.h"
 #include "linear.h"
+#include "conv2d.h"
+#include "activation.h"
 #include "loss.h"
 #include "optimizer.h"
 #include "tensor.h"
 #include "data_loader.h"
 #include "nncell.h"
 #include "napcas.h"
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 namespace py = pybind11;
 
@@ -20,7 +20,7 @@ PYBIND11_MODULE(napcas, m) {
         .def(py::init<std::vector<int>, std::vector<float>>())
         .def("shape", &Tensor::shape)
         .def("size", &Tensor::size)
-        .def("data", &Tensor::data, py::return_value_policy::reference)
+        .def("data", (const std::vector<float>& (Tensor::*)() const) &Tensor::data, py::return_value_policy::reference)
         .def("zero_grad", &Tensor::zero_grad)
         .def("__getitem__", [](Tensor& t, int i) { return t[i]; })
         .def("__setitem__", [](Tensor& t, int i, float v) { t[i] = v; });
@@ -32,7 +32,8 @@ PYBIND11_MODULE(napcas, m) {
         .def("backward", &Linear::backward)
         .def("update", &Linear::update)
         .def("get_weights", &Linear::get_weights, py::return_value_policy::reference)
-        .def("get_grad_weights", &Linear::get_grad_weights, py::return_value_policy::reference);
+        .def("get_grad_weights", &Linear::get_grad_weights, py::return_value_policy::reference)
+        .def("set_weights", &Linear::set_weights);
 
     // Bind Conv2d
     py::class_<Conv2d, Module, std::shared_ptr<Conv2d>>(m, "Conv2d")
@@ -41,7 +42,8 @@ PYBIND11_MODULE(napcas, m) {
         .def("backward", &Conv2d::backward)
         .def("update", &Conv2d::update)
         .def("get_weights", &Conv2d::get_weights, py::return_value_policy::reference)
-        .def("get_grad_weights", &Conv2d::get_grad_weights, py::return_value_policy::reference);
+        .def("get_grad_weights", &Conv2d::get_grad_weights, py::return_value_policy::reference)
+        .def("set_weights", &Conv2d::set_weights);
 
     // Bind Activation Functions
     py::class_<ReLU, Module, std::shared_ptr<ReLU>>(m, "ReLU")
@@ -93,7 +95,8 @@ PYBIND11_MODULE(napcas, m) {
         .def("backward", &NNCell::backward)
         .def("update", &NNCell::update)
         .def("get_weights", &NNCell::get_weights, py::return_value_policy::reference)
-        .def("get_grad_weights", &NNCell::get_grad_weights, py::return_value_policy::reference);
+        .def("get_grad_weights", &NNCell::get_grad_weights, py::return_value_policy::reference)
+        .def("set_weights", &NNCell::set_weights);
 
     // Bind NAPCAS
     py::class_<NAPCAS, Module, std::shared_ptr<NAPCAS>>(m, "NAPCAS")
@@ -102,5 +105,6 @@ PYBIND11_MODULE(napcas, m) {
         .def("backward", &NAPCAS::backward)
         .def("update", &NAPCAS::update)
         .def("get_weights", &NAPCAS::get_weights, py::return_value_policy::reference)
-        .def("get_grad_weights", &NAPCAS::get_grad_weights, py::return_value_policy::reference);
+        .def("get_grad_weights", &NAPCAS::get_grad_weights, py::return_value_policy::reference)
+        .def("set_weights", &NAPCAS::set_weights);
 }
