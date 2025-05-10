@@ -16,7 +16,7 @@ find_package(Python3 REQUIRED COMPONENTS Development)
 
 # Trouver Eigen
 find_package(Eigen3 REQUIRED)
-message(STATUS "Eigen include dir: ${EIGEN3_INCLUDE_DIR}")
+include_directories(${EIGEN3_INCLUDE_DIR})
 
 # Définir les sources de la bibliothèque C++
 set(NAPCAS_SRC
@@ -59,5 +59,7 @@ set_target_properties(napcas PROPERTIES
     VISIBILITY_INLINES_HIDDEN ON
 )
 
-# Ajouter les tests
-add_subdirectory(tests)
+# Ajouter les tests si la variable BUILD_TESTS est définie
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
