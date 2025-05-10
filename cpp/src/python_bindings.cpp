@@ -7,12 +7,48 @@
 #include "data_loader.h"
 #include "nncell.h"
 #include "napcas.h"
+#include "autograd.h"
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(napcas, m) {
+class PyModule : public Module {
+public:
+    using Module::Module;
+
+    void forward(Tensor& input, Tensor& output) override {
+        PYBIND11_OVERRIDE_PURE(
+            void,       // type de retour
+            Module,     // classe de base
+            forward,    // nom de la méthode
+            input, output
+        );
+    }
+
+    void backward(Tensor& grad_output, Tensor& grad_input) override {
+        PYBIND11_OVERRIDE_PURE(void, Module, backward, grad_output, grad_input);
+    }
+
+    void update(float lr) override {
+        PYBIND11_OVERRIDE_PURE(void, Module, update, lr);
+    }
+
+    Tensor& get_weights() override {
+        PYBIND11_OVERRIDE_PURE(Tensor&, Module, get_weights);
+    }
+
+    Tensor& get_grad_weights() override {
+        PYBIND11_OVERRIDE_PURE(Tensor&, Module, get_grad_weights);
+    }
+
+    void set_weights(const Tensor& weights) override {
+        PYBIND11_OVERRIDE_PURE(void, Module, set_weights, weights);
+    }
+};
+
+
+PYBIND11_MODULE(_napcas, m) {
     m.doc() = "NAPCAS: A lightweight deep learning framework";
 
     // Bind Tensor
@@ -25,6 +61,15 @@ PYBIND11_MODULE(napcas, m) {
         .def("__getitem__", [](Tensor& t, int i) { return t[i]; })
         .def("__setitem__", [](Tensor& t, int i, float v) { t[i] = v; });
 
+    // Bind Module
+    py::class_<Module, PyModule, std::shared_ptr<Module>>(m, "Module")
+        .def("forward", &Module::forward)
+        .def("backward", &Module::backward)
+        .def("update", &Module::update)
+        .def("get_weights", &Module::get_weights, py::return_value_policy::reference)
+        .def("get_grad_weights", &Module::get_grad_weights, py::return_value_policy::reference)
+        .def("set_weights", &Module::set_weights);
+    
     // Bind Linear
     py::class_<Linear, Module, std::shared_ptr<Linear>>(m, "Linear")
         .def(py::init<int, int>())
@@ -107,4 +152,9 @@ PYBIND11_MODULE(napcas, m) {
         .def("get_weights", &NAPCAS::get_weights, py::return_value_policy::reference)
         .def("get_grad_weights", &NAPCAS::get_grad_weights, py::return_value_policy::reference)
         .def("set_weights", &NAPCAS::set_weights);
+        
+    // Bind Autograd
+    py::class_<Autograd, std::shared_ptr<Autograd>>(m, "Autograd")
+        .def(py::init<>());
+        
 }
