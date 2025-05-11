@@ -7,22 +7,26 @@
 #include "data_loader.h"
 #include "nncell.h"
 #include "napcas.h"
+#include "napca_sim.h"
 #include "autograd.h"
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/functional.h>
 
 namespace py = pybind11;
 
+// Trampoline class for Module to enable Python inheritance
 class PyModule : public Module {
 public:
     using Module::Module;
 
     void forward(Tensor& input, Tensor& output) override {
         PYBIND11_OVERRIDE_PURE(
-            void,       // type de retour
-            Module,     // classe de base
-            forward,    // nom de la méthode
-            input, output
+            void,
+            Module,
+            forward,
+            input,
+            output
         );
     }
 
@@ -47,22 +51,25 @@ public:
     }
 };
 
-
 PYBIND11_MODULE(_napcas, m) {
     m.doc() = "NAPCAS: A lightweight deep learning framework";
-
+    
     // Bind Tensor
     py::class_<Tensor>(m, "Tensor")
+        .def(py::init<>())
+        .def(py::init<const std::vector<int>&>())
         .def(py::init<std::vector<int>, std::vector<float>>())
         .def("shape", &Tensor::shape)
         .def("size", &Tensor::size)
-        .def("data", (const std::vector<float>& (Tensor::*)() const) &Tensor::data, py::return_value_policy::reference)
+        .def("data", (const std::vector<float>& (Tensor::*)() const) &Tensor::data, 
+             py::return_value_policy::reference)
         .def("zero_grad", &Tensor::zero_grad)
         .def("__getitem__", [](Tensor& t, int i) { return t[i]; })
         .def("__setitem__", [](Tensor& t, int i, float v) { t[i] = v; });
 
-    // Bind Module
+    // Bind Module base class
     py::class_<Module, PyModule, std::shared_ptr<Module>>(m, "Module")
+        .def(py::init<>())
         .def("forward", &Module::forward)
         .def("backward", &Module::backward)
         .def("update", &Module::update)
@@ -152,9 +159,24 @@ PYBIND11_MODULE(_napcas, m) {
         .def("get_weights", &NAPCAS::get_weights, py::return_value_policy::reference)
         .def("get_grad_weights", &NAPCAS::get_grad_weights, py::return_value_policy::reference)
         .def("set_weights", &NAPCAS::set_weights);
-        
+
+    // Bind NAPCA-SIM
+    py::class_<NAPCA_Sim, Module, std::shared_ptr<NAPCA_Sim>>(m, "NAPCA_Sim")
+        .def(py::init<int, int, float, float>(), 
+             py::arg("in_features"), 
+             py::arg("out_features"),
+             py::arg("alpha") = 0.6f,
+             py::arg("threshold") = 0.5f)
+        .def("forward", &NAPCA_Sim::forward)
+        .def("backward", &NAPCA_Sim::backward)
+        .def("update", &NAPCA_Sim::update)
+        .def("compute_path_similarity", &NAPCA_Sim::compute_path_similarity)
+        .def("update_weights_conditionally", &NAPCA_Sim::update_weights_conditionally)
+        .def("prune_connections", &NAPCA_Sim::prune_connections)
+        .def("get_weights", &NAPCA_Sim::get_weights, py::return_value_policy::reference)
+        .def("get_grad_weights", &NAPCA_Sim::get_grad_weights, py::return_value_policy::reference);
+
     // Bind Autograd
     py::class_<Autograd, std::shared_ptr<Autograd>>(m, "Autograd")
         .def(py::init<>());
-        
 }

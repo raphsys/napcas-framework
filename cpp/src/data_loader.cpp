@@ -11,6 +11,9 @@ DataLoader::DataLoader(const std::string& filename, int batch_size)
     }
 
     std::string line;
+    if (std::getline(file, line)) {
+        // La première ligne est ignorée
+    }
     while (std::getline(file, line)) {
         std::vector<float> row;
         std::stringstream ss(line);
@@ -24,7 +27,7 @@ DataLoader::DataLoader(const std::string& filename, int batch_size)
 }
 
 std::pair<Tensor, Tensor> DataLoader::next() {
-    if (current_index_ >= data_.size()) {
+    if (current_index_ >= static_cast<int>(data_.size())) {
         current_index_ = 0; // Reset pour boucler
     }
 

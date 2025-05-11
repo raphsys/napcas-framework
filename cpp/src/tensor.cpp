@@ -27,3 +27,4 @@ void Tensor::fill(float value) {
 void Tensor::zero_grad() {
     fill(0.0f);
 }
+
