@@ -1,8 +1,3 @@
 [build-system]
-requires = ["pybind11", "setuptools"]
+requires = ["setuptools >= 64", "pybind11 >= 2.5.0"]
 build-backend = "setuptools.build_meta"
-
-[project]
-name = "napcas"
-version = "0.1.0"
-description = "A Python package for napcas"
