@@ -27,6 +27,7 @@ set(NAPCAS_SRC
     cpp/src/linear.cpp
     cpp/src/loss.cpp
     cpp/src/napcas.cpp
+    cpp/src/napca_sim.cpp
     cpp/src/nncell.cpp
     cpp/src/optimizer.cpp
     cpp/src/tensor.cpp
@@ -52,6 +53,7 @@ add_library(libnapcas STATIC ${NAPCAS_SRC})
 target_include_directories(libnapcas PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include ${EIGEN3_INCLUDE_DIR})
 target_link_libraries(libnapcas PUBLIC Eigen3::Eigen)
 
+
 # Créer le module Python
 pybind11_add_module(napcas MODULE cpp/src/python_bindings.cpp)
 target_link_libraries(napcas PRIVATE libnapcas Python3::Python Eigen3::Eigen)
@@ -66,3 +68,5 @@ set_target_properties(napcas PROPERTIES
 if(BUILD_TESTS)
     add_subdirectory(tests)
 endif()
+
+
