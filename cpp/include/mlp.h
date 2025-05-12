@@ -1,17 +1,20 @@
-#ifndef NNCELL_H
-#define NNCELL_H
+#ifndef MLP_H
+#define MLP_H
 
 #include "module.h"
-#include "tensor.h"
+#include "linear.h"
+#include "activation.h"
+#include <vector>
+#include <memory>
 
-/// @brief Neural Network Cell with adaptive connections.
-class NNCel : public Module {
+/// @brief Multi-Layer Perceptron (MLP) model.
+class MLP : public Module {
 public:
-    /// @brief Constructs a NNCel layer.
-    /// @param in_features Number of input features.
-    /// @param out_features Number of output features.
-    NNCel(int in_features, int out_features);
-    /// @brief Performs forward pass with adaptive connections.
+    /// @brief Constructs an MLP.
+    /// @param layers List of layer sizes (including input and output).
+    /// @param activation Activation function to use between layers.
+    MLP(const std::vector<int>& layers, const std::string& activation = "relu");
+    /// @brief Performs forward pass through the MLP.
     /// @param input Input tensor.
     /// @param output Output tensor.
     void forward(Tensor& input, Tensor& output) override;
@@ -31,31 +34,18 @@ public:
     /// @brief Sets weights tensor.
     /// @param weights New weights tensor.
     void set_weights(const Tensor& weights) override;
-    /// @brief Saves module state to file.
+    /// @brief Saves MLP state to file.
     /// @param path File path.
     void save(const std::string& path) override;
-    /// @brief Loads module state from file.
+    /// @brief Loads MLP state from file.
     /// @param path File path.
     void load(const std::string& path) override;
 
 private:
+    std::vector<std::shared_ptr<Linear>> linear_layers_;
+    std::vector<std::shared_ptr<Module>> activation_layers_;
     Tensor weights_;
-    Tensor bias_;
     Tensor grad_weights_;
-    Tensor grad_bias_;
-    Tensor connections_;
-    Tensor threshold_;
-    Tensor alpha_;
-    Tensor memory_paths_;
-    Tensor grad_connections_;
-    Tensor grad_threshold_;
-    Tensor grad_alpha_;
-    Tensor grad_memory_paths_;
-    float learning_rate_;
-#ifdef USE_CUDA
-    void forward_cuda(Tensor& input, Tensor& output);
-    void backward_cuda(Tensor& grad_output, Tensor& grad_input);
-#endif
 };
 
-#endif // NNCELL_H
+#endif // MLP_H

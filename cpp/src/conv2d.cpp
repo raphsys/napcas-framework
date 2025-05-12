@@ -1,64 +1,166 @@
 #include "conv2d.h"
 #include <Eigen/Dense>
 #include <stdexcept>
+#include <fstream>
 #include <vector>
 
-Conv2d::Conv2d(int in_channels, int out_channels, int kernel_size)
-    : kernel_size_(kernel_size), learning_rate_(0.0f) {
-    if (kernel_size % 2 == 0) {
-        throw std::invalid_argument("Kernel size must be odd");
-    }
-    std::vector<int> weight_shape = {out_channels, in_channels, kernel_size, kernel_size};
-    std::vector<int> bias_shape = {out_channels};
-    weights_ = Tensor(weight_shape);
-    bias_ = Tensor(bias_shape);
-    grad_weights_ = Tensor(weight_shape);
-    grad_bias_ = Tensor(bias_shape);
+Conv2d::Conv2d(int in_channels, int out_channels, int kernel_size, int stride, int padding)
+    : in_channels_(in_channels), out_channels_(out_channels), kernel_size_(kernel_size),
+      stride_(stride), padding_(padding) {
+    weights_ = Tensor({out_channels, in_channels, kernel_size, kernel_size});
+    bias_ = Tensor({out_channels});
+    grad_weights_ = Tensor({out_channels, in_channels, kernel_size, kernel_size});
+    grad_bias_ = Tensor({out_channels});
+    weights_.fill(0.01f); // Simple initialization
+    bias_.fill(0.0f);
+}
 
-    // Initialisation des poids (exemple : initialisation aléatoire simple)
-    for (int i = 0; i < weights_.size(); ++i) {
-        weights_[i] = static_cast<float>(rand()) / RAND_MAX - 0.5f;
+void Conv2d::im2col(const Tensor& input, Eigen::MatrixXf& col, int out_height, int out_width) {
+    int batch_size = input.shape()[0];
+    int in_height = input.shape()[2];
+    int in_width = input.shape()[3];
+    int patch_size = in_channels_ * kernel_size_ * kernel_size_;
+
+    col.resize(patch_size, out_height * out_width * batch_size);
+
+    std::vector<float> padded_input;
+    if (padding_ > 0) {
+        int padded_height = in_height + 2 * padding_;
+        int padded_width = in_width + 2 * padding_;
+        padded_input.resize(batch_size * in_channels_ * padded_height * padded_width, 0.0f);
+        for (int b = 0; b < batch_size; ++b) {
+            for (int c = 0; c < in_channels_; ++c) {
+                for (int h = 0; h < in_height; ++h) {
+                    for (int w = 0; w < in_width; ++w) {
+                        int src_idx = b * in_channels_ * in_height * in_width +
+                                      c * in_height * in_width + h * in_width + w;
+                        int dst_idx = b * in_channels_ * padded_height * padded_width +
+                                      c * padded_height * padded_width + (h + padding_) * padded_width + (w + padding_);
+                        padded_input[dst_idx] = input[src_idx];
+                    }
+                }
+            }
+        }
+    } else {
+        padded_input = input.data();
     }
-    for (int i = 0; i < bias_.size(); ++i) {
-        bias_[i] = 0.0f;
+
+    int col_idx = 0;
+    for (int b = 0; b < batch_size; ++b) {
+        for (int oh = 0; oh < out_height; ++oh) {
+            for (int ow = 0; ow < out_width; ++ow) {
+                for (int c = 0; c < in_channels_; ++c) {
+                    for (int kh = 0; kh < kernel_size_; ++kh) {
+                        for (int kw = 0; kw < kernel_size_; ++kw) {
+                            int h = oh * stride_ + kh;
+                            int w = ow * stride_ + kw;
+                            int padded_height = in_height + 2 * padding_;
+                            int padded_width = in_width + 2 * padding_;
+                            int idx = b * in_channels_ * padded_height * padded_width +
+                                      c * padded_height * padded_width + h * padded_width + w;
+                            col(col_idx++, oh * out_width * batch_size + ow * batch_size + b) = padded_input[idx];
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
 void Conv2d::forward(Tensor& input, Tensor& output) {
     if (input.ndim() != 4) {
-        throw std::invalid_argument("Input must be 4D (batch, channels, height, width)");
+        throw std::invalid_argument("Input must be 4D (batch_size, in_channels, height, width)");
     }
     int batch_size = input.shape()[0];
-    int in_channels = input.shape()[1];
-    int height = input.shape()[2];
-    int width = input.shape()[3];
-    int out_channels = weights_.shape()[0];
-    int out_height = height - kernel_size_ + 1;
-    int out_width = width - kernel_size_ + 1;
-
-    if (output.shape() != std::vector<int>{batch_size, out_channels, out_height, out_width}) {
+    int in_height = input.shape()[2];
+    int in_width = input.shape()[3];
+    int out_height = (in_height + 2 * padding_ - kernel_size_) / stride_ + 1;
+    int out_width = (in_width + 2 * padding_ - kernel_size_) / stride_ + 1;
+    if (output.shape() != std::vector<int>{batch_size, out_channels_, out_height, out_width}) {
         throw std::invalid_argument("Output shape mismatch");
     }
 
-    // Conversion des tenseurs en matrices Eigen pour le calcul
-    Eigen::Map<Eigen::MatrixXf> weights_mat(weights_.data().data(), out_channels, in_channels * kernel_size_ * kernel_size_);
-    Eigen::Map<Eigen::MatrixXf> output_mat(output.data().data(), batch_size * out_height * out_width, out_channels);
+    // im2col transformation
+    Eigen::MatrixXf col;
+    im2col(input, col, out_height, out_width);
 
-    // Extraction des patches de l'entrée (im2col)
-    std::vector<float> input_patches(batch_size * out_height * out_width * in_channels * kernel_size_ * kernel_size_);
+    // Reshape weights to (out_channels, in_channels * kernel_size * kernel_size)
+    Eigen::Map<Eigen::MatrixXf> weight_mat(weights_.data().data(), out_channels_,
+                                           in_channels_ * kernel_size_ * kernel_size_);
+    Eigen::MatrixXf output_mat(out_channels_, out_height * out_width * batch_size);
+    output_mat = weight_mat * col;
+
+    // Add bias and reshape to output tensor
     for (int b = 0; b < batch_size; ++b) {
-        for (int h = 0; h < out_height; ++h) {
-            for (int w = 0; w < out_width; ++w) {
-                for (int c = 0; c < in_channels; ++c) {
+        for (int c = 0; c < out_channels_; ++c) {
+            for (int h = 0; h < out_height; ++h) {
+                for (int w = 0; w < out_width; ++w) {
+                    int idx = b * out_channels_ * out_height * out_width +
+                              c * out_height * out_width + h * out_width + w;
+                    output[idx] = output_mat(c, h * out_width * batch_size + w * batch_size + b) + bias_[c];
+                }
+            }
+        }
+    }
+
+    // Cache for backward pass
+    input_cache_ = input;
+    col_cache_ = col;
+}
+
+void Conv2d::backward(Tensor& grad_output, Tensor& grad_input) {
+    int batch_size = grad_output.shape()[0];
+    int out_height = grad_output.shape()[2];
+    int out_width = grad_output.shape()[3];
+    int in_height = input_cache_.shape()[2];
+    int in_width = input_cache_.shape()[3];
+
+    // Reshape grad_output to (out_channels, out_height * out_width * batch_size)
+    Eigen::MatrixXf grad_output_mat(out_channels_, out_height * out_width * batch_size);
+    for (int b = 0; b < batch_size; ++b) {
+        for (int c = 0; c < out_channels_; ++c) {
+            for (int h = 0; h < out_height; ++h) {
+                for (int w = 0; w < out_width; ++w) {
+                    int idx = b * out_channels_ * out_height * out_width +
+                              c * out_height * out_width + h * out_width + w;
+                    grad_output_mat(c, h * out_width * batch_size + w * batch_size + b) = grad_output[idx];
+                }
+            }
+        }
+    }
+
+    // Compute gradients for weights
+    Eigen::Map<Eigen::MatrixXf> grad_weight_mat(grad_weights_.data().data(), out_channels_,
+                                                in_channels_ * kernel_size_ * kernel_size_);
+    grad_weight_mat = grad_output_mat * col_cache_.transpose();
+
+    // Compute gradients for bias
+    for (int c = 0; c < out_channels_; ++c) {
+        grad_bias_[c] = grad_output_mat.row(c).sum();
+    }
+
+    // Compute gradients for input
+    grad_input.fill(0.0f);
+    Eigen::Map<Eigen::MatrixXf> weight_mat(weights_.data().data(), out_channels_,
+                                           in_channels_ * kernel_size_ * kernel_size_);
+    Eigen::MatrixXf grad_col = weight_mat.transpose() * grad_output_mat;
+
+    // col2im to compute grad_input
+    int padded_height = in_height + 2 * padding_;
+    int padded_width = in_width + 2 * padding_;
+    std::vector<float> grad_padded(batch_size * in_channels_ * padded_height * padded_width, 0.0f);
+    int col_idx = 0;
+    for (int b = 0; b < batch_size; ++b) {
+        for (int oh = 0; oh < out_height; ++oh) {
+            for (int ow = 0; ow < out_width; ++ow) {
+                for (int c = 0; c < in_channels_; ++c) {
                     for (int kh = 0; kh < kernel_size_; ++kh) {
                         for (int kw = 0; kw < kernel_size_; ++kw) {
-                            int idx = b * out_height * out_width * in_channels * kernel_size_ * kernel_size_ +
-                                     (h * out_width + w) * in_channels * kernel_size_ * kernel_size_ +
-                                     c * kernel_size_ * kernel_size_ + kh * kernel_size_ + kw;
-                            int input_idx = b * in_channels * height * width +
-                                           c * height * width +
-                                           (h + kh) * width + (w + kw);
-                            input_patches[idx] = input[input_idx];
+                            int h = oh * stride_ + kh;
+                            int w = ow * stride_ + kw;
+                            int idx = b * in_channels_ * padded_height * padded_width +
+                                      c * padded_height * padded_width + h * padded_width + w;
+                            grad_padded[idx] += grad_col(col_idx++, oh * out_width * batch_size + ow * batch_size + b);
                         }
                     }
                 }
@@ -66,69 +168,16 @@ void Conv2d::forward(Tensor& input, Tensor& output) {
         }
     }
 
-    Eigen::Map<Eigen::MatrixXf> input_patches_mat(input_patches.data(),
-        batch_size * out_height * out_width, in_channels * kernel_size_ * kernel_size_);
-    output_mat = input_patches_mat * weights_mat.transpose();
-
-    // Ajout du biais
-    Eigen::Map<Eigen::VectorXf> bias_vec(bias_.data().data(), bias_.shape()[0]);
-    for (int i = 0; i < batch_size * out_height * out_width; ++i) {
-        output_mat.row(i) += bias_vec.transpose();
-    }
-}
-
-void Conv2d::backward(Tensor& grad_output, Tensor& grad_input) {
-    if (grad_output.ndim() != 4 || grad_input.ndim() != 4) {
-        throw std::invalid_argument("Gradients must be 4D");
-    }
-    int batch_size = grad_input.shape()[0];
-    int in_channels = grad_input.shape()[1];
-    int height = grad_input.shape()[2];
-    int width = grad_input.shape()[3];
-    int out_channels = weights_.shape()[0];
-    int out_height = height - kernel_size_ + 1;
-    int out_width = width - kernel_size_ + 1;
-
-    if (grad_output.shape() != std::vector<int>{batch_size, out_channels, out_height, out_width}) {
-        throw std::invalid_argument("Gradient output shape mismatch");
-    }
-
-    // Conversion des tenseurs en matrices Eigen
-    Eigen::Map<Eigen::MatrixXf> grad_output_mat(grad_output.data().data(), batch_size * out_height * out_width, out_channels);
-    Eigen::Map<Eigen::MatrixXf> grad_input_mat(grad_input.data().data(), batch_size * height * width, in_channels);
-    Eigen::Map<Eigen::MatrixXf> grad_weights_mat(grad_weights_.data().data(), out_channels, in_channels * kernel_size_ * kernel_size_);
-    Eigen::Map<Eigen::VectorXf> grad_bias_vec(grad_bias_.data().data(), grad_bias_.shape()[0]);
-
-    // Calcul du gradient des poids et du biais
-    std::vector<float> input_patches(batch_size * out_height * out_width * in_channels * kernel_size_ * kernel_size_, 0.0f);
-    Eigen::Map<Eigen::MatrixXf> input_patches_mat(input_patches.data(),
-        batch_size * out_height * out_width, in_channels * kernel_size_ * kernel_size_);
-    Eigen::Map<Eigen::MatrixXf> weights_mat(weights_.data().data(), out_channels, in_channels * kernel_size_ * kernel_size_);
-
-    // Gradient du biais
-    grad_bias_vec = grad_output_mat.colwise().sum();
-
-    // Gradient des poids
-    grad_weights_mat = grad_output_mat.transpose() * input_patches_mat;
-
-    // Gradient de l'entrée
-    grad_input_mat.setZero();
-    Eigen::MatrixXf grad_input_patches = grad_output_mat * weights_mat;
+    // Extract grad_input from padded gradient
     for (int b = 0; b < batch_size; ++b) {
-        for (int h = 0; h < out_height; ++h) {
-            for (int w = 0; w < out_width; ++w) {
-                for (int c = 0; c < in_channels; ++c) {
-                    for (int kh = 0; kh < kernel_size_; ++kh) {
-                        for (int kw = 0; kw < kernel_size_; ++kw) {
-                            int idx = b * out_height * out_width * in_channels * kernel_size_ * kernel_size_ +
-                                     (h * out_width + w) * in_channels * kernel_size_ * kernel_size_ +
-                                     c * kernel_size_ * kernel_size_ + kh * kernel_size_ + kw;
-                            int grad_idx = b * in_channels * height * width +
-                                          c * height * width +
-                                          (h + kh) * width + (w + kw);
-                            grad_input_mat(grad_idx, c) += grad_input_patches(idx, c);
-                        }
-                    }
+        for (int c = 0; c < in_channels_; ++c) {
+            for (int h = 0; h < in_height; ++h) {
+                for (int w = 0; w < in_width; ++w) {
+                    int src_idx = b * in_channels_ * padded_height * padded_width +
+                                  c * padded_height * padded_width + (h + padding_) * padded_width + (w + padding_);
+                    int dst_idx = b * in_channels_ * in_height * in_width +
+                                  c * in_height * in_width + h * in_width + w;
+                    grad_input[dst_idx] = grad_padded[src_idx];
                 }
             }
         }
@@ -136,18 +185,27 @@ void Conv2d::backward(Tensor& grad_output, Tensor& grad_input) {
 }
 
 void Conv2d::update(float lr) {
-    learning_rate_ = lr;
-    for (int i = 0; i < weights_.size(); ++i) {
+    for (size_t i = 0; i < weights_.size(); ++i) {
         weights_[i] -= lr * grad_weights_[i];
     }
-    for (int i = 0; i < bias_.size(); ++i) {
+    for (size_t i = 0; i < bias_.size(); ++i) {
         bias_[i] -= lr * grad_bias_[i];
     }
 }
 
-Tensor& Conv2d::get_weights() { return weights_; }
-Tensor& Conv2d::get_grad_weights() { return grad_weights_; }
-
 void Conv2d::set_weights(const Tensor& weights) {
-    this->weights_ = weights;
+    if (weights.shape() != std::vector<int>{out_channels_, in_channels_, kernel_size_, kernel_size_}) {
+        throw std::invalid_argument("Weight shape mismatch");
+    }
+    weights_ = weights;
+}
+
+void Conv2d::save(const std::string& path) {
+    weights_.save(path + "_weights.tensor");
+    bias_.save(path + "_bias.tensor");
+}
+
+void Conv2d::load(const std::string& path) {
+    weights_.load(path + "_weights.tensor");
+    bias_.load(path + "_bias.tensor");
 }

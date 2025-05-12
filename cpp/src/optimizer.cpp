@@ -1,60 +1,77 @@
 #include "optimizer.h"
-#include <cmath>
-#include <vector>
-#include <memory>
+#include <fstream>
+#include <stdexcept>
 
-// Constructeur par défaut pour SGD avec une learning rate par défaut
 SGD::SGD(float lr) : learning_rate_(lr) {}
 
-// Constructeur pour SGD avec une liste de modules et une learning rate par défaut
 SGD::SGD(const std::vector<std::shared_ptr<Module>>& modules, float lr)
-    : learning_rate_(lr), modules_(modules) {}
+    : modules_(modules), learning_rate_(lr) {}
 
-// Méthode pour effectuer un pas d'optimisation
 void SGD::step() {
     for (auto& module : modules_) {
-        auto weights = module->get_weights();
-        auto grad_weights = module->get_grad_weights();
-        for (size_t i = 0; i < weights.size(); ++i) {
-            weights[i] -= learning_rate_ * grad_weights[i];
-        }
-        module->set_weights(weights);
+        module->update(learning_rate_);
     }
 }
 
-// Constructeur par défaut pour Adam avec des valeurs par défaut pour les paramètres
+void SGD::save(const std::string& path) {
+    std::ofstream file(path + "_sgd.txt");
+    file << learning_rate_ << "\n";
+    file.close();
+}
+
+void SGD::load(const std::string& path) {
+    std::ifstream file(path + "_sgd.txt");
+    file >> learning_rate_;
+    file.close();
+}
+
 Adam::Adam(float lr, float beta1, float beta2, float epsilon)
     : learning_rate_(lr), beta1_(beta1), beta2_(beta2), epsilon_(epsilon), t_(0) {}
 
-// Constructeur pour Adam avec une liste de modules et des valeurs par défaut pour les paramètres
 Adam::Adam(const std::vector<std::shared_ptr<Module>>& modules, float lr, float beta1, float beta2, float epsilon)
-    : learning_rate_(lr), beta1_(beta1), beta2_(beta2), epsilon_(epsilon), t_(0), modules_(modules) {
-    for (auto& module : modules) {
-        auto weights = module->get_weights();
-        m_.push_back(Tensor(weights.shape()));
-        v_.push_back(Tensor(weights.shape()));
+    : modules_(modules), learning_rate_(lr), beta1_(beta1), beta2_(beta2), epsilon_(epsilon), t_(0) {
+    for (const auto& module : modules_) {
+        m_.push_back(Tensor(module->get_weights().shape()));
+        v_.push_back(Tensor(module->get_weights().shape()));
+        m_.back().fill(0.0f);
+        v_.back().fill(0.0f);
     }
 }
 
-// Méthode pour effectuer un pas d'optimisation
 void Adam::step() {
     t_++;
     for (size_t i = 0; i < modules_.size(); ++i) {
-        auto module = modules_[i];
-        auto weights = module->get_weights();
-        auto grad_weights = module->get_grad_weights();
-        for (size_t j = 0; j < weights.size(); ++j) {
-            // Calcul des moments premiers et seconds
-            m_[i][j] = beta1_ * m_[i][j] + (1 - beta1_) * grad_weights[j];
-            v_[i][j] = beta2_ * v_[i][j] + (1 - beta2_) * grad_weights[j] * grad_weights[j];
+        Tensor& weights = modules_[i]->get_weights();
+        Tensor& grad = modules_[i]->get_grad_weights();
+        Tensor& m = m_[i];
+        Tensor& v = v_[i];
 
-            // Correction des biais
-            float m_hat = m_[i][j] / (1 - std::pow(beta1_, t_));
-            float v_hat = v_[i][j] / (1 - std::pow(beta2_, t_));
-
-            // Mise à jour des poids
+        for (int j = 0; j < weights.size(); ++j) {
+            m[j] = beta1_ * m[j] + (1.0f - beta1_) * grad[j];
+            v[j] = beta2_ * v[j] + (1.0f - beta2_) * grad[j] * grad[j];
+            float m_hat = m[j] / (1.0f - std::pow(beta1_, t_));
+            float v_hat = v[j] / (1.0f - std::pow(beta2_, t_));
             weights[j] -= learning_rate_ * m_hat / (std::sqrt(v_hat) + epsilon_);
         }
-        module->set_weights(weights);
+    }
+}
+
+void Adam::save(const std::string& path) {
+    std::ofstream file(path + "_adam.txt");
+    file << learning_rate_ << " " << beta1_ << " " << beta2_ << " " << epsilon_ << " " << t_ << "\n";
+    file.close();
+    for (size_t i = 0; i < m_.size(); ++i) {
+        m_[i].save(path + "_m_" + std::to_string(i) + ".tensor");
+        v_[i].save(path + "_v_" + std::to_string(i) + ".tensor");
+    }
+}
+
+void Adam::load(const std::string& path) {
+    std::ifstream file(path + "_adam.txt");
+    file >> learning_rate_ >> beta1_ >> beta2_ >> epsilon_ >> t_;
+    file.close();
+    for (size_t i = 0; i < m_.size(); ++i) {
+        m_[i].load(path + "_m_" + std::to_string(i) + ".tensor");
+        v_[i].load(path + "_v_" + std::to_string(i) + ".tensor");
     }
 }

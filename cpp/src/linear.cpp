@@ -1,6 +1,8 @@
 #include "linear.h"
+#include "gpu_utils.h"
 #include <Eigen/Dense>
 #include <stdexcept>
+#include <fstream>
 
 Linear::Linear(int in_features, int out_features) : learning_rate_(0.0f) {
     std::vector<int> weight_shape = {out_features, in_features};
@@ -10,19 +12,22 @@ Linear::Linear(int in_features, int out_features) : learning_rate_(0.0f) {
     grad_weights_ = Tensor(weight_shape);
     grad_bias_ = Tensor(bias_shape);
 
-    // Initialisation des poids (exemple : initialisation aléatoire simple)
     for (int i = 0; i < weights_.size(); ++i) {
         weights_[i] = static_cast<float>(rand()) / RAND_MAX - 0.5f;
     }
-    for (int i = 0; i < bias_.size(); ++i) {
-        bias_[i] = 0.0f;
-    }
+    bias_.fill(0.0f);
 }
 
 void Linear::forward(Tensor& input, Tensor& output) {
     if (input.ndim() != 2) {
         throw std::invalid_argument("Input must be 2D (batch_size, in_features)");
     }
+#ifdef USE_CUDA
+    if (input.cuda_data_) {
+        forward_cuda(input, output);
+        return;
+    }
+#endif
     int batch_size = input.shape()[0];
     int in_features = input.shape()[1];
     int out_features = weights_.shape()[0];
@@ -44,6 +49,12 @@ void Linear::backward(Tensor& grad_output, Tensor& grad_input) {
     if (grad_output.ndim() != 2 || grad_input.ndim() != 2) {
         throw std::invalid_argument("Gradients must be 2D");
     }
+#ifdef USE_CUDA
+    if (grad_output.cuda_data_) {
+        backward_cuda(grad_output, grad_input);
+        return;
+    }
+#endif
     int batch_size = grad_input.shape()[0];
     int in_features = grad_input.shape()[1];
     int out_features = weights_.shape()[0];
@@ -77,5 +88,25 @@ Tensor& Linear::get_weights() { return weights_; }
 Tensor& Linear::get_grad_weights() { return grad_weights_; }
 
 void Linear::set_weights(const Tensor& weights) {
-    this->weights_ = weights;
+    weights_ = weights;
 }
+
+void Linear::save(const std::string& path) {
+    weights_.save(path + "_weights.tensor");
+    bias_.save(path + "_bias.tensor");
+}
+
+void Linear::load(const std::string& path) {
+    weights_.load(path + "_weights.tensor");
+    bias_.load(path + "_bias.tensor");
+}
+
+#ifdef USE_CUDA
+void Linear::forward_cuda(Tensor& input, Tensor& output) {
+    // Implement CUDA matrix multiplication
+}
+
+void Linear::backward_cuda(Tensor& grad_output, Tensor& grad_input) {
+    // Implement CUDA backward pass
+}
+#endif

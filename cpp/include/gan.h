@@ -1,12 +1,16 @@
-#ifndef CONV2D_H
-#define CONV2D_H
+#ifndef GAN_H
+#define GAN_H
 
 #include "module.h"
 #include "tensor.h"
+#include "linear.h"
+#include "activation.h"
+#include <vector>
+#include <memory>
 
-class Conv2d : public Module {
+class GAN : public Module {
 public:
-    Conv2d(int in_channels, int out_channels, int kernel_size, int stride = 1, int padding = 0);
+    GAN(const std::vector<int>& generator_layers, const std::vector<int>& discriminator_layers);
     void forward(Tensor& input, Tensor& output) override;
     void backward(Tensor& grad_output, Tensor& grad_input) override;
     void update(float lr) override;
@@ -15,18 +19,13 @@ public:
     void set_weights(const Tensor& weights) override;
     void save(const std::string& path) override;
     void load(const std::string& path) override;
+    void train_step(Tensor& real_data, Tensor& noise, float lr, Tensor& gen_loss, Tensor& disc_loss);
 
 private:
-    int in_channels_;
-    int out_channels_;
-    int kernel_size_;
-    int stride_;
-    int padding_;
+    std::vector<std::shared_ptr<Module>> generator_;
+    std::vector<std::shared_ptr<Module>> discriminator_;
     Tensor weights_;
-    Tensor bias_;
     Tensor grad_weights_;
-    Tensor grad_bias_;
-    Tensor input_cache_; // For backward pass
 };
 
 #endif

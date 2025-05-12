@@ -1,81 +1,100 @@
 #include "napcas.h"
 #include <Eigen/Dense>
 #include <stdexcept>
+#include <fstream>
+#include <cmath>
 
-NAPCAS::NAPCAS(int in_features, int out_features) : learning_rate_(0.0f) {
-    std::vector<int> weight_shape = {out_features, in_features};
-    std::vector<int> bias_shape = {out_features};
-    weights_ = Tensor(weight_shape);
-    bias_ = Tensor(bias_shape);
-    grad_weights_ = Tensor(weight_shape);
-    grad_bias_ = Tensor(bias_shape);
+NAPCAS::NAPCAS(int input_size, int output_size)
+    : input_size_(input_size), output_size_(output_size) {
+    weights_ = Tensor({output_size, input_size});
+    alpha_ = Tensor({output_size});
+    grad_weights_ = Tensor({output_size, input_size});
+    grad_alpha_ = Tensor({output_size});
+    weights_.fill(0.01f); // Simple initialization
+    alpha_.fill(0.0f);
+}
 
-    // Initialisation des poids (exemple : initialisation aléatoire simple)
-    for (int i = 0; i < weights_.size(); ++i) {
-        weights_[i] = static_cast<float>(rand()) / RAND_MAX - 0.5f;
-    }
-    for (int i = 0; i < bias_.size(); ++i) {
-        bias_[i] = 0.0f;
+void NAPCAS::compute_mask() {
+    masked_weights_ = Tensor(weights_.shape());
+    for (int i = 0; i < output_size_; ++i) {
+        for (int j = 0; j < input_size_; ++j) {
+            int idx = i * input_size_ + j;
+            masked_weights_[idx] = weights_[idx] * std::exp(-std::abs(alpha_[i]));
+        }
     }
 }
 
 void NAPCAS::forward(Tensor& input, Tensor& output) {
-    if (input.ndim() != 2) {
-        throw std::invalid_argument("Input must be 2D (batch_size, in_features)");
+    if (input.shape() != std::vector<int>({1, input_size_})) {
+        throw std::invalid_argument("Input shape must be {1, input_size}");
     }
-    int batch_size = input.shape()[0];
-    int in_features = input.shape()[1];
-    int out_features = weights_.shape()[0];
-
-    if (output.shape() != std::vector<int>{batch_size, out_features}) {
-        throw std::invalid_argument("Output shape mismatch");
+    if (output.shape() != std::vector<int>({1, output_size_})) {
+        throw std::invalid_argument("Output shape must be {1, output_size}");
     }
 
-    Eigen::Map<Eigen::MatrixXf> input_mat(input.data().data(), batch_size, in_features);
-    Eigen::Map<Eigen::MatrixXf> weights_mat(weights_.data().data(), out_features, in_features);
-    Eigen::Map<Eigen::MatrixXf> output_mat(output.data().data(), batch_size, out_features);
-    Eigen::Map<Eigen::VectorXf> bias_vec(bias_.data().data(), bias_.shape()[0]);
+    compute_mask();
+    Eigen::Map<Eigen::MatrixXf> input_mat(input.data().data(), 1, input_size_);
+    Eigen::Map<Eigen::MatrixXf> weight_mat(masked_weights_.data().data(), output_size_, input_size_);
+    Eigen::Map<Eigen::MatrixXf> output_mat(output.data().data(), 1, output_size_);
+    output_mat = input_mat * weight_mat.transpose();
+    for (int i = 0; i < output_size_; ++i) {
+        output[i] += alpha_[i];
+    }
 
-    output_mat = input_mat * weights_mat.transpose();
-    output_mat.rowwise() += bias_vec.transpose();
+    input_ = input; // Cache input for backward pass
 }
 
 void NAPCAS::backward(Tensor& grad_output, Tensor& grad_input) {
-    if (grad_output.ndim() != 2 || grad_input.ndim() != 2) {
-        throw std::invalid_argument("Gradients must be 2D");
+    if (grad_output.shape() != std::vector<int>({1, output_size_})) {
+        throw std::invalid_argument("Grad output shape must be {1, output_size}");
     }
-    int batch_size = grad_input.shape()[0];
-    int in_features = grad_input.shape()[1];
-    int out_features = weights_.shape()[0];
-
-    if (grad_output.shape() != std::vector<int>{batch_size, out_features}) {
-        throw std::invalid_argument("Gradient output shape mismatch");
+    if (grad_input.shape() != std::vector<int>({1, input_size_})) {
+        throw std::invalid_argument("Grad input shape must be {1, input_size}");
     }
 
-    Eigen::Map<Eigen::MatrixXf> grad_output_mat(grad_output.data().data(), batch_size, out_features);
-    Eigen::Map<Eigen::MatrixXf> grad_input_mat(grad_input.data().data(), batch_size, in_features);
-    Eigen::Map<Eigen::MatrixXf> weights_mat(weights_.data().data(), out_features, in_features);
-    Eigen::Map<Eigen::MatrixXf> grad_weights_mat(grad_weights_.data().data(), out_features, in_features);
-    Eigen::Map<Eigen::VectorXf> grad_bias_vec(grad_bias_.data().data(), grad_bias_.shape()[0]);
+    // Map tensors to Eigen matrices
+    Eigen::Map<Eigen::MatrixXf> grad_output_mat(grad_output.data().data(), 1, output_size_);
+    Eigen::Map<Eigen::MatrixXf> input_mat(input_.data().data(), 1, input_size_);
+    Eigen::Map<Eigen::MatrixXf> masked_weights_mat(masked_weights_.data().data(), output_size_, input_size_);
+    Eigen::Map<Eigen::MatrixXf> grad_input_mat(grad_input.data().data(), 1, input_size_);
+    Eigen::Map<Eigen::MatrixXf> grad_weights_mat(grad_weights_.data().data(), output_size_, input_size_);
 
-    grad_input_mat = grad_output_mat * weights_mat;
-    grad_weights_mat = grad_output_mat.transpose() * grad_input_mat;
-    grad_bias_vec = grad_output_mat.colwise().sum();
+    // Compute gradients
+    grad_input_mat = grad_output_mat * masked_weights_mat;
+    grad_weights_mat = grad_output_mat.transpose() * input_mat;
+    grad_alpha_[0] = (grad_output_mat * (input_mat * masked_weights_mat.transpose())).sum();
+
+    // Update masked weights gradients
+    for (int i = 0; i < output_size_; ++i) {
+        for (int j = 0; j < input_size_; ++j) {
+            int idx = i * input_size_ + j;
+            grad_weights_[idx] *= std::exp(-std::abs(alpha_[i]));
+        }
+    }
 }
 
 void NAPCAS::update(float lr) {
-    learning_rate_ = lr;
-    for (int i = 0; i < weights_.size(); ++i) {
+    for (size_t i = 0; i < weights_.size(); ++i) {
         weights_[i] -= lr * grad_weights_[i];
     }
-    for (int i = 0; i < bias_.size(); ++i) {
-        bias_[i] -= lr * grad_bias_[i];
+    for (size_t i = 0; i < alpha_.size(); ++i) {
+        alpha_[i] -= lr * grad_alpha_[i];
     }
 }
 
-Tensor& NAPCAS::get_weights() { return weights_; }
-Tensor& NAPCAS::get_grad_weights() { return grad_weights_; }
-
 void NAPCAS::set_weights(const Tensor& weights) {
-    this->weights_ = weights;
+    if (weights.shape() != std::vector<int>({output_size_, input_size_})) {
+        throw std::invalid_argument("Weight shape mismatch");
+    }
+    weights_ = weights;
+}
+
+void NAPCAS::save(const std::string& path) {
+    weights_.save(path + "_weights.tensor");
+    alpha_.save(path + "_alpha.tensor");
+}
+
+void NAPCAS::load(const std::string& path) {
+    weights_.load(path + "_weights.tensor");
+    alpha_.load(path + "_alpha.tensor");
 }

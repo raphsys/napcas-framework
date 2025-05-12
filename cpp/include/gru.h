@@ -1,12 +1,16 @@
-#ifndef CONV2D_H
-#define CONV2D_H
+#ifndef GRU_H
+#define GRU_H
 
 #include "module.h"
 #include "tensor.h"
+#include "linear.h"
+#include "activation.h"
+#include <vector>
+#include <memory>
 
-class Conv2d : public Module {
+class GRU : public Module {
 public:
-    Conv2d(int in_channels, int out_channels, int kernel_size, int stride = 1, int padding = 0);
+    GRU(int input_size, int hidden_size, int num_layers);
     void forward(Tensor& input, Tensor& output) override;
     void backward(Tensor& grad_output, Tensor& grad_input) override;
     void update(float lr) override;
@@ -17,16 +21,16 @@ public:
     void load(const std::string& path) override;
 
 private:
-    int in_channels_;
-    int out_channels_;
-    int kernel_size_;
-    int stride_;
-    int padding_;
+    int input_size_;
+    int hidden_size_;
+    int num_layers_;
+    std::vector<std::shared_ptr<Linear>> input_to_hidden_;
+    std::vector<std::shared_ptr<Linear>> hidden_to_hidden_;
+    std::vector<std::shared_ptr<Sigmoid>> gate_activations_;
+    std::vector<std::shared_ptr<Tanh>> tanh_activations_;
     Tensor weights_;
-    Tensor bias_;
     Tensor grad_weights_;
-    Tensor grad_bias_;
-    Tensor input_cache_; // For backward pass
+    std::vector<Tensor> hidden_states_;
 };
 
 #endif

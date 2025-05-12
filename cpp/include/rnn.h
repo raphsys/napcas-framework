@@ -1,19 +1,23 @@
-#ifndef NNCELL_H
-#define NNCELL_H
+#ifndef RNN_H
+#define RNN_H
 
 #include "module.h"
-#include "tensor.h"
+#include "linear.h"
+#include "activation.h"
+#include <vector>
+#include <memory>
 
-/// @brief Neural Network Cell with adaptive connections.
-class NNCel : public Module {
+/// @brief Recurrent Neural Network (RNN) module.
+class RNN : public Module {
 public:
-    /// @brief Constructs a NNCel layer.
-    /// @param in_features Number of input features.
-    /// @param out_features Number of output features.
-    NNCel(int in_features, int out_features);
-    /// @brief Performs forward pass with adaptive connections.
-    /// @param input Input tensor.
-    /// @param output Output tensor.
+    /// @brief Constructs an RNN.
+    /// @param input_size Size of input features.
+    /// @param hidden_size Size of hidden state.
+    /// @param num_layers Number of RNN layers.
+    RNN(int input_size, int hidden_size, int num_layers = 1);
+    /// @brief Performs forward pass through the RNN.
+    /// @param input Input tensor (sequence_length, batch_size, input_size).
+    /// @param output Output tensor (sequence_length, batch_size, hidden_size).
     void forward(Tensor& input, Tensor& output) override;
     /// @brief Performs backward pass (gradient computation).
     /// @param grad_output Gradient of the output.
@@ -31,31 +35,22 @@ public:
     /// @brief Sets weights tensor.
     /// @param weights New weights tensor.
     void set_weights(const Tensor& weights) override;
-    /// @brief Saves module state to file.
+    /// @brief Saves RNN state to file.
     /// @param path File path.
     void save(const std::string& path) override;
-    /// @brief Loads module state from file.
+    /// @brief Loads RNN state from file.
     /// @param path File path.
     void load(const std::string& path) override;
 
 private:
+    int input_size_;
+    int hidden_size_;
+    int num_layers_;
+    std::vector<std::shared_ptr<Linear>> input_to_hidden_;
+    std::vector<std::shared_ptr<Linear>> hidden_to_hidden_;
+    std::vector<std::shared_ptr<Tanh>> activations_;
     Tensor weights_;
-    Tensor bias_;
     Tensor grad_weights_;
-    Tensor grad_bias_;
-    Tensor connections_;
-    Tensor threshold_;
-    Tensor alpha_;
-    Tensor memory_paths_;
-    Tensor grad_connections_;
-    Tensor grad_threshold_;
-    Tensor grad_alpha_;
-    Tensor grad_memory_paths_;
-    float learning_rate_;
-#ifdef USE_CUDA
-    void forward_cuda(Tensor& input, Tensor& output);
-    void backward_cuda(Tensor& grad_output, Tensor& grad_input);
-#endif
 };
 
-#endif // NNCELL_H
+#endif // RNN_H

@@ -1,12 +1,16 @@
-#ifndef CONV2D_H
-#define CONV2D_H
+#ifndef TRANSFORMER_H
+#define TRANSFORMER_H
 
 #include "module.h"
 #include "tensor.h"
+#include "linear.h"
+#include "attention.h"
+#include <vector>
+#include <memory>
 
-class Conv2d : public Module {
+class Transformer : public Module {
 public:
-    Conv2d(int in_channels, int out_channels, int kernel_size, int stride = 1, int padding = 0);
+    Transformer(int d_model, int num_heads, int num_layers, int d_ff);
     void forward(Tensor& input, Tensor& output) override;
     void backward(Tensor& grad_output, Tensor& grad_input) override;
     void update(float lr) override;
@@ -17,16 +21,16 @@ public:
     void load(const std::string& path) override;
 
 private:
-    int in_channels_;
-    int out_channels_;
-    int kernel_size_;
-    int stride_;
-    int padding_;
+    void add_positional_encoding(Tensor& input);
+    int d_model_;
+    int num_heads_;
+    int num_layers_;
+    int d_ff_;
+    std::vector<std::shared_ptr<MultiHeadAttention>> attention_layers_;
+    std::vector<std::shared_ptr<Linear>> feed_forward_layers_;
+    std::vector<std::shared_ptr<ReLU>> ff_activations_;
     Tensor weights_;
-    Tensor bias_;
     Tensor grad_weights_;
-    Tensor grad_bias_;
-    Tensor input_cache_; // For backward pass
 };
 
 #endif
