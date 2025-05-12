@@ -1,0 +1,11 @@
+PROJECT_NAME           = "napcas"
+OUTPUT_DIRECTORY       = build
+GENERATE_LATEX         = NO
+GENERATE_HTML          = YES
+GENERATE_XML           = YES
+INPUT                  = ../cpp/include ../cpp/src
+RECURSIVE              = YES
+OPTIMIZE_OUTPUT_FOR_C  = NO
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES

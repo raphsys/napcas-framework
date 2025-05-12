@@ -1,0 +1,97 @@
+napcas-framework/
+├── CMakeLists.txt
+├── cpp/
+│   ├── include/
+│   │   ├── activation.h
+│   │   ├── autograd.h
+│   │   ├── conv2d.h
+│   │   ├── data_loader.h
+│   │   ├── linear.h
+│   │   ├── loss.h
+│   │   ├── module.h
+│   │   ├── napca_sim.h
+│   │   ├── napcas.h
+│   │   ├── nncell.h
+│   │   ├── optimizer.h
+│   │   ├── tensor.h
+│   │   ├── mlp.h
+│   │   ├── rnn.h
+│   │   ├── transformer.h
+│   │   ├── gan.h
+│   │   ├── visualization.h
+│   │   └── gpu_utils.h
+│   └── src/
+│       ├── activation.cpp
+│       ├── autograd.cpp
+│       ├── conv2d.cpp
+│       ├── data_loader.cpp
+│       ├── linear.cpp
+│       ├── loss.cpp
+│       ├── napca_sim.cpp
+│       ├── napcas.cpp
+│       ├── nncell.cpp
+│       ├── optimizer.cpp
+│       ├── python_bindings.cpp
+│       ├── tensor.cpp
+│       ├── mlp.cpp
+│       ├── rnn.cpp
+│       ├── transformer.cpp
+│       ├── gan.cpp
+│       ├── visualization.cpp
+│       └── gpu_utils.cpp
+├── docs/
+│   ├── Doxyfile
+│   ├── source/
+│   │   ├── conf.py
+│   │   ├── index.rst
+│   │   ├── modules.rst
+│   │   ├── examples.rst
+│   │   └── api.rst
+│   └── build/
+├── python/
+│   ├── __init__.py
+│   ├── pyproject.toml
+│   ├── setup.py
+│   ├── napcas/
+│   │   ├── __init__.py
+│   │   ├── core.py
+│   │   ├── data_augmentation.py
+│   │   ├── visualization.py
+│   │   └── modules/
+│   │       ├── __init__.py
+│   │       ├── activation.py
+│   │       ├── autograd.py
+│   │       ├── data_loader.py
+│   │       ├── linear.py
+│   │       ├── loss.py
+│   │       ├── optimizer.py
+│   │       ├── napcas.py
+│   │       ├── mlp.py
+│   │       ├── rnn.py
+│   │       ├── transformer.py
+│   │       ├── gan.py
+│   │       └── visualization.py
+│   ├── tests/
+│   │   ├── test_dataloader_autograd.py
+│   │   ├── test_napcas.py
+│   │   ├── test_napcas_components.py
+│   │   ├── test_mnist.py
+│   │   ├── test_cifar10.py
+│   │   ├── test_mlp.py
+│   │   ├── test_rnn.py
+│   │   ├── test_transformer.py
+│   │   └── test_gan.py
+│   └── examples/
+│       ├── mlp_example.py
+│       ├── cnn_example.py
+│       ├── rnn_example.py
+│       ├── transformer_example.py
+│       └── gan_example.py
+└── tests/
+    ├── CMakeLists.txt
+    ├── test_all_modules.cpp
+    ├── test_napcas.cpp
+    ├── test_mlp.cpp
+    ├── test_rnn.cpp
+    ├── test_transformer.cpp
+    └── test_gan.cpp
