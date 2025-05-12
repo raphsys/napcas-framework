@@ -1,72 +1,80 @@
-cmake_minimum_required(VERSION 3.14)
-project(napcas)
+cmake_minimum_required(VERSION 3.10)
+project(napcas VERSION 1.0.0 LANGUAGES CXX)
 
+# Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Compilation sécurisée
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fvisibility=hidden -fvisibility-inlines-hidden")
-
-# Activer PYBIND11_FINDPYTHON pour éviter l'avertissement CMP0148
-set(PYBIND11_FINDPYTHON ON)
-
-# Trouver pybind11 et Python
-find_package(pybind11 REQUIRED)
-find_package(Python3 REQUIRED COMPONENTS Development)
-
-# Trouver Eigen
+# Find dependencies
 find_package(Eigen3 REQUIRED)
-include_directories(${EIGEN3_INCLUDE_DIR})
+find_package(CUDAToolkit QUIET)
+set(PYBIND11_FINDPYTHON ON)
+find_package(pybind11 REQUIRED)
+find_package(Doxygen QUIET)
 
-# Définir les sources de la bibliothèque C++
-set(NAPCAS_SRC
-    cpp/src/activation.cpp
-    cpp/src/autograd.cpp
-    cpp/src/conv2d.cpp
-    cpp/src/data_loader.cpp
-    cpp/src/linear.cpp
-    cpp/src/loss.cpp
+# Source files
+set(SOURCES
+    cpp/src/tensor.cpp
     cpp/src/napcas.cpp
     cpp/src/napca_sim.cpp
     cpp/src/nncell.cpp
+    cpp/src/linear.cpp
+    cpp/src/conv2d.cpp
+    cpp/src/pooling.cpp
+    cpp/src/attention.cpp
+    cpp/src/activation.cpp
+    cpp/src/loss.cpp
     cpp/src/optimizer.cpp
-    cpp/src/tensor.cpp
+    cpp/src/data_loader.cpp
+    cpp/src/autograd.cpp
+    cpp/src/mlp.cpp
+    cpp/src/rnn.cpp
+    cpp/src/transformer.cpp
+    cpp/src/gan.cpp
+    cpp/src/lstm.cpp
+    cpp/src/gru.cpp
+    cpp/src/visualization.cpp
+    cpp/src/gpu_utils.cpp
+    cpp/src/python_bindings.cpp
 )
 
-# Vérifier que les fichiers source existent
-foreach(src_file ${NAPCAS_SRC})
-    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${src_file}")
-        message(WARNING "Source file ${src_file} not found")
-    endif()
-endforeach()
+# Build static library
+add_library(napcas STATIC ${SOURCES})
 
-# Vérifier que python_bindings.cpp existe
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cpp/src/python_bindings.cpp")
-    message(FATAL_ERROR "Source file cpp/src/python_bindings.cpp not found")
-endif()
-
-# Ajouter le chemin du répertoire contenant la bibliothèque
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../build)
-
-# Créer la bibliothèque statique
-add_library(libnapcas STATIC ${NAPCAS_SRC})
-target_include_directories(libnapcas PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include ${EIGEN3_INCLUDE_DIR})
-target_link_libraries(libnapcas PUBLIC Eigen3::Eigen)
-
-
-# Créer le module Python
-pybind11_add_module(napcas MODULE cpp/src/python_bindings.cpp)
-target_link_libraries(napcas PRIVATE libnapcas Python3::Python Eigen3::Eigen)
-
-# Propriétés de visibilité
-set_target_properties(napcas PROPERTIES
-    CXX_VISIBILITY_PRESET "hidden"
-    VISIBILITY_INLINES_HIDDEN ON
+# Set include directories for napcas
+target_include_directories(napcas PUBLIC
+    ${EIGEN3_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}/cpp/include
 )
 
-# Ajouter les tests si la variable BUILD_TESTS est définie
-if(BUILD_TESTS)
-    add_subdirectory(tests)
+# Link CUDA if available
+if(CUDAToolkit_FOUND)
+    add_definitions(-DUSE_CUDA)
+    target_link_libraries(napcas PRIVATE CUDA::cudart CUDA::cublas)
 endif()
 
+# Link other dependencies
+target_link_libraries(napcas PRIVATE Eigen3::Eigen pybind11::pybind11)
 
+# Build test executable
+add_executable(napcas_test cpp/tests/test_main.cpp)
+
+# Set include directories for napcas_test
+target_include_directories(napcas_test PRIVATE
+    ${EIGEN3_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}/cpp/include
+)
+
+# Link napcas_test with napcas
+target_link_libraries(napcas_test PRIVATE napcas)
+
+# Optional Doxygen documentation
+if(DOXYGEN_FOUND)
+    doxygen_add_docs(docs cpp/include cpp/src ALL)
+else()
+    message(WARNING "Doxygen not found. Documentation will not be generated.")
+endif()
+
+# Install targets
+install(TARGETS napcas DESTINATION lib)
+install(DIRECTORY cpp/include/ DESTINATION include/napcas)
