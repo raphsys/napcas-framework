@@ -3,56 +3,56 @@
 
 #include <vector>
 #include <stdexcept>
+#include <numeric>
+#include <functional>
+#include <string>
+
+#ifdef USE_CUDA
+#include "gpu_utils.h"
+#endif
 
 /// @brief Tensor class for multi-dimensional arrays.
 class Tensor {
 public:
     Tensor() = default;
-    /// @brief Constructs a tensor with given shape and optional data.
+    /// @brief Constructs a tensor with given shape and optional initial data.
     /// @param shape Shape of the tensor.
-    /// @param data Optional initial data.
+    /// @param data Optional initial data; if empty, tensor is zero-initialized.
     Tensor(const std::vector<int>& shape, const std::vector<float>& data = {});
-    /// @brief Gets the total number of elements.
-    /// @return Size of the tensor.
-    int size() const { return data_.size(); }
-    /// @brief Gets the shape of the tensor.
-    /// @return Reference to shape vector.
+
+    /// @brief Total number of elements.
+    int size() const { return static_cast<int>(data_.size()); }
+    /// @brief Number of dimensions.
+    int ndim() const { return static_cast<int>(shape_.size()); }
+
+    /// @brief Shape vector.
     const std::vector<int>& shape() const { return shape_; }
-    /// @brief Gets the tensor data.
-    /// @return Reference to data vector.
+
+    /// @brief Raw data access.
     std::vector<float>& data() { return data_; }
-    /// @brief Gets the tensor data (const).
-    /// @return Const reference to data vector.
     const std::vector<float>& data() const { return data_; }
-    /// @brief Fills the tensor with a value.
-    /// @param value Value to fill.
+
+    /// @brief Fill every element with a value.
     void fill(float value);
-    /// @brief Zeros the gradient.
+    /// @brief Zero the tensor (alias for fill(0)).
     void zero_grad();
-    /// @brief Accesses element at index.
-    /// @param i Index.
-    /// @return Reference to element.
-    float& operator[](int i) { return data_[i]; }
-    /// @brief Accesses element at index (const).
-    /// @param i Index.
-    /// @return Const reference to element.
-    const float& operator[](int i) const { return data_[i]; }
-    /// @brief Gets the number of dimensions.
-    /// @return Number of dimensions.
-    int ndim() const { return shape_.size(); }
-    /// @brief Reshapes the tensor.
-    /// @param new_shape New shape.
+
+    /// @brief Element access.
+    float& operator[](int i) { return data_.at(i); }
+    const float& operator[](int i) const { return data_.at(i); }
+
+    /// @brief Reshape the tensor (must preserve total size).
     void reshape(const std::vector<int>& new_shape);
-    /// @brief Saves tensor to file.
-    /// @param path File path.
+
+    /// @brief Save tensor to binary file.
     void save(const std::string& path) const;
-    /// @brief Loads tensor from file.
-    /// @param path File path.
+    /// @brief Load tensor from binary file.
     void load(const std::string& path);
+
 #ifdef USE_CUDA
-    /// @brief Moves tensor to GPU.
+    /// @brief Transfer data to GPU.
     void to_cuda();
-    /// @brief Moves tensor to CPU.
+    /// @brief Transfer data back to CPU.
     void to_cpu();
 #endif
 
@@ -65,3 +65,4 @@ private:
 };
 
 #endif // TENSOR_H
+

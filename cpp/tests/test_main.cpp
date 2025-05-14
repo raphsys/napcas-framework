@@ -24,7 +24,7 @@ void test_napcas() {
     Tensor input({2, 10}, std::vector<float>(20, 1.0f));
     Tensor output({2, 5});
     model.forward(input, output);
-    assert(output.shape() == std::vector<int>{2, 5});
+    assert((output.shape() == std::vector<int>{2, 5}));
     std::cout << "NAPCAS test passed\n";
 }
 
@@ -34,7 +34,7 @@ void test_napca_sim() {
     Tensor output({2, 5});
     model.forward(input, output);
     model.prune_connections(0.01f);
-    assert(output.shape() == std::vector<int>{2, 5});
+    assert((output.shape() == std::vector<int>{2, 5}));
     std::cout << "NAPCA_Sim test passed\n";
 }
 
@@ -43,7 +43,7 @@ void test_nncell() {
     Tensor input({2, 10}, std::vector<float>(20, 1.0f));
     Tensor output({2, 5});
     model.forward(input, output);
-    assert(output.shape() == std::vector<int>{2, 5});
+    assert((output.shape() == std::vector<int>{2, 5}));
     std::cout << "NNCel test passed\n";
 }
 
@@ -52,7 +52,7 @@ void test_mlp() {
     Tensor input({2, 10}, std::vector<float>(20, 1.0f));
     Tensor output({2, 5});
     model.forward(input, output);
-    assert(output.shape() == std::vector<int>{2, 5});
+    assert((output.shape() == std::vector<int>{2, 5}));
     std::cout << "MLP test passed\n";
 }
 
@@ -61,7 +61,7 @@ void test_rnn() {
     Tensor input({5, 2, 10}, std::vector<float>(100, 1.0f));
     Tensor output({5, 2, 20});
     model.forward(input, output);
-    assert(output.shape() == std::vector<int>{5, 2, 20});
+    assert((output.shape() == std::vector<int>{5, 2, 20}));
     std::cout << "RNN test passed\n";
 }
 
@@ -73,7 +73,7 @@ void test_transformer() {
     model.forward(input, output);
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    assert(output.shape() == std::vector<int>{512, 2, 64});
+    assert((output.shape() == std::vector<int>{512, 2, 64}));
     std::cout << "Transformer test passed, time: " << duration.count() << "ms\n";
 }
 
@@ -82,7 +82,7 @@ void test_gan() {
     Tensor noise({64, 100}, std::vector<float>(6400, 1.0f));
     Tensor output({64, 784});
     model.forward(noise, output);
-    assert(output.shape() == std::vector<int>{64, 784});
+    assert((output.shape() == std::vector<int>{64, 784}));
     std::cout << "GAN test passed\n";
 }
 
@@ -91,7 +91,7 @@ void test_maxpool2d() {
     Tensor input({2, 3, 32, 32}, std::vector<float>(6144, 1.0f));
     Tensor output({2, 3, 16, 16});
     model.forward(input, output);
-    assert(output.shape() == std::vector<int>{2, 3, 16, 16});
+    assert((output.shape() == std::vector<int>{2, 3, 16, 16}));
     std::cout << "MaxPool2d test passed\n";
 }
 
@@ -100,7 +100,7 @@ void test_lstm() {
     Tensor input({5, 2, 10}, std::vector<float>(100, 1.0f));
     Tensor output({5, 2, 20});
     model.forward(input, output);
-    assert(output.shape() == std::vector<int>{5, 2, 20});
+    assert((output.shape() == std::vector<int>{5, 2, 20}));
     std::cout << "LSTM test passed\n";
 }
 
@@ -109,7 +109,7 @@ void test_gru() {
     Tensor input({5, 2, 10}, std::vector<float>(100, 1.0f));
     Tensor output({5, 2, 20});
     model.forward(input, output);
-    assert(output.shape() == std::vector<int>{5, 2, 20});
+    assert((output.shape() == std::vector<int>{5, 2, 20}));
     std::cout << "GRU test passed\n";
 }
 
@@ -121,7 +121,7 @@ void test_conv2d() {
     model.forward(input, output);
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    assert(output.shape() == std::vector<int>{2, 16, 64, 64});
+    assert((output.shape() == std::vector<int>{2, 16, 64, 64}));
     std::cout << "Conv2d test passed, time: " << duration.count() << "ms\n";
 }
 
@@ -140,3 +140,4 @@ int main() {
     std::cout << "All tests passed!\n";
     return 0;
 }
+

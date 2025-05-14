@@ -1,124 +1,93 @@
 cmake_minimum_required(VERSION 3.14)
-project(napcas VERSION 1.0.0 LANGUAGES CXX)
+project(napcas VERSION 1.0 LANGUAGES CXX)
 
-# --------------------------------------------------
-# 1) Paramètres généraux
-# --------------------------------------------------
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-# Flags pour PIC et visibilité
-set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -fPIC -fvisibility=hidden -fvisibility-inlines-hidden"
-)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+add_compile_options(-fvisibility=hidden)
 
-# --------------------------------------------------
-# 2) Dépendances externes
-# --------------------------------------------------
-# Pybind11 / Python
-set(PYBIND11_FINDPYTHON ON)
-find_package(pybind11 REQUIRED)
-find_package(Python3 REQUIRED COMPONENTS Development)
-
-# Eigen3
 find_package(Eigen3 REQUIRED)
-
-# HDF5 (C++ API)
 find_package(HDF5 REQUIRED COMPONENTS CXX)
-# HDF5_LIBRARIES et HDF5_INCLUDE_DIRS sont définis par find_package(HDF5)
-include_directories(${HDF5_INCLUDE_DIRS})
+find_package(pybind11 REQUIRED)
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 
-# --------------------------------------------------
-# 3) Sources C++ du framework
-# --------------------------------------------------
-set(NAPCAS_SRC
-    cpp/src/tensor.cpp
-    cpp/src/napcas.cpp
-    cpp/src/napca_sim.cpp
-    cpp/src/nncell.cpp
-    cpp/src/linear.cpp
-    cpp/src/conv2d.cpp
-    cpp/src/pooling.cpp
-    cpp/src/attention.cpp
-    cpp/src/activation.cpp
-    cpp/src/loss.cpp
-    cpp/src/optimizer.cpp
-    cpp/src/data_loader.cpp
-    cpp/src/autograd.cpp
-    cpp/src/mlp.cpp
-    cpp/src/rnn.cpp
-    cpp/src/transformer.cpp
-    cpp/src/gan.cpp
-    cpp/src/lstm.cpp
-    cpp/src/gru.cpp
-    cpp/src/visualization.cpp
-    cpp/src/gpu_utils.cpp
-)
-
-# Vérification (facultative)
-foreach(src ${NAPCAS_SRC})
-    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${src}")
-        message(WARNING "Source file not found: ${src}")
-    endif()
-endforeach()
-
-# --------------------------------------------------
-# 4) Bibliothèque statique napcas_lib
-# --------------------------------------------------
-add_library(napcas_lib STATIC ${NAPCAS_SRC})
-
-# Include pour Eigen, HDF5, STB_IMAGE (placé dans cpp/include) et nos headers
-target_include_directories(napcas_lib PUBLIC
-    ${EIGEN3_INCLUDE_DIR}
+include_directories(
+    ${PROJECT_SOURCE_DIR}/include
     ${HDF5_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include
 )
 
-# Link des dépendances
+set(NAPCAS_SOURCES
+    src/tensor.cpp
+    src/napcas.cpp
+    src/napca_sim.cpp
+    src/nncell.cpp
+    src/linear.cpp
+    src/conv2d.cpp
+    src/pooling.cpp
+    src/attention.cpp
+    src/activation.cpp
+    src/loss.cpp
+    src/optimizer.cpp
+    src/data_loader.cpp
+    src/autograd.cpp
+    src/mlp.cpp
+    src/rnn.cpp
+    src/transformer.cpp
+    src/gan.cpp
+    src/lstm.cpp
+    src/gru.cpp
+    src/visualization.cpp
+    src/gpu_utils.cpp
+)
+
+# Bibliothèque stb compilée séparément avec -fPIC
+add_library(stb_image_impl STATIC src/stb_image_impl.cpp)
+set_target_properties(stb_image_impl PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# Bibliothèque principale
+add_library(napcas_lib STATIC ${NAPCAS_SOURCES})
+target_compile_options(napcas_lib PRIVATE -fPIC)
+
+target_include_directories(napcas_lib PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
+    ${HDF5_INCLUDE_DIRS}
+)
+
 target_link_libraries(napcas_lib PUBLIC
     Eigen3::Eigen
     ${HDF5_LIBRARIES}
+    stb_image_impl
 )
 
-# --------------------------------------------------
-# 5) Module Python (_napcas) via Pybind11
-# --------------------------------------------------
-pybind11_add_module(_napcas MODULE cpp/src/python_bindings.cpp)
+pybind11_add_module(_napcas MODULE src/python_bindings.cpp)
 
-target_link_libraries(_napcas PRIVATE
-    napcas_lib
-    Python3::Python
-    Eigen3::Eigen
-    ${HDF5_LIBRARIES}
-)
-
-# Masquer les symboles inutiles
 set_target_properties(_napcas PROPERTIES
-    CXX_VISIBILITY_PRESET "hidden"
-    VISIBILITY_INLINES_HIDDEN ON
-)
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/src/napcas"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/src/napcas")   # Windows
 
-# --------------------------------------------------
-# 6) Tests C++ (optionnel)
-# --------------------------------------------------
+# Où sera créée la lib lors de l'étape install
+install(TARGETS _napcas
+        LIBRARY DESTINATION napcas             # Unix (.so)
+        RUNTIME DESTINATION napcas             # Windows (.pyd/.dll)
+        ARCHIVE DESTINATION napcas)            # Static lib (rare)
+        
+set_target_properties(_napcas PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/src/napcas"
+        PREFIX ""
+)
+target_link_libraries(_napcas PRIVATE napcas_lib ${HDF5_LIBRARIES} Eigen3::Eigen)
+target_include_directories(_napcas PRIVATE ${PROJECT_SOURCE_DIR}/include ${HDF5_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR})
+set_target_properties(_napcas PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN ON)
+
 option(BUILD_TESTS "Build C++ unit tests" ON)
 if(BUILD_TESTS)
     enable_testing()
-    add_executable(napcas_test cpp/tests/test_main.cpp)
-    target_include_directories(napcas_test PRIVATE
-        ${EIGEN3_INCLUDE_DIR}
-        ${HDF5_INCLUDE_DIRS}
-        ${CMAKE_CURRENT_SOURCE_DIR}/cpp/include
-    )
-    target_link_libraries(napcas_test PRIVATE
-        napcas_lib
-    )
-    add_test(NAME run_napcas_test COMMAND napcas_test)
+    add_executable(napcas_test tests/test_main.cpp)
+    target_include_directories(napcas_test PRIVATE ${PROJECT_SOURCE_DIR}/include ${HDF5_INCLUDE_DIRS})
+    target_link_libraries(napcas_test PRIVATE napcas_lib)
+    add_test(NAME napcas_cpp_tests COMMAND napcas_test)
 endif()
 
-# --------------------------------------------------
-# 7) Installation (facultative)
-# --------------------------------------------------
-install(TARGETS napcas_lib DESTINATION lib)
-install(TARGETS _napcas DESTINATION lib)
-install(DIRECTORY cpp/include/ DESTINATION include/napcas)
+install(TARGETS napcas_lib _napcas LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+install(DIRECTORY include/ DESTINATION include/napcas)
 

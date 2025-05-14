@@ -1,207 +1,269 @@
+// File: cpp/src/attention.cpp
+
 #include "attention.h"
-#include "linear.h"
 #include <Eigen/Dense>
 #include <cmath>
 #include <stdexcept>
-#include <fstream>
 #include <algorithm>
 
 MultiHeadAttention::MultiHeadAttention(int d_model, int num_heads)
-    : d_model_(d_model), num_heads_(num_heads), d_k_(d_model / num_heads) {
-    if (d_model % num_heads != 0) {
+    : d_model_(d_model),
+      num_heads_(num_heads),
+      d_k_(d_model / num_heads),
+      chunk_size_(512),
+      weights_({d_model, d_model}),
+      grad_weights_({d_model, d_model})
+{
+    if (d_model_ % num_heads_ != 0) {
         throw std::invalid_argument("d_model must be divisible by num_heads");
     }
-    for (int i = 0; i < num_heads; ++i) {
-        w_q_.push_back(std::make_shared<Linear>(d_model, d_k_));
-        w_k_.push_back(std::make_shared<Linear>(d_model, d_k_));
-        w_v_.push_back(std::make_shared<Linear>(d_model, d_k_));
+    w_q_.reserve(num_heads_);
+    w_k_.reserve(num_heads_);
+    w_v_.reserve(num_heads_);
+    for (int i = 0; i < num_heads_; ++i) {
+        w_q_.push_back(std::make_shared<Linear>(d_model_, d_k_));
+        w_k_.push_back(std::make_shared<Linear>(d_model_, d_k_));
+        w_v_.push_back(std::make_shared<Linear>(d_model_, d_k_));
     }
-    w_o_ = std::make_shared<Linear>(d_model, d_model);
-    weights_ = Tensor({d_model, d_model}); // Placeholder for serialization
-    grad_weights_ = Tensor({d_model, d_model});
-    chunk_size_ = 512; // Process 512 query tokens at a time
+    w_o_ = std::make_shared<Linear>(d_model_, d_model_);
 }
 
-void MultiHeadAttention::forward(Tensor& query, Tensor& key, Tensor& value, Tensor& output) {
+void MultiHeadAttention::forward(Tensor& input, Tensor& output) {
+    // self-attention
+    forward(input, input, input, output);
+}
+
+void MultiHeadAttention::forward(Tensor& query,
+                                 Tensor& key,
+                                 Tensor& value,
+                                 Tensor& output)
+{
+    // Vérification des dimensions
     if (query.ndim() != 3 || key.ndim() != 3 || value.ndim() != 3) {
-        throw std::invalid_argument("Inputs must be 3D (seq_len, batch_size, d_model)");
+        throw std::invalid_argument("Inputs must be 3D (seq_len, batch, d_model)");
     }
     int seq_len = query.shape()[0];
-    int batch_size = query.shape()[1];
-    if (output.shape() != std::vector<int>{seq_len, batch_size, d_model_}) {
+    int batch   = query.shape()[1];
+    if (output.shape() != std::vector<int>{seq_len, batch, d_model_}) {
         throw std::invalid_argument("Output shape mismatch");
     }
 
-    std::vector<Tensor> heads(num_heads_);
-    attention_weights_.reshape({seq_len, seq_len, batch_size, num_heads_});
+    // Vider les caches
+    q_cache_.clear(); k_cache_.clear(); v_cache_.clear();
 
+    // Préparer le tensor de poids d'attention
+    attention_weights_.reshape({seq_len, seq_len, batch, num_heads_});
+
+    // Stockage temporaire des sorties de chaque tête
+    std::vector<Tensor> heads;
+    heads.reserve(num_heads_);
+
+    // 1) Projections Q, K, V + caches
     for (int h = 0; h < num_heads_; ++h) {
-        Tensor q({seq_len, batch_size, d_k_});
-        Tensor k({seq_len, batch_size, d_k_});
-        Tensor v({seq_len, batch_size, d_k_});
+        Tensor q({seq_len, batch, d_k_});
+        Tensor k({seq_len, batch, d_k_});
+        Tensor v({seq_len, batch, d_k_});
         w_q_[h]->forward(query, q);
-        w_k_[h]->forward(key, k);
+        w_k_[h]->forward(key,   k);
         w_v_[h]->forward(value, v);
+        q_cache_.push_back(q);
+        k_cache_.push_back(k);
+        v_cache_.push_back(v);
 
-        heads[h] = Tensor({seq_len, batch_size, d_k_});
-        // Process attention in chunks to reduce memory usage
+        // 2) Attention échelonnée (chunked) pour économiser la mémoire
+        Tensor head_out({seq_len, batch, d_k_});
         for (int start = 0; start < seq_len; start += chunk_size_) {
             int end = std::min(start + chunk_size_, seq_len);
-            int chunk_len = end - start;
+            int len = end - start;
 
-            // Compute scores for chunk
-            Tensor scores({chunk_len, seq_len, batch_size});
-            Eigen::Map<Eigen::MatrixXf> q_mat(q.data().data() + start * batch_size * d_k_, chunk_len, batch_size * d_k_);
-            Eigen::Map<Eigen::MatrixXf> k_mat(k.data().data(), seq_len, batch_size * d_k_);
-            Eigen::Map<Eigen::MatrixXf> scores_mat(scores.data().data(), chunk_len, seq_len * batch_size);
-            scores_mat = (q_mat * k_mat.transpose()) / std::sqrt(static_cast<float>(d_k_));
+            // Map à Eigen
+            Eigen::Map<Eigen::MatrixXf> qmat(
+                q.data().data() + start * batch * d_k_, len, batch * d_k_);
+            Eigen::Map<Eigen::MatrixXf> kmat(
+                k.data().data(), seq_len, batch * d_k_);
+            Eigen::Map<Eigen::MatrixXf> smat(
+                attention_weights_.data().data() +
+                    h * seq_len * seq_len * batch +
+                    start * seq_len * batch,
+                len, seq_len * batch);
 
-            // Softmax
-            for (int b = 0; b < batch_size; ++b) {
-                for (int i = 0; i < chunk_len; ++i) {
-                    float max_score = scores[i * seq_len * batch_size].data()[0];
-                    for (int j = 0; j < seq_len; ++j) {
-                        max_score = std::max(max_score, scores[i * seq_len * batch_size + j * batch_size + b]);
+            // Produit scalaire / √d_k
+            smat = (qmat * kmat.transpose()) / std::sqrt(static_cast<float>(d_k_));
+
+            // Softmax par position et batch
+            for (int b = 0; b < batch; ++b) {
+                for (int i = 0; i < len; ++i) {
+                    // max pour stabilité
+                    float m = smat(i, b);
+                    for (int j = 1; j < seq_len; ++j) {
+                        m = std::max(m, smat(i, j * batch + b));
                     }
-                    float sum_exp = 0.0f;
+                    // exponentielle et normalisation
+                    float sum = 0.0f;
                     for (int j = 0; j < seq_len; ++j) {
-                        float exp_val = std::exp(scores[i * seq_len * batch_size + j * batch_size + b] - max_score);
-                        attention_weights_[(start + i) * seq_len * batch_size * num_heads_ +
-                                           j * batch_size * num_heads_ + b * num_heads_ + h] = exp_val;
-                        sum_exp += exp_val;
+                        float e = std::exp(smat(i, j * batch + b) - m);
+                        smat(i, j * batch + b) = e;
+                        sum += e;
                     }
                     for (int j = 0; j < seq_len; ++j) {
-                        attention_weights_[(start + i) * seq_len * batch_size * num_heads_ +
-                                           j * batch_size * num_heads_ + b * num_heads_ + h] /= sum_exp;
+                        smat(i, j * batch + b) /= sum;
                     }
                 }
             }
 
-            // Apply attention weights to values
-            Eigen::Map<Eigen::MatrixXf> v_mat(v.data().data(), seq_len, batch_size * d_k_);
-            Eigen::Map<Eigen::MatrixXf> head_mat(heads[h].data().data() + start * batch_size * d_k_, chunk_len, batch_size * d_k_);
-            Eigen::Map<Eigen::MatrixXf> attn_mat(attention_weights_.data().data() +
-                                                 h * seq_len * seq_len * batch_size +
-                                                 start * seq_len * batch_size, chunk_len, seq_len * batch_size);
-            head_mat = attn_mat * v_mat;
+            // Multiplication par V
+            Eigen::Map<Eigen::MatrixXf> vmat(
+                v.data().data(), seq_len, batch * d_k_);
+            Eigen::Map<Eigen::MatrixXf> hmat(
+                head_out.data().data() + start * batch * d_k_, len, batch * d_k_);
+            hmat = smat * vmat;
         }
+        heads.push_back(std::move(head_out));
     }
 
-    // Concatenate heads
-    Tensor concat({seq_len, batch_size, d_model_});
-    for (int h = 0; h < num_heads_; ++h) {
-        for (int i = 0; i < seq_len; ++i) {
-            for (int b = 0; b < batch_size; ++b) {
-                for (int j = 0; j < d_k_; ++j) {
-                    concat[i * batch_size * d_model_ + b * d_model_ + h * d_k_ + j] = heads[h][i * batch_size * d_k_ + b * d_k_ + j];
+    // 3) Concaténation des têtes → concat_cache_
+    concat_cache_.reshape({seq_len, batch, d_model_});
+    for (int i = 0; i < seq_len; ++i) {
+        for (int b = 0; b < batch; ++b) {
+            for (int h = 0; h < num_heads_; ++h) {
+                for (int k = 0; k < d_k_; ++k) {
+                    int out_idx  = i * batch * d_model_ + b * d_model_ + h * d_k_ + k;
+                    int head_idx = i * batch * d_k_ + b * d_k_ + k;
+                    concat_cache_.data()[out_idx] = heads[h].data()[head_idx];
                 }
             }
         }
     }
 
-    w_o_->forward(concat, output);
+    // 4) Projection finale
+    w_o_->forward(concat_cache_, output);
 }
 
 void MultiHeadAttention::backward(Tensor& grad_output, Tensor& grad_input) {
-    int seq_len = grad_output.shape()[0];
-    int batch_size = grad_output.shape()[1];
+    // grad_output : [seq_len, batch, d_model_]
+    int seq_len = concat_cache_.shape()[0];
+    int batch   = concat_cache_.shape()[1];
 
-    // Backward through output linear layer
-    Tensor grad_concat({seq_len, batch_size, d_model_});
+    // Initialiser grad_input à zéro
+    grad_input = Tensor(concat_cache_.shape());
+    grad_input.fill(0.0f);
+
+    // 1) Backward projection finale
+    Tensor grad_concat(concat_cache_.shape());
     w_o_->backward(grad_output, grad_concat);
 
-    // Split gradient to heads
-    std::vector<Tensor> grad_heads(num_heads_, Tensor({seq_len, batch_size, d_k_}));
+    // 2) Séparer grad_concat en un grad par tête
+    std::vector<Tensor> grad_heads;
+    grad_heads.reserve(num_heads_);
     for (int h = 0; h < num_heads_; ++h) {
+        grad_heads.emplace_back(Tensor({seq_len, batch, d_k_}));
+    }
+    for (int i = 0; i < seq_len; ++i) {
+        for (int b = 0; b < batch; ++b) {
+            for (int h = 0; h < num_heads_; ++h) {
+                for (int k = 0; k < d_k_; ++k) {
+                    int idx_concat = i * batch * d_model_ + b * d_model_ + h * d_k_ + k;
+                    int idx_head   = i * batch * d_k_   + b * d_k_   + k;
+                    grad_heads[h].data()[idx_head] = grad_concat.data()[idx_concat];
+                }
+            }
+        }
+    }
+
+    // 3) Pour chaque tête, backprop à travers attention
+    float scale = 1.0f / std::sqrt(static_cast<float>(d_k_));
+    for (int h = 0; h < num_heads_; ++h) {
+        // Récupérer caches
+        auto& Q = q_cache_[h];
+        auto& K = k_cache_[h];
+        auto& V = v_cache_[h];
+
+        // 3a) Gradients initiaux
+        Tensor grad_P({seq_len, seq_len, batch});
+        grad_P.fill(0.0f);
+        Tensor grad_V({seq_len, batch, d_k_});
+        grad_V.fill(0.0f);
+
+        // 3b) Calcul de grad_P et grad_V
         for (int i = 0; i < seq_len; ++i) {
-            for (int b = 0; b < batch_size; ++b) {
-                for (int j = 0; j < d_k_; ++j) {
-                    grad_heads[h][i * batch_size * d_k_ + b * d_k_ + j] =
-                        grad_concat[i * batch_size * d_model_ + b * d_model_ + h * d_k_ + j];
+            for (int b = 0; b < batch; ++b) {
+                for (int k = 0; k < d_k_; ++k) {
+                    int idx_head = i * batch * d_k_ + b * d_k_ + k;
+                    float g = grad_heads[h].data()[idx_head];
+                    for (int j = 0; j < seq_len; ++j) {
+                        int idx_P = ((i * seq_len + j) * batch + b);
+                        float Pij = attention_weights_.data()[idx_P * num_heads_ + h];
+                        int idx_V = (j * batch * d_k_) + (b * d_k_) + k;
+                        float Vjk = V.data()[idx_V];
+                        grad_P.data()[idx_P]       += g * Vjk;
+                        grad_V.data()[idx_V]       += g * Pij;
+                    }
                 }
             }
         }
-    }
 
-    // Backward through attention
-    Tensor grad_query({seq_len, batch_size, d_model_});
-    Tensor grad_key({seq_len, batch_size, d_model_});
-    Tensor grad_value({seq_len, batch_size, d_model_});
-    grad_query.fill(0.0f);
-    grad_key.fill(0.0f);
-    grad_value.fill(0.0f);
-
-    for (int h = 0; h < num_heads_; ++h) {
-        Tensor q({seq_len, batch_size, d_k_});
-        Tensor k({seq_len, batch_size, d_k_});
-        w_q_[h]->forward(grad_query, q);
-        w_k_[h]->forward(grad_key, k);
-
-        for (int start = 0; start < seq_len; start += chunk_size_) {
-            int end = std::min(start + chunk_size_, seq_len);
-            int chunk_len = end - start;
-
-            Tensor grad_v({chunk_len, batch_size, d_k_});
-            Eigen::Map<Eigen::MatrixXf> grad_head_mat(grad_heads[h].data().data() + start * batch_size * d_k_,
-                                                      chunk_len, batch_size * d_k_);
-            Eigen::Map<Eigen::MatrixXf> attn_mat(attention_weights_.data().data() +
-                                                 h * seq_len * seq_len * batch_size +
-                                                 start * seq_len * batch_size, chunk_len, seq_len * batch_size);
-            Eigen::Map<Eigen::MatrixXf> grad_v_mat(grad_v.data().data(), chunk_len, batch_size * d_k_);
-            grad_v_mat = attn_mat.transpose() * grad_head_mat;
-
-            Tensor grad_attn({chunk_len, seq_len, batch_size});
-            for (int b = 0; b < batch_size; ++b) {
-                for (int i = 0; i < chunk_len; ++i) {
-                    float sum_grad = 0.0f;
-                    for (int j = 0; j < seq_len; ++j) {
-                        float attn = attention_weights_[(start + i) * seq_len * batch_size * num_heads_ +
-                                                        j * batch_size * num_heads_ + b * num_heads_ + h];
-                        float grad = grad_heads[h][(start + i) * batch_size * d_k_ + b * d_k_];
-                        grad_attn[i * seq_len * batch_size + j * batch_size + b] = attn * (1.0f - attn) * grad;
-                        sum_grad += grad_attn[i * seq_len * batch_size + j * batch_size + b];
+        // 3c) Softmax backward → grad_S
+        Tensor grad_S({seq_len, seq_len, batch});
+        grad_S.fill(0.0f);
+        for (int i = 0; i < seq_len; ++i) {
+            for (int b = 0; b < batch; ++b) {
+                for (int j = 0; j < seq_len; ++j) {
+                    int idx_P = ((i * seq_len + j) * batch + b);
+                    float dSj = 0.0f;
+                    for (int l = 0; l < seq_len; ++l) {
+                        int idx_Pl = ((i * seq_len + l) * batch + b);
+                        float gradPl = grad_P.data()[idx_Pl];
+                        float Pil    = attention_weights_.data()[idx_Pl * num_heads_ + h];
+                        float Pij    = attention_weights_.data()[idx_P  * num_heads_ + h];
+                        if (l == j) {
+                            dSj += gradPl * Pil * (1.0f - Pij);
+                        } else {
+                            dSj -= gradPl * Pil * Pij;
+                        }
                     }
-                    for (int j = 0; j < seq_len; ++j) {
-                        grad_attn[i * seq_len * batch_size + j * batch_size + b] -= attn * sum_grad;
+                    grad_S.data()[idx_P] = dSj;
+                }
+            }
+        }
+
+        // 3d) Backprop scaled dot-product → grad_Q et grad_K
+        Tensor grad_Q({seq_len, batch, d_k_});
+        Tensor grad_K({seq_len, batch, d_k_});
+        grad_Q.fill(0.0f);
+        grad_K.fill(0.0f);
+        for (int i = 0; i < seq_len; ++i) {
+            for (int b = 0; b < batch; ++b) {
+                for (int j = 0; j < seq_len; ++j) {
+                    int idx_S = ((i * seq_len + j) * batch + b);
+                    float dS = grad_S.data()[idx_S];
+                    for (int k = 0; k < d_k_; ++k) {
+                        int idx_Q = (i * batch * d_k_) + (b * d_k_) + k;
+                        int idx_K = (j * batch * d_k_) + (b * d_k_) + k;
+                        float Kjk = K.data()[idx_K];
+                        float Qik = Q.data()[idx_Q];
+                        grad_Q.data()[idx_Q] += dS * Kjk * scale;
+                        grad_K.data()[idx_K] += dS * Qik * scale;
                     }
                 }
             }
+        }
 
-            Tensor grad_q({chunk_len, batch_size, d_k_});
-            Eigen::Map<Eigen::MatrixXf> grad_attn_mat(grad_attn.data().data(), chunk_len, seq_len * batch_size);
-            Eigen::Map<Eigen::MatrixXf> k_mat(k.data().data(), seq_len, batch_size * d_k_);
-            Eigen::Map<Eigen::MatrixXf> grad_q_mat(grad_q.data().data(), chunk_len, batch_size * d_k_);
-            grad_q_mat = grad_attn_mat * k_mat / std::sqrt(static_cast<float>(d_k_));
+        // 3e) Backprop à travers Q/K/V linears
+        Tensor grad_in_q(concat_cache_.shape()); grad_in_q.fill(0.0f);
+        Tensor grad_in_k(concat_cache_.shape()); grad_in_k.fill(0.0f);
+        Tensor grad_in_v(concat_cache_.shape()); grad_in_v.fill(0.0f);
+        w_q_[h]->backward(grad_Q, grad_in_q);
+        w_k_[h]->backward(grad_K, grad_in_k);
+        w_v_[h]->backward(grad_V, grad_in_v);
 
-            Tensor grad_k({seq_len, batch_size, d_k_});
-            Eigen::Map<Eigen::MatrixXf> q_mat(q.data().data() + start * batch_size * d_k_, chunk_len, batch_size * d_k_);
-            Eigen::Map<Eigen::MatrixXf> grad_k_mat(grad_k.data().data(), seq_len, batch_size * d_k_);
-            grad_k_mat = grad_attn_mat.transpose() * q_mat / std::sqrt(static_cast<float>(d_k_));
-
-            Tensor grad_v_full({seq_len, batch_size, d_k_});
-            for (int i = 0; i < chunk_len; ++i) {
-                for (int b = 0; b < batch_size; ++b) {
-                    for (int j = 0; j < d_k_; ++j) {
-                        grad_v_full[(start + i) * batch_size * d_k_ + b * d_k_ + j] = grad_v[i * batch_size * d_k_ + b * d_k_ + j];
-                    }
-                }
-            }
-
-            w_v_[h]->backward(grad_v_full, grad_value);
-            Tensor grad_q_full({seq_len, batch_size, d_k_});
-            for (int i = 0; i < chunk_len; ++i) {
-                for (int b = 0; b < batch_size; ++b) {
-                    for (int j = 0; j < d_k_; ++j) {
-                        grad_q_full[(start + i) * batch_size * d_k_ + b * d_k_ + j] = grad_q[i * batch_size * d_k_ + b * d_k_ + j];
-                    }
-                }
-            }
-            w_q_[h]->backward(grad_q_full, grad_query);
-            w_k_[h]->backward(grad_k, grad_key);
+        // 3f) Accumuler dans grad_input
+        for (int idx = 0; idx < grad_input.size(); ++idx) {
+            grad_input.data()[idx] +=
+                grad_in_q.data()[idx] +
+                grad_in_k.data()[idx] +
+                grad_in_v.data()[idx];
         }
     }
-
-    grad_input = grad_query; // Assuming query = key = value for simplicity
 }
 
 void MultiHeadAttention::update(float lr) {
@@ -211,10 +273,6 @@ void MultiHeadAttention::update(float lr) {
         w_v_[h]->update(lr);
     }
     w_o_->update(lr);
-}
-
-void MultiHeadAttention::set_weights(const Tensor& weights) {
-    weights_ = weights;
 }
 
 void MultiHeadAttention::save(const std::string& path) {
@@ -234,3 +292,4 @@ void MultiHeadAttention::load(const std::string& path) {
     }
     w_o_->load(path + "_w_o");
 }
+
