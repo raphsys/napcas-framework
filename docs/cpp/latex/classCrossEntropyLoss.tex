@@ -1,0 +1,84 @@
+\doxysection{Référence de la classe Cross\+Entropy\+Loss}
+\hypertarget{classCrossEntropyLoss}{}\label{classCrossEntropyLoss}\index{CrossEntropyLoss@{CrossEntropyLoss}}
+
+
+Cross Entropy loss function.  
+
+
+
+
+{\ttfamily \#include $<$loss.\+h$>$}
+
+
+
+Graphe de collaboration de Cross\+Entropy\+Loss\+:
+% FIG 0
+\doxysubsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classCrossEntropyLoss_ac1a6f40fabf077e54a805087a5a088a4}{Cross\+Entropy\+Loss}} ()=default
+\item 
+float \mbox{\hyperlink{classCrossEntropyLoss_a58779cd0232f131207971cc3e6068e70}{forward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&y\+\_\+pred, \mbox{\hyperlink{classTensor}{Tensor}} \&y\+\_\+true)
+\begin{DoxyCompactList}\small\item\em Computes Cross Entropy loss. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classCrossEntropyLoss_ab632566560602a70262392ffd78f7aa2}{backward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&y\+\_\+pred, \mbox{\hyperlink{classTensor}{Tensor}} \&y\+\_\+true)
+\begin{DoxyCompactList}\small\item\em Computes gradient of Cross Entropy loss. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Description détaillée}
+Cross Entropy loss function. 
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\Hypertarget{classCrossEntropyLoss_ac1a6f40fabf077e54a805087a5a088a4}\label{classCrossEntropyLoss_ac1a6f40fabf077e54a805087a5a088a4} 
+\index{CrossEntropyLoss@{CrossEntropyLoss}!CrossEntropyLoss@{CrossEntropyLoss}}
+\index{CrossEntropyLoss@{CrossEntropyLoss}!CrossEntropyLoss@{CrossEntropyLoss}}
+\doxysubsubsection{\texorpdfstring{CrossEntropyLoss()}{CrossEntropyLoss()}}
+{\footnotesize\ttfamily Cross\+Entropy\+Loss\+::\+Cross\+Entropy\+Loss (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\doxysubsection{Documentation des fonctions membres}
+\Hypertarget{classCrossEntropyLoss_ab632566560602a70262392ffd78f7aa2}\label{classCrossEntropyLoss_ab632566560602a70262392ffd78f7aa2} 
+\index{CrossEntropyLoss@{CrossEntropyLoss}!backward@{backward}}
+\index{backward@{backward}!CrossEntropyLoss@{CrossEntropyLoss}}
+\doxysubsubsection{\texorpdfstring{backward()}{backward()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} Cross\+Entropy\+Loss\+::backward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{y\+\_\+pred,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{y\+\_\+true }\end{DoxyParamCaption})}
+
+
+
+Computes gradient of Cross Entropy loss. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em y\+\_\+pred} & Predicted logits. \\
+\hline
+{\em y\+\_\+true} & True labels. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+Gradient tensor. 
+\end{DoxyReturn}
+\Hypertarget{classCrossEntropyLoss_a58779cd0232f131207971cc3e6068e70}\label{classCrossEntropyLoss_a58779cd0232f131207971cc3e6068e70} 
+\index{CrossEntropyLoss@{CrossEntropyLoss}!forward@{forward}}
+\index{forward@{forward}!CrossEntropyLoss@{CrossEntropyLoss}}
+\doxysubsubsection{\texorpdfstring{forward()}{forward()}}
+{\footnotesize\ttfamily float Cross\+Entropy\+Loss\+::forward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{y\+\_\+pred,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{y\+\_\+true }\end{DoxyParamCaption})}
+
+
+
+Computes Cross Entropy loss. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em y\+\_\+pred} & Predicted logits. \\
+\hline
+{\em y\+\_\+true} & True labels (one-\/hot or indices). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+Loss value. 
+\end{DoxyReturn}
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/\mbox{\hyperlink{loss_8h}{loss.\+h}}\end{DoxyCompactItemize}

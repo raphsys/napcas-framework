@@ -1,0 +1,225 @@
+\doxysection{Référence de la classe Multi\+Head\+Attention}
+\hypertarget{classMultiHeadAttention}{}\label{classMultiHeadAttention}\index{MultiHeadAttention@{MultiHeadAttention}}
+
+
+Multi-\/head self-\/attention module.  
+
+
+
+
+{\ttfamily \#include $<$attention.\+h$>$}
+
+
+
+Graphe d\textquotesingle{}héritage de Multi\+Head\+Attention\+:
+% FIG 0
+
+
+Graphe de collaboration de Multi\+Head\+Attention\+:
+% FIG 1
+\doxysubsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMultiHeadAttention_aa1aecfb653918f4ba0fdd03f4fd45971}{Multi\+Head\+Attention}} (int d\+\_\+model, int num\+\_\+heads)
+\item 
+void \mbox{\hyperlink{classMultiHeadAttention_a8c88a48bb4d45b0f72bead15f38ba4fb}{forward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&input, \mbox{\hyperlink{classTensor}{Tensor}} \&output) override
+\begin{DoxyCompactList}\small\item\em Forward (self-\/attention, 2-\/args). ~\newline
+ \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMultiHeadAttention_a1af4ff2e9f2541ff5eedc58541bcb4e7}{forward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&query, \mbox{\hyperlink{classTensor}{Tensor}} \&key, \mbox{\hyperlink{classTensor}{Tensor}} \&value, \mbox{\hyperlink{classTensor}{Tensor}} \&output)
+\begin{DoxyCompactList}\small\item\em Forward (Q, K, V explicites, 4-\/args). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMultiHeadAttention_ace2a7e78ddebff1da9c7680083706b83}{backward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+output, \mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+input) override
+\begin{DoxyCompactList}\small\item\em Backward complet pour self-\/attention. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMultiHeadAttention_ad8c1572f6d3d3dec761ded4b4246657a}{update}} (float lr) override
+\begin{DoxyCompactList}\small\item\em Met à jour tous les poids internes. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classMultiHeadAttention_af7dacb69f88980441e2240e59e31ca4c}{get\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Gets weights tensor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classMultiHeadAttention_a194b5792bc0f34f7c50d3188f7d11724}{get\+\_\+grad\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Gets gradient of weights tensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMultiHeadAttention_a6dbbe962032f0d53726cba3c332f70b9}{set\+\_\+weights}} (const \mbox{\hyperlink{classTensor}{Tensor}} \&weights) override
+\begin{DoxyCompactList}\small\item\em Sets weights tensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMultiHeadAttention_ae8e1d6e71ff98d5d9a4e39900b9fb4bd}{save}} (const std\+::string \&path) override
+\begin{DoxyCompactList}\small\item\em Saves module state to file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMultiHeadAttention_a7460085fb474cf99f32713291708278a}{load}} (const std\+::string \&path) override
+\begin{DoxyCompactList}\small\item\em Loads module state from file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Fonctions membres publiques hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classModule_a4a48538d35a2da7fcc32d9f509034723}{\texorpdfstring{$\sim$}{\string~}\+Module}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Membres hérités additionnels}
+\doxysubsection*{Attributs protégés hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classModule_a648d6840cd912a7492ce7d53807d3e59}{input\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Description détaillée}
+Multi-\/head self-\/attention module. 
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\Hypertarget{classMultiHeadAttention_aa1aecfb653918f4ba0fdd03f4fd45971}\label{classMultiHeadAttention_aa1aecfb653918f4ba0fdd03f4fd45971} 
+\index{MultiHeadAttention@{MultiHeadAttention}!MultiHeadAttention@{MultiHeadAttention}}
+\index{MultiHeadAttention@{MultiHeadAttention}!MultiHeadAttention@{MultiHeadAttention}}
+\doxysubsubsection{\texorpdfstring{MultiHeadAttention()}{MultiHeadAttention()}}
+{\footnotesize\ttfamily Multi\+Head\+Attention\+::\+Multi\+Head\+Attention (\begin{DoxyParamCaption}\item[{int}]{d\+\_\+model,  }\item[{int}]{num\+\_\+heads }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Paramètres}
+{\em d\+\_\+model} & Dimension du modèle. \\
+\hline
+{\em num\+\_\+heads} & Nombre de têtes. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Documentation des fonctions membres}
+\Hypertarget{classMultiHeadAttention_ace2a7e78ddebff1da9c7680083706b83}\label{classMultiHeadAttention_ace2a7e78ddebff1da9c7680083706b83} 
+\index{MultiHeadAttention@{MultiHeadAttention}!backward@{backward}}
+\index{backward@{backward}!MultiHeadAttention@{MultiHeadAttention}}
+\doxysubsubsection{\texorpdfstring{backward()}{backward()}}
+{\footnotesize\ttfamily void Multi\+Head\+Attention\+::backward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+output,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+input }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Backward complet pour self-\/attention. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_afd9b0211fb34658f3b709391c6ae479d}{Module}}.
+
+\Hypertarget{classMultiHeadAttention_a8c88a48bb4d45b0f72bead15f38ba4fb}\label{classMultiHeadAttention_a8c88a48bb4d45b0f72bead15f38ba4fb} 
+\index{MultiHeadAttention@{MultiHeadAttention}!forward@{forward}}
+\index{forward@{forward}!MultiHeadAttention@{MultiHeadAttention}}
+\doxysubsubsection{\texorpdfstring{forward()}{forward()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Multi\+Head\+Attention\+::forward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{input,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Forward (self-\/attention, 2-\/args). ~\newline
+ 
+
+
+
+Implémente \mbox{\hyperlink{classModule_ab480860c2b4d385a5d25d488ae216fc7}{Module}}.
+
+\Hypertarget{classMultiHeadAttention_a1af4ff2e9f2541ff5eedc58541bcb4e7}\label{classMultiHeadAttention_a1af4ff2e9f2541ff5eedc58541bcb4e7} 
+\index{MultiHeadAttention@{MultiHeadAttention}!forward@{forward}}
+\index{forward@{forward}!MultiHeadAttention@{MultiHeadAttention}}
+\doxysubsubsection{\texorpdfstring{forward()}{forward()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Multi\+Head\+Attention\+::forward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{query,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{key,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{value,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{output }\end{DoxyParamCaption})}
+
+
+
+Forward (Q, K, V explicites, 4-\/args). 
+
+\Hypertarget{classMultiHeadAttention_a194b5792bc0f34f7c50d3188f7d11724}\label{classMultiHeadAttention_a194b5792bc0f34f7c50d3188f7d11724} 
+\index{MultiHeadAttention@{MultiHeadAttention}!get\_grad\_weights@{get\_grad\_weights}}
+\index{get\_grad\_weights@{get\_grad\_weights}!MultiHeadAttention@{MultiHeadAttention}}
+\doxysubsubsection{\texorpdfstring{get\_grad\_weights()}{get\_grad\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& Multi\+Head\+Attention\+::get\+\_\+grad\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets gradient of weights tensor. 
+
+\begin{DoxyReturn}{Renvoie}
+Reference to gradient of weights tensor. 
+\end{DoxyReturn}
+
+
+Implémente \mbox{\hyperlink{classModule_a15fa8437ef5ebdebb2d4887105b3cc56}{Module}}.
+
+\Hypertarget{classMultiHeadAttention_af7dacb69f88980441e2240e59e31ca4c}\label{classMultiHeadAttention_af7dacb69f88980441e2240e59e31ca4c} 
+\index{MultiHeadAttention@{MultiHeadAttention}!get\_weights@{get\_weights}}
+\index{get\_weights@{get\_weights}!MultiHeadAttention@{MultiHeadAttention}}
+\doxysubsubsection{\texorpdfstring{get\_weights()}{get\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& Multi\+Head\+Attention\+::get\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets weights tensor. 
+
+\begin{DoxyReturn}{Renvoie}
+Reference to weights tensor. 
+\end{DoxyReturn}
+
+
+Implémente \mbox{\hyperlink{classModule_a5fd2b886333928f321cb17554d7b28eb}{Module}}.
+
+\Hypertarget{classMultiHeadAttention_a7460085fb474cf99f32713291708278a}\label{classMultiHeadAttention_a7460085fb474cf99f32713291708278a} 
+\index{MultiHeadAttention@{MultiHeadAttention}!load@{load}}
+\index{load@{load}!MultiHeadAttention@{MultiHeadAttention}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily void Multi\+Head\+Attention\+::load (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Loads module state from file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_a8455466e7aae6765f2c5c7bec4db6efe}{Module}}.
+
+\Hypertarget{classMultiHeadAttention_ae8e1d6e71ff98d5d9a4e39900b9fb4bd}\label{classMultiHeadAttention_ae8e1d6e71ff98d5d9a4e39900b9fb4bd} 
+\index{MultiHeadAttention@{MultiHeadAttention}!save@{save}}
+\index{save@{save}!MultiHeadAttention@{MultiHeadAttention}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily void Multi\+Head\+Attention\+::save (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Saves module state to file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ae66a6e139971adb9375c94a88f86be99}{Module}}.
+
+\Hypertarget{classMultiHeadAttention_a6dbbe962032f0d53726cba3c332f70b9}\label{classMultiHeadAttention_a6dbbe962032f0d53726cba3c332f70b9} 
+\index{MultiHeadAttention@{MultiHeadAttention}!set\_weights@{set\_weights}}
+\index{set\_weights@{set\_weights}!MultiHeadAttention@{MultiHeadAttention}}
+\doxysubsubsection{\texorpdfstring{set\_weights()}{set\_weights()}}
+{\footnotesize\ttfamily void Multi\+Head\+Attention\+::set\+\_\+weights (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classTensor}{Tensor}} \&}]{weights }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Sets weights tensor. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em weights} & New weights tensor. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ac9fe3ade73ca62999e96f63947174f2e}{Module}}.
+
+\Hypertarget{classMultiHeadAttention_ad8c1572f6d3d3dec761ded4b4246657a}\label{classMultiHeadAttention_ad8c1572f6d3d3dec761ded4b4246657a} 
+\index{MultiHeadAttention@{MultiHeadAttention}!update@{update}}
+\index{update@{update}!MultiHeadAttention@{MultiHeadAttention}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Multi\+Head\+Attention\+::update (\begin{DoxyParamCaption}\item[{float}]{lr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Met à jour tous les poids internes. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_a877f73f8b1fd5422652cbd0d0331ac7c}{Module}}.
+
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/\mbox{\hyperlink{attention_8h}{attention.\+h}}\end{DoxyCompactItemize}

@@ -1,0 +1,212 @@
+\doxysection{Référence de la classe Transformer}
+\hypertarget{classTransformer}{}\label{classTransformer}\index{Transformer@{Transformer}}
+
+
+\doxylink{classTransformer}{Transformer} composé de blocs self-\/attention + feed-\/forward.  
+
+
+
+
+{\ttfamily \#include $<$transformer.\+h$>$}
+
+
+
+Graphe d\textquotesingle{}héritage de Transformer\+:
+% FIG 0
+
+
+Graphe de collaboration de Transformer\+:
+% FIG 1
+\doxysubsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classTransformer_acc3c81e3eb0caaa52d4dc299a2db988a}{Transformer}} (int d\+\_\+model, int num\+\_\+heads, int d\+\_\+ff, int num\+\_\+layers)
+\item 
+void \mbox{\hyperlink{classTransformer_aa623f4310bb66dcbe8beaebb28e357d9}{forward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&input, \mbox{\hyperlink{classTensor}{Tensor}} \&output) override
+\begin{DoxyCompactList}\small\item\em Passe avant (seq\+\_\+len, batch, d\+\_\+model) → même forme. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTransformer_a2a0e54515decbf1272a105d95e79c561}{backward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+output, \mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+input) override
+\begin{DoxyCompactList}\small\item\em Rétro-\/propagation complète sur tous les blocs. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTransformer_a16af7102bdb47d4fb06d60710919e17f}{update}} (float lr) override
+\begin{DoxyCompactList}\small\item\em Mise à jour (\doxylink{classSGD}{SGD}) de tous les sous-\/modules. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classTransformer_ac2777fedc0d38b46e4b4f3382062a023}{get\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Pas de poids « globaux » pour le \doxylink{classTransformer}{Transformer}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classTransformer_a1d1624bbc5917614a4f18e8d49fcf6f0}{get\+\_\+grad\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Gets gradient of weights tensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTransformer_ab9e752f5b4f5ead860886303adf1c690}{set\+\_\+weights}} (const \mbox{\hyperlink{classTensor}{Tensor}} \&w) override
+\begin{DoxyCompactList}\small\item\em Sets weights tensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTransformer_a2bd67de2e8b6c9a86576cd06b2571a55}{save}} (const std\+::string \&path) override
+\begin{DoxyCompactList}\small\item\em Saves module state to file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTransformer_a72c963b175fb1286ce19c97675ee8fa5}{load}} (const std\+::string \&path) override
+\begin{DoxyCompactList}\small\item\em Loads module state from file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Fonctions membres publiques hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classModule_a4a48538d35a2da7fcc32d9f509034723}{\texorpdfstring{$\sim$}{\string~}\+Module}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Membres hérités additionnels}
+\doxysubsection*{Attributs protégés hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classModule_a648d6840cd912a7492ce7d53807d3e59}{input\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Description détaillée}
+\doxylink{classTransformer}{Transformer} composé de blocs self-\/attention + feed-\/forward. 
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\Hypertarget{classTransformer_acc3c81e3eb0caaa52d4dc299a2db988a}\label{classTransformer_acc3c81e3eb0caaa52d4dc299a2db988a} 
+\index{Transformer@{Transformer}!Transformer@{Transformer}}
+\index{Transformer@{Transformer}!Transformer@{Transformer}}
+\doxysubsubsection{\texorpdfstring{Transformer()}{Transformer()}}
+{\footnotesize\ttfamily Transformer\+::\+Transformer (\begin{DoxyParamCaption}\item[{int}]{d\+\_\+model,  }\item[{int}]{num\+\_\+heads,  }\item[{int}]{d\+\_\+ff,  }\item[{int}]{num\+\_\+layers }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Paramètres}
+{\em d\+\_\+model} & Dimension des embeddings. \\
+\hline
+{\em num\+\_\+heads} & Nombre de têtes d’attention. \\
+\hline
+{\em d\+\_\+ff} & Dimension interne du feed-\/forward. \\
+\hline
+{\em num\+\_\+layers} & Nombre de blocs. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Documentation des fonctions membres}
+\Hypertarget{classTransformer_a2a0e54515decbf1272a105d95e79c561}\label{classTransformer_a2a0e54515decbf1272a105d95e79c561} 
+\index{Transformer@{Transformer}!backward@{backward}}
+\index{backward@{backward}!Transformer@{Transformer}}
+\doxysubsubsection{\texorpdfstring{backward()}{backward()}}
+{\footnotesize\ttfamily void Transformer\+::backward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+output,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+input }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Rétro-\/propagation complète sur tous les blocs. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_afd9b0211fb34658f3b709391c6ae479d}{Module}}.
+
+\Hypertarget{classTransformer_aa623f4310bb66dcbe8beaebb28e357d9}\label{classTransformer_aa623f4310bb66dcbe8beaebb28e357d9} 
+\index{Transformer@{Transformer}!forward@{forward}}
+\index{forward@{forward}!Transformer@{Transformer}}
+\doxysubsubsection{\texorpdfstring{forward()}{forward()}}
+{\footnotesize\ttfamily void Transformer\+::forward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{input,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Passe avant (seq\+\_\+len, batch, d\+\_\+model) → même forme. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_ab480860c2b4d385a5d25d488ae216fc7}{Module}}.
+
+\Hypertarget{classTransformer_a1d1624bbc5917614a4f18e8d49fcf6f0}\label{classTransformer_a1d1624bbc5917614a4f18e8d49fcf6f0} 
+\index{Transformer@{Transformer}!get\_grad\_weights@{get\_grad\_weights}}
+\index{get\_grad\_weights@{get\_grad\_weights}!Transformer@{Transformer}}
+\doxysubsubsection{\texorpdfstring{get\_grad\_weights()}{get\_grad\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& Transformer\+::get\+\_\+grad\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets gradient of weights tensor. 
+
+\begin{DoxyReturn}{Renvoie}
+Reference to gradient of weights tensor. 
+\end{DoxyReturn}
+
+
+Implémente \mbox{\hyperlink{classModule_a15fa8437ef5ebdebb2d4887105b3cc56}{Module}}.
+
+\Hypertarget{classTransformer_ac2777fedc0d38b46e4b4f3382062a023}\label{classTransformer_ac2777fedc0d38b46e4b4f3382062a023} 
+\index{Transformer@{Transformer}!get\_weights@{get\_weights}}
+\index{get\_weights@{get\_weights}!Transformer@{Transformer}}
+\doxysubsubsection{\texorpdfstring{get\_weights()}{get\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& Transformer\+::get\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Pas de poids « globaux » pour le \doxylink{classTransformer}{Transformer}. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_a5fd2b886333928f321cb17554d7b28eb}{Module}}.
+
+\Hypertarget{classTransformer_a72c963b175fb1286ce19c97675ee8fa5}\label{classTransformer_a72c963b175fb1286ce19c97675ee8fa5} 
+\index{Transformer@{Transformer}!load@{load}}
+\index{load@{load}!Transformer@{Transformer}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily void Transformer\+::load (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Loads module state from file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_a8455466e7aae6765f2c5c7bec4db6efe}{Module}}.
+
+\Hypertarget{classTransformer_a2bd67de2e8b6c9a86576cd06b2571a55}\label{classTransformer_a2bd67de2e8b6c9a86576cd06b2571a55} 
+\index{Transformer@{Transformer}!save@{save}}
+\index{save@{save}!Transformer@{Transformer}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily void Transformer\+::save (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Saves module state to file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ae66a6e139971adb9375c94a88f86be99}{Module}}.
+
+\Hypertarget{classTransformer_ab9e752f5b4f5ead860886303adf1c690}\label{classTransformer_ab9e752f5b4f5ead860886303adf1c690} 
+\index{Transformer@{Transformer}!set\_weights@{set\_weights}}
+\index{set\_weights@{set\_weights}!Transformer@{Transformer}}
+\doxysubsubsection{\texorpdfstring{set\_weights()}{set\_weights()}}
+{\footnotesize\ttfamily void Transformer\+::set\+\_\+weights (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classTensor}{Tensor}} \&}]{weights }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Sets weights tensor. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em weights} & New weights tensor. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ac9fe3ade73ca62999e96f63947174f2e}{Module}}.
+
+\Hypertarget{classTransformer_a16af7102bdb47d4fb06d60710919e17f}\label{classTransformer_a16af7102bdb47d4fb06d60710919e17f} 
+\index{Transformer@{Transformer}!update@{update}}
+\index{update@{update}!Transformer@{Transformer}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Transformer\+::update (\begin{DoxyParamCaption}\item[{float}]{lr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Mise à jour (\doxylink{classSGD}{SGD}) de tous les sous-\/modules. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_a877f73f8b1fd5422652cbd0d0331ac7c}{Module}}.
+
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/\mbox{\hyperlink{transformer_8h}{transformer.\+h}}\end{DoxyCompactItemize}

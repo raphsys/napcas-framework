@@ -1,0 +1,228 @@
+\doxysection{Référence de la classe Linear}
+\hypertarget{classLinear}{}\label{classLinear}\index{Linear@{Linear}}
+
+
+\doxylink{classLinear}{Linear} (fully connected) layer module.  
+
+
+
+
+{\ttfamily \#include $<$linear.\+h$>$}
+
+
+
+Graphe d\textquotesingle{}héritage de Linear\+:
+% FIG 0
+
+
+Graphe de collaboration de Linear\+:
+% FIG 1
+\doxysubsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classLinear_a6ce9ad9e3ffed2295b90ffe94e439c1f}{Linear}} (int in\+\_\+features, int out\+\_\+features)
+\begin{DoxyCompactList}\small\item\em Constructs a \doxylink{classLinear}{Linear} layer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classLinear_a6005d718667cc979d2766805632889a2}{forward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&input, \mbox{\hyperlink{classTensor}{Tensor}} \&output) override
+\begin{DoxyCompactList}\small\item\em Performs forward pass (matrix multiplication + bias). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classLinear_a7bcdf2b8d30304f030aa5fea96547fd1}{backward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+output, \mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+input) override
+\begin{DoxyCompactList}\small\item\em Performs backward pass (gradient computation). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classLinear_a93b65d8a6e6fc722bc10be48ebda1e18}{update}} (float lr) override
+\begin{DoxyCompactList}\small\item\em Updates weights and biases. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classLinear_ab652828df21020c271e66c69296a8155}{get\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Gets the weight tensor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classLinear_ae09eb9c6865add59ab2c7d99279e8e63}{get\+\_\+grad\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Gets the gradient-\/of-\/weights tensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classLinear_a135d2a1b14c324666653dc7d324c50ea}{set\+\_\+weights}} (const \mbox{\hyperlink{classTensor}{Tensor}} \&weights) override
+\begin{DoxyCompactList}\small\item\em Sets the weight tensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classLinear_a7c3150664a9ae2fa61aa822f875f489b}{save}} (const std\+::string \&path)
+\begin{DoxyCompactList}\small\item\em Saves layer parameters to file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classLinear_a43aa840ab3bd51a55a435dc265c0565e}{load}} (const std\+::string \&path)
+\begin{DoxyCompactList}\small\item\em Loads layer parameters from file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Fonctions membres publiques hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classModule_a4a48538d35a2da7fcc32d9f509034723}{\texorpdfstring{$\sim$}{\string~}\+Module}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Membres hérités additionnels}
+\doxysubsection*{Attributs protégés hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classModule_a648d6840cd912a7492ce7d53807d3e59}{input\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Description détaillée}
+\doxylink{classLinear}{Linear} (fully connected) layer module. 
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\Hypertarget{classLinear_a6ce9ad9e3ffed2295b90ffe94e439c1f}\label{classLinear_a6ce9ad9e3ffed2295b90ffe94e439c1f} 
+\index{Linear@{Linear}!Linear@{Linear}}
+\index{Linear@{Linear}!Linear@{Linear}}
+\doxysubsubsection{\texorpdfstring{Linear()}{Linear()}}
+{\footnotesize\ttfamily Linear\+::\+Linear (\begin{DoxyParamCaption}\item[{int}]{in\+\_\+features,  }\item[{int}]{out\+\_\+features }\end{DoxyParamCaption})}
+
+
+
+Constructs a \doxylink{classLinear}{Linear} layer. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em in\+\_\+features} & Number of input features. \\
+\hline
+{\em out\+\_\+features} & Number of output features. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Documentation des fonctions membres}
+\Hypertarget{classLinear_a7bcdf2b8d30304f030aa5fea96547fd1}\label{classLinear_a7bcdf2b8d30304f030aa5fea96547fd1} 
+\index{Linear@{Linear}!backward@{backward}}
+\index{backward@{backward}!Linear@{Linear}}
+\doxysubsubsection{\texorpdfstring{backward()}{backward()}}
+{\footnotesize\ttfamily void Linear\+::backward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+output,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+input }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Performs backward pass (gradient computation). 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em grad\+\_\+output} & Gradient of the output. \\
+\hline
+{\em grad\+\_\+input} & Gradient of the input. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_afd9b0211fb34658f3b709391c6ae479d}{Module}}.
+
+\Hypertarget{classLinear_a6005d718667cc979d2766805632889a2}\label{classLinear_a6005d718667cc979d2766805632889a2} 
+\index{Linear@{Linear}!forward@{forward}}
+\index{forward@{forward}!Linear@{Linear}}
+\doxysubsubsection{\texorpdfstring{forward()}{forward()}}
+{\footnotesize\ttfamily void Linear\+::forward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{input,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Performs forward pass (matrix multiplication + bias). 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em input} & Input tensor (batch\+\_\+size, in\+\_\+features). \\
+\hline
+{\em output} & Output tensor (batch\+\_\+size, out\+\_\+features). \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ab480860c2b4d385a5d25d488ae216fc7}{Module}}.
+
+\Hypertarget{classLinear_ae09eb9c6865add59ab2c7d99279e8e63}\label{classLinear_ae09eb9c6865add59ab2c7d99279e8e63} 
+\index{Linear@{Linear}!get\_grad\_weights@{get\_grad\_weights}}
+\index{get\_grad\_weights@{get\_grad\_weights}!Linear@{Linear}}
+\doxysubsubsection{\texorpdfstring{get\_grad\_weights()}{get\_grad\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& Linear\+::get\+\_\+grad\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets the gradient-\/of-\/weights tensor. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_a15fa8437ef5ebdebb2d4887105b3cc56}{Module}}.
+
+\Hypertarget{classLinear_ab652828df21020c271e66c69296a8155}\label{classLinear_ab652828df21020c271e66c69296a8155} 
+\index{Linear@{Linear}!get\_weights@{get\_weights}}
+\index{get\_weights@{get\_weights}!Linear@{Linear}}
+\doxysubsubsection{\texorpdfstring{get\_weights()}{get\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& Linear\+::get\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets the weight tensor. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_a5fd2b886333928f321cb17554d7b28eb}{Module}}.
+
+\Hypertarget{classLinear_a43aa840ab3bd51a55a435dc265c0565e}\label{classLinear_a43aa840ab3bd51a55a435dc265c0565e} 
+\index{Linear@{Linear}!load@{load}}
+\index{load@{load}!Linear@{Linear}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily void Linear\+::load (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Loads layer parameters from file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path prefix. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_a8455466e7aae6765f2c5c7bec4db6efe}{Module}}.
+
+\Hypertarget{classLinear_a7c3150664a9ae2fa61aa822f875f489b}\label{classLinear_a7c3150664a9ae2fa61aa822f875f489b} 
+\index{Linear@{Linear}!save@{save}}
+\index{save@{save}!Linear@{Linear}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily void Linear\+::save (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Saves layer parameters to file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path prefix. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ae66a6e139971adb9375c94a88f86be99}{Module}}.
+
+\Hypertarget{classLinear_a135d2a1b14c324666653dc7d324c50ea}\label{classLinear_a135d2a1b14c324666653dc7d324c50ea} 
+\index{Linear@{Linear}!set\_weights@{set\_weights}}
+\index{set\_weights@{set\_weights}!Linear@{Linear}}
+\doxysubsubsection{\texorpdfstring{set\_weights()}{set\_weights()}}
+{\footnotesize\ttfamily void Linear\+::set\+\_\+weights (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classTensor}{Tensor}} \&}]{weights }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Sets the weight tensor. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em weights} & New weights tensor. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ac9fe3ade73ca62999e96f63947174f2e}{Module}}.
+
+\Hypertarget{classLinear_a93b65d8a6e6fc722bc10be48ebda1e18}\label{classLinear_a93b65d8a6e6fc722bc10be48ebda1e18} 
+\index{Linear@{Linear}!update@{update}}
+\index{update@{update}!Linear@{Linear}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Linear\+::update (\begin{DoxyParamCaption}\item[{float}]{lr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Updates weights and biases. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em lr} & Learning rate. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_a877f73f8b1fd5422652cbd0d0331ac7c}{Module}}.
+
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/\mbox{\hyperlink{linear_8h}{linear.\+h}}\end{DoxyCompactItemize}

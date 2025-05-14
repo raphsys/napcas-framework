@@ -1,0 +1,64 @@
+\doxysection{transformer.\+h}
+\hypertarget{transformer_8h_source}{}\label{transformer_8h_source}\index{cpp/include/transformer.h@{cpp/include/transformer.h}}
+\mbox{\hyperlink{transformer_8h}{Aller à la documentation de ce fichier.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ File:\ cpp/include/transformer.h}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#ifndef\ TRANSFORMER\_H}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#define\ TRANSFORMER\_H}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{module_8h}{module.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tensor_8h}{tensor.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{attention_8h}{attention.h}}"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{linear_8h}{linear.h}}"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{activation_8h}{activation.h}}"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classTransformer}{Transformer}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classModule}{Module}}\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{classTransformer_acc3c81e3eb0caaa52d4dc299a2db988a}{Transformer}}(\textcolor{keywordtype}{int}\ d\_model,}
+\DoxyCodeLine{00023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ num\_heads,}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ d\_ff,}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ num\_layers);}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classTransformer_aa623f4310bb66dcbe8beaebb28e357d9}{forward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ input,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ output)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classTransformer_a2a0e54515decbf1272a105d95e79c561}{backward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_output,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_input)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classTransformer_a16af7102bdb47d4fb06d60710919e17f}{update}}(\textcolor{keywordtype}{float}\ lr)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\&\ \mbox{\hyperlink{classTransformer_ac2777fedc0d38b46e4b4f3382062a023}{get\_weights}}()\textcolor{keyword}{\ override\ }\{\ \textcolor{keywordflow}{return}\ dummy\_;\ \}}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\&\ \mbox{\hyperlink{classTransformer_a1d1624bbc5917614a4f18e8d49fcf6f0}{get\_grad\_weights}}()\textcolor{keyword}{\ override\ }\{\ \textcolor{keywordflow}{return}\ dummy\_;\ \}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classTransformer_ab9e752f5b4f5ead860886303adf1c690}{set\_weights}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ w)\textcolor{keyword}{\ override\ }\{\ dummy\_\ =\ w;\ \}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classTransformer_a2bd67de2e8b6c9a86576cd06b2571a55}{save}}(\textcolor{keyword}{const}\ std::string\&\ path)\textcolor{keyword}{\ override\ }\{\}}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classTransformer_a72c963b175fb1286ce19c97675ee8fa5}{load}}(\textcolor{keyword}{const}\ std::string\&\ path)\textcolor{keyword}{\ override\ }\{\}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{int}\ d\_model\_;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{int}\ num\_heads\_;}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{int}\ d\_ff\_;}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{int}\ num\_layers\_;}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{comment}{//\ Les\ sous-\/modules}}
+\DoxyCodeLine{00051\ \ \ \ \ std::vector<std::shared\_ptr<MultiHeadAttention>>\ attention\_layers\_;}
+\DoxyCodeLine{00052\ \ \ \ \ std::vector<std::shared\_ptr<Linear>>\ \ \ \ \ \ \ \ \ \ \ \ ff\_w1\_,\ ff\_w2\_;}
+\DoxyCodeLine{00053\ \ \ \ \ std::vector<std::shared\_ptr<ReLU>>\ \ \ \ \ \ \ \ \ \ \ \ \ \ ff\_activations\_;}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{comment}{//\ Caches\ pour\ backward}}
+\DoxyCodeLine{00056\ \ \ \ \ std::vector<Tensor>\ residual1\_cache\_;\ \ \ \ \textcolor{comment}{//\ avant\ attention}}
+\DoxyCodeLine{00057\ \ \ \ \ std::vector<Tensor>\ attn\_out\_cache\_;\ \ \ \ \ \textcolor{comment}{//\ sortie\ attention}}
+\DoxyCodeLine{00058\ \ \ \ \ std::vector<Tensor>\ residual2\_cache\_;\ \ \ \ \textcolor{comment}{//\ après\ attention}}
+\DoxyCodeLine{00059\ \ \ \ \ std::vector<Tensor>\ ff\_hidden\_cache\_;\ \ \ \ \textcolor{comment}{//\ sortie\ W1\ avant\ activation}}
+\DoxyCodeLine{00060\ \ \ \ \ std::vector<Tensor>\ ff\_out\_cache\_;\ \ \ \ \ \ \ \textcolor{comment}{//\ sortie\ W2}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{comment}{//\ placeholder\ abstrait}}
+\DoxyCodeLine{00063\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ dummy\_;}
+\DoxyCodeLine{00064\ \};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ TRANSFORMER\_H}}
+\DoxyCodeLine{00067\ }
+
+\end{DoxyCode}

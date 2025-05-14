@@ -1,0 +1,538 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>NAPCAS Framework: Référence de la classe GAN</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">NAPCAS Framework
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classGAN.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Fonctions membres publiques</a> &#124;
+<a href="classGAN-members.html">Liste de tous les membres</a>  </div>
+  <div class="headertitle"><div class="title">Référence de la classe GAN</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="gan_8h_source.html">gan.h</a>&gt;</code></p>
+<div class="dynheader">
+Graphe d'héritage de GAN:</div>
+<div class="dyncontent">
+<div class="center"><!-- SVG 0 --></div>
+</div>
+<div class="dynheader">
+Graphe de collaboration de GAN:</div>
+<div class="dyncontent">
+<div class="center"><!-- SVG 1 --></div>
+</div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Fonctions membres publiques</h2></td></tr>
+<tr class="memitem:ab57699686ad158a6d6a7bd42eaa5df9f" id="r_ab57699686ad158a6d6a7bd42eaa5df9f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGAN.html#ab57699686ad158a6d6a7bd42eaa5df9f">GAN</a> (const std::vector&lt; int &gt; &amp;generator_layers, const std::vector&lt; int &gt; &amp;discriminator_layers)</td></tr>
+<tr class="separator:ab57699686ad158a6d6a7bd42eaa5df9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20c2afa8df4e2d1ec8f62fe636134860" id="r_a20c2afa8df4e2d1ec8f62fe636134860"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGAN.html#a20c2afa8df4e2d1ec8f62fe636134860">forward</a> (<a class="el" href="classTensor.html">Tensor</a> &amp;input, <a class="el" href="classTensor.html">Tensor</a> &amp;output) override</td></tr>
+<tr class="memdesc:a20c2afa8df4e2d1ec8f62fe636134860"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs forward pass.  <br /></td></tr>
+<tr class="separator:a20c2afa8df4e2d1ec8f62fe636134860"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60cd02ac9f4ec4871cba4e04e24f1235" id="r_a60cd02ac9f4ec4871cba4e04e24f1235"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGAN.html#a60cd02ac9f4ec4871cba4e04e24f1235">backward</a> (<a class="el" href="classTensor.html">Tensor</a> &amp;grad_output, <a class="el" href="classTensor.html">Tensor</a> &amp;grad_input) override</td></tr>
+<tr class="memdesc:a60cd02ac9f4ec4871cba4e04e24f1235"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs backward pass (gradient computation).  <br /></td></tr>
+<tr class="separator:a60cd02ac9f4ec4871cba4e04e24f1235"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a115c1b8d88de0dab4cb8b2b2dc825d95" id="r_a115c1b8d88de0dab4cb8b2b2dc825d95"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGAN.html#a115c1b8d88de0dab4cb8b2b2dc825d95">update</a> (float lr) override</td></tr>
+<tr class="memdesc:a115c1b8d88de0dab4cb8b2b2dc825d95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates parameters.  <br /></td></tr>
+<tr class="separator:a115c1b8d88de0dab4cb8b2b2dc825d95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68d4dae3d46c5667b12186824496bbc8" id="r_a68d4dae3d46c5667b12186824496bbc8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classTensor.html">Tensor</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGAN.html#a68d4dae3d46c5667b12186824496bbc8">get_weights</a> () override</td></tr>
+<tr class="memdesc:a68d4dae3d46c5667b12186824496bbc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets weights tensor.  <br /></td></tr>
+<tr class="separator:a68d4dae3d46c5667b12186824496bbc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeba0b16811ca8a1e8fcac3b2b3a035d1" id="r_aeba0b16811ca8a1e8fcac3b2b3a035d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classTensor.html">Tensor</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGAN.html#aeba0b16811ca8a1e8fcac3b2b3a035d1">get_grad_weights</a> () override</td></tr>
+<tr class="memdesc:aeba0b16811ca8a1e8fcac3b2b3a035d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets gradient of weights tensor.  <br /></td></tr>
+<tr class="separator:aeba0b16811ca8a1e8fcac3b2b3a035d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a105ddc9da76e2e699eb1707a34bfcb50" id="r_a105ddc9da76e2e699eb1707a34bfcb50"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGAN.html#a105ddc9da76e2e699eb1707a34bfcb50">set_weights</a> (const <a class="el" href="classTensor.html">Tensor</a> &amp;weights) override</td></tr>
+<tr class="memdesc:a105ddc9da76e2e699eb1707a34bfcb50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets weights tensor.  <br /></td></tr>
+<tr class="separator:a105ddc9da76e2e699eb1707a34bfcb50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42f9ad0e1061bc1d64fa3be6b4b70678" id="r_a42f9ad0e1061bc1d64fa3be6b4b70678"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGAN.html#a42f9ad0e1061bc1d64fa3be6b4b70678">save</a> (const std::string &amp;path) override</td></tr>
+<tr class="memdesc:a42f9ad0e1061bc1d64fa3be6b4b70678"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves module state to file.  <br /></td></tr>
+<tr class="separator:a42f9ad0e1061bc1d64fa3be6b4b70678"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16da500fe62eadd60554432ea1708285" id="r_a16da500fe62eadd60554432ea1708285"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGAN.html#a16da500fe62eadd60554432ea1708285">load</a> (const std::string &amp;path) override</td></tr>
+<tr class="memdesc:a16da500fe62eadd60554432ea1708285"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads module state from file.  <br /></td></tr>
+<tr class="separator:a16da500fe62eadd60554432ea1708285"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa5f486191b94d4d61ffa1b3b61369fa" id="r_afa5f486191b94d4d61ffa1b3b61369fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGAN.html#afa5f486191b94d4d61ffa1b3b61369fa">train_step</a> (<a class="el" href="classTensor.html">Tensor</a> &amp;real_data, <a class="el" href="classTensor.html">Tensor</a> &amp;noise, float lr, <a class="el" href="classTensor.html">Tensor</a> &amp;gen_loss, <a class="el" href="classTensor.html">Tensor</a> &amp;disc_loss)</td></tr>
+<tr class="separator:afa5f486191b94d4d61ffa1b3b61369fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classModule"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classModule')"><img src="closed.png" alt="-"/>&#160;Fonctions membres publiques hérités de <a class="el" href="classModule.html">Module</a></td></tr>
+<tr class="memitem:a4a48538d35a2da7fcc32d9f509034723 inherit pub_methods_classModule" id="r_a4a48538d35a2da7fcc32d9f509034723"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModule.html#a4a48538d35a2da7fcc32d9f509034723">~Module</a> ()=default</td></tr>
+<tr class="separator:a4a48538d35a2da7fcc32d9f509034723 inherit pub_methods_classModule"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Membres hérités additionnels</h2></td></tr>
+<tr class="inherit_header pro_attribs_classModule"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classModule')"><img src="closed.png" alt="-"/>&#160;Attributs protégés hérités de <a class="el" href="classModule.html">Module</a></td></tr>
+<tr class="memitem:a648d6840cd912a7492ce7d53807d3e59 inherit pro_attribs_classModule" id="r_a648d6840cd912a7492ce7d53807d3e59"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classTensor.html">Tensor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classModule.html#a648d6840cd912a7492ce7d53807d3e59">input_</a></td></tr>
+<tr class="separator:a648d6840cd912a7492ce7d53807d3e59 inherit pro_attribs_classModule"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Documentation des constructeurs et destructeur</h2>
+<a id="ab57699686ad158a6d6a7bd42eaa5df9f" name="ab57699686ad158a6d6a7bd42eaa5df9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab57699686ad158a6d6a7bd42eaa5df9f">&#9670;&#160;</a></span>GAN()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GAN::GAN </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>generator_layers</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>discriminator_layers</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Documentation des fonctions membres</h2>
+<a id="a60cd02ac9f4ec4871cba4e04e24f1235" name="a60cd02ac9f4ec4871cba4e04e24f1235"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60cd02ac9f4ec4871cba4e04e24f1235">&#9670;&#160;</a></span>backward()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GAN::backward </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classTensor.html">Tensor</a> &amp;&#160;</td>
+          <td class="paramname"><em>grad_output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classTensor.html">Tensor</a> &amp;&#160;</td>
+          <td class="paramname"><em>grad_input</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Performs backward pass (gradient computation). </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">grad_output</td><td>Gradient of the output. </td></tr>
+    <tr><td class="paramname">grad_input</td><td>Gradient of the input. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implémente <a class="el" href="classModule.html#afd9b0211fb34658f3b709391c6ae479d">Module</a>.</p>
+
+</div>
+</div>
+<a id="a20c2afa8df4e2d1ec8f62fe636134860" name="a20c2afa8df4e2d1ec8f62fe636134860"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20c2afa8df4e2d1ec8f62fe636134860">&#9670;&#160;</a></span>forward()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GAN::forward </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classTensor.html">Tensor</a> &amp;&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classTensor.html">Tensor</a> &amp;&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Performs forward pass. </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Input tensor. </td></tr>
+    <tr><td class="paramname">output</td><td>Output tensor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implémente <a class="el" href="classModule.html#ab480860c2b4d385a5d25d488ae216fc7">Module</a>.</p>
+
+</div>
+</div>
+<a id="aeba0b16811ca8a1e8fcac3b2b3a035d1" name="aeba0b16811ca8a1e8fcac3b2b3a035d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeba0b16811ca8a1e8fcac3b2b3a035d1">&#9670;&#160;</a></span>get_grad_weights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classTensor.html">Tensor</a> &amp; GAN::get_grad_weights </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets gradient of weights tensor. </p>
+<dl class="section return"><dt>Renvoie</dt><dd>Reference to gradient of weights tensor. </dd></dl>
+
+<p>Implémente <a class="el" href="classModule.html#a15fa8437ef5ebdebb2d4887105b3cc56">Module</a>.</p>
+
+</div>
+</div>
+<a id="a68d4dae3d46c5667b12186824496bbc8" name="a68d4dae3d46c5667b12186824496bbc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68d4dae3d46c5667b12186824496bbc8">&#9670;&#160;</a></span>get_weights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classTensor.html">Tensor</a> &amp; GAN::get_weights </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets weights tensor. </p>
+<dl class="section return"><dt>Renvoie</dt><dd>Reference to weights tensor. </dd></dl>
+
+<p>Implémente <a class="el" href="classModule.html#a5fd2b886333928f321cb17554d7b28eb">Module</a>.</p>
+
+</div>
+</div>
+<a id="a16da500fe62eadd60554432ea1708285" name="a16da500fe62eadd60554432ea1708285"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a16da500fe62eadd60554432ea1708285">&#9670;&#160;</a></span>load()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GAN::load </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads module state from file. </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>File path. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implémente <a class="el" href="classModule.html#a8455466e7aae6765f2c5c7bec4db6efe">Module</a>.</p>
+
+</div>
+</div>
+<a id="a42f9ad0e1061bc1d64fa3be6b4b70678" name="a42f9ad0e1061bc1d64fa3be6b4b70678"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42f9ad0e1061bc1d64fa3be6b4b70678">&#9670;&#160;</a></span>save()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GAN::save </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Saves module state to file. </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>File path. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implémente <a class="el" href="classModule.html#ae66a6e139971adb9375c94a88f86be99">Module</a>.</p>
+
+</div>
+</div>
+<a id="a105ddc9da76e2e699eb1707a34bfcb50" name="a105ddc9da76e2e699eb1707a34bfcb50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a105ddc9da76e2e699eb1707a34bfcb50">&#9670;&#160;</a></span>set_weights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GAN::set_weights </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classTensor.html">Tensor</a> &amp;&#160;</td>
+          <td class="paramname"><em>weights</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets weights tensor. </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">weights</td><td>New weights tensor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implémente <a class="el" href="classModule.html#ac9fe3ade73ca62999e96f63947174f2e">Module</a>.</p>
+
+</div>
+</div>
+<a id="afa5f486191b94d4d61ffa1b3b61369fa" name="afa5f486191b94d4d61ffa1b3b61369fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa5f486191b94d4d61ffa1b3b61369fa">&#9670;&#160;</a></span>train_step()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GAN::train_step </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classTensor.html">Tensor</a> &amp;&#160;</td>
+          <td class="paramname"><em>real_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classTensor.html">Tensor</a> &amp;&#160;</td>
+          <td class="paramname"><em>noise</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>lr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classTensor.html">Tensor</a> &amp;&#160;</td>
+          <td class="paramname"><em>gen_loss</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classTensor.html">Tensor</a> &amp;&#160;</td>
+          <td class="paramname"><em>disc_loss</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a115c1b8d88de0dab4cb8b2b2dc825d95" name="a115c1b8d88de0dab4cb8b2b2dc825d95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a115c1b8d88de0dab4cb8b2b2dc825d95">&#9670;&#160;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GAN::update </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>lr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Updates parameters. </p>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lr</td><td>Learning rate. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Implémente <a class="el" href="classModule.html#a877f73f8b1fd5422652cbd0d0331ac7c">Module</a>.</p>
+
+</div>
+</div>
+<hr/>La documentation de cette classe a été générée à partir du fichier suivant :<ul>
+<li>cpp/include/<a class="el" href="gan_8h_source.html">gan.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="classGAN.html">GAN</a></li>
+    <li class="footer">Généré par <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

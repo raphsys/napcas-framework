@@ -1,0 +1,68 @@
+\doxysection{Référence de la classe Data\+Loader}
+\hypertarget{classDataLoader}{}\label{classDataLoader}\index{DataLoader@{DataLoader}}
+
+
+\doxylink{classDataLoader}{Data\+Loader} capable de charger des données depuis \+:  
+
+
+
+
+{\ttfamily \#include $<$data\+\_\+loader.\+h$>$}
+
+
+
+Graphe de collaboration de Data\+Loader\+:
+% FIG 0
+\doxysubsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classDataLoader_afd257157eb6ec14dc2d9fa9ca609c1f4}{Data\+Loader}} (const std\+::string \&dataset\+\_\+path, int batch\+\_\+size, bool augment=false)
+\item 
+std\+::pair$<$ \mbox{\hyperlink{classTensor}{Tensor}}, \mbox{\hyperlink{classTensor}{Tensor}} $>$ \mbox{\hyperlink{classDataLoader_a911efc87bf40b5aaa86cacac8aae22cf}{next}} ()
+\begin{DoxyCompactList}\small\item\em Retourne le batch suivant (inputs, targets) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Description détaillée}
+\doxylink{classDataLoader}{Data\+Loader} capable de charger des données depuis \+: 
+
+
+\begin{DoxyItemize}
+\item un fichier HDF5 (.h5, .hdf5) contenant les datasets "{}features"{} et "{}labels"{}
+\item un fichier CSV
+\item un dossier d’images 
+\end{DoxyItemize}
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\Hypertarget{classDataLoader_afd257157eb6ec14dc2d9fa9ca609c1f4}\label{classDataLoader_afd257157eb6ec14dc2d9fa9ca609c1f4} 
+\index{DataLoader@{DataLoader}!DataLoader@{DataLoader}}
+\index{DataLoader@{DataLoader}!DataLoader@{DataLoader}}
+\doxysubsubsection{\texorpdfstring{DataLoader()}{DataLoader()}}
+{\footnotesize\ttfamily Data\+Loader\+::\+Data\+Loader (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{dataset\+\_\+path,  }\item[{int}]{batch\+\_\+size,  }\item[{bool}]{augment = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Paramètres}
+{\em dataset\+\_\+path} & Chemin vers .h5/.hdf5, .csv ou dossier d’images \\
+\hline
+{\em batch\+\_\+size} & Taille des mini-\/batchs \\
+\hline
+{\em augment} & Si true, ajoute un léger bruit gaussien aux features \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Documentation des fonctions membres}
+\Hypertarget{classDataLoader_a911efc87bf40b5aaa86cacac8aae22cf}\label{classDataLoader_a911efc87bf40b5aaa86cacac8aae22cf} 
+\index{DataLoader@{DataLoader}!next@{next}}
+\index{next@{next}!DataLoader@{DataLoader}}
+\doxysubsubsection{\texorpdfstring{next()}{next()}}
+{\footnotesize\ttfamily std\+::pair$<$ \mbox{\hyperlink{classTensor}{Tensor}}, \mbox{\hyperlink{classTensor}{Tensor}} $>$ Data\+Loader\+::next (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Retourne le batch suivant (inputs, targets) 
+
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/\mbox{\hyperlink{data__loader_8h}{data\+\_\+loader.\+h}}\end{DoxyCompactItemize}

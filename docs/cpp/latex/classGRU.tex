@@ -1,0 +1,200 @@
+\doxysection{Référence de la classe GRU}
+\hypertarget{classGRU}{}\label{classGRU}\index{GRU@{GRU}}
+
+
+Gated Recurrent Unit (\doxylink{classGRU}{GRU}) récurrent.  
+
+
+
+
+{\ttfamily \#include $<$gru.\+h$>$}
+
+
+
+Graphe d\textquotesingle{}héritage de GRU\+:
+% FIG 0
+
+
+Graphe de collaboration de GRU\+:
+% FIG 1
+\doxysubsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classGRU_ab503a83a301ad2a8d2a43a308819c0e8}{GRU}} (int input\+\_\+size, int hidden\+\_\+size, int num\+\_\+layers)
+\item 
+void \mbox{\hyperlink{classGRU_ac5d5f5710e5285e904435ccf28c43bcf}{forward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&input, \mbox{\hyperlink{classTensor}{Tensor}} \&output) override
+\item 
+void \mbox{\hyperlink{classGRU_a8f6280f11215c2c36db1674fee7e81de}{backward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+output, \mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+input) override
+\begin{DoxyCompactList}\small\item\em Rétro-\/propagation (BPTT). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGRU_a4f6cb295fe3d21e72c55621025b43afc}{update}} (float lr) override
+\begin{DoxyCompactList}\small\item\em Mise à jour \doxylink{classSGD}{SGD} des linears internes. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classGRU_a471810a13f19eff58fb48abd72f0d853}{get\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Gets weights tensor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classGRU_a053b6a41a36717c6d38cd9db02c636a2}{get\+\_\+grad\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Gets gradient of weights tensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGRU_af9b9aab2f614bfc4294dc3b10420104a}{set\+\_\+weights}} (const \mbox{\hyperlink{classTensor}{Tensor}} \&weights) override
+\begin{DoxyCompactList}\small\item\em Sets weights tensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGRU_abe6800e384125bd61c9429afd31bdefb}{save}} (const std\+::string \&path) override
+\begin{DoxyCompactList}\small\item\em Saves module state to file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGRU_a49382d8540f471ab519b453b772ec621}{load}} (const std\+::string \&path) override
+\begin{DoxyCompactList}\small\item\em Loads module state from file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Fonctions membres publiques hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classModule_a4a48538d35a2da7fcc32d9f509034723}{\texorpdfstring{$\sim$}{\string~}\+Module}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Membres hérités additionnels}
+\doxysubsection*{Attributs protégés hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classModule_a648d6840cd912a7492ce7d53807d3e59}{input\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Description détaillée}
+Gated Recurrent Unit (\doxylink{classGRU}{GRU}) récurrent. 
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\Hypertarget{classGRU_ab503a83a301ad2a8d2a43a308819c0e8}\label{classGRU_ab503a83a301ad2a8d2a43a308819c0e8} 
+\index{GRU@{GRU}!GRU@{GRU}}
+\index{GRU@{GRU}!GRU@{GRU}}
+\doxysubsubsection{\texorpdfstring{GRU()}{GRU()}}
+{\footnotesize\ttfamily GRU\+::\+GRU (\begin{DoxyParamCaption}\item[{int}]{input\+\_\+size,  }\item[{int}]{hidden\+\_\+size,  }\item[{int}]{num\+\_\+layers }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Documentation des fonctions membres}
+\Hypertarget{classGRU_a8f6280f11215c2c36db1674fee7e81de}\label{classGRU_a8f6280f11215c2c36db1674fee7e81de} 
+\index{GRU@{GRU}!backward@{backward}}
+\index{backward@{backward}!GRU@{GRU}}
+\doxysubsubsection{\texorpdfstring{backward()}{backward()}}
+{\footnotesize\ttfamily void GRU\+::backward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+output,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+input }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Rétro-\/propagation (BPTT). 
+
+
+
+Implémente \mbox{\hyperlink{classModule_afd9b0211fb34658f3b709391c6ae479d}{Module}}.
+
+\Hypertarget{classGRU_ac5d5f5710e5285e904435ccf28c43bcf}\label{classGRU_ac5d5f5710e5285e904435ccf28c43bcf} 
+\index{GRU@{GRU}!forward@{forward}}
+\index{forward@{forward}!GRU@{GRU}}
+\doxysubsubsection{\texorpdfstring{forward()}{forward()}}
+{\footnotesize\ttfamily void GRU\+::forward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{input,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Passe avant sur toute la séquence. input.\+shape = \mbox{[}seq\+\_\+len, batch\+\_\+size, input\+\_\+size\mbox{]} output.\+shape = \mbox{[}seq\+\_\+len, batch\+\_\+size, hidden\+\_\+size\mbox{]} 
+
+Implémente \mbox{\hyperlink{classModule_ab480860c2b4d385a5d25d488ae216fc7}{Module}}.
+
+\Hypertarget{classGRU_a053b6a41a36717c6d38cd9db02c636a2}\label{classGRU_a053b6a41a36717c6d38cd9db02c636a2} 
+\index{GRU@{GRU}!get\_grad\_weights@{get\_grad\_weights}}
+\index{get\_grad\_weights@{get\_grad\_weights}!GRU@{GRU}}
+\doxysubsubsection{\texorpdfstring{get\_grad\_weights()}{get\_grad\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& GRU\+::get\+\_\+grad\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets gradient of weights tensor. 
+
+\begin{DoxyReturn}{Renvoie}
+Reference to gradient of weights tensor. 
+\end{DoxyReturn}
+
+
+Implémente \mbox{\hyperlink{classModule_a15fa8437ef5ebdebb2d4887105b3cc56}{Module}}.
+
+\Hypertarget{classGRU_a471810a13f19eff58fb48abd72f0d853}\label{classGRU_a471810a13f19eff58fb48abd72f0d853} 
+\index{GRU@{GRU}!get\_weights@{get\_weights}}
+\index{get\_weights@{get\_weights}!GRU@{GRU}}
+\doxysubsubsection{\texorpdfstring{get\_weights()}{get\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& GRU\+::get\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets weights tensor. 
+
+\begin{DoxyReturn}{Renvoie}
+Reference to weights tensor. 
+\end{DoxyReturn}
+
+
+Implémente \mbox{\hyperlink{classModule_a5fd2b886333928f321cb17554d7b28eb}{Module}}.
+
+\Hypertarget{classGRU_a49382d8540f471ab519b453b772ec621}\label{classGRU_a49382d8540f471ab519b453b772ec621} 
+\index{GRU@{GRU}!load@{load}}
+\index{load@{load}!GRU@{GRU}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily void GRU\+::load (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Loads module state from file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_a8455466e7aae6765f2c5c7bec4db6efe}{Module}}.
+
+\Hypertarget{classGRU_abe6800e384125bd61c9429afd31bdefb}\label{classGRU_abe6800e384125bd61c9429afd31bdefb} 
+\index{GRU@{GRU}!save@{save}}
+\index{save@{save}!GRU@{GRU}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily void GRU\+::save (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Saves module state to file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ae66a6e139971adb9375c94a88f86be99}{Module}}.
+
+\Hypertarget{classGRU_af9b9aab2f614bfc4294dc3b10420104a}\label{classGRU_af9b9aab2f614bfc4294dc3b10420104a} 
+\index{GRU@{GRU}!set\_weights@{set\_weights}}
+\index{set\_weights@{set\_weights}!GRU@{GRU}}
+\doxysubsubsection{\texorpdfstring{set\_weights()}{set\_weights()}}
+{\footnotesize\ttfamily void GRU\+::set\+\_\+weights (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classTensor}{Tensor}} \&}]{weights }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Sets weights tensor. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em weights} & New weights tensor. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ac9fe3ade73ca62999e96f63947174f2e}{Module}}.
+
+\Hypertarget{classGRU_a4f6cb295fe3d21e72c55621025b43afc}\label{classGRU_a4f6cb295fe3d21e72c55621025b43afc} 
+\index{GRU@{GRU}!update@{update}}
+\index{update@{update}!GRU@{GRU}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void GRU\+::update (\begin{DoxyParamCaption}\item[{float}]{lr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Mise à jour \doxylink{classSGD}{SGD} des linears internes. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_a877f73f8b1fd5422652cbd0d0331ac7c}{Module}}.
+
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/\mbox{\hyperlink{gru_8h}{gru.\+h}}\end{DoxyCompactItemize}

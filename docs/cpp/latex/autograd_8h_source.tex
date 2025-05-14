@@ -1,0 +1,21 @@
+\doxysection{autograd.\+h}
+\hypertarget{autograd_8h_source}{}\label{autograd_8h_source}\index{cpp/include/autograd.h@{cpp/include/autograd.h}}
+\mbox{\hyperlink{autograd_8h}{Aller à la documentation de ce fichier.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ AUTOGRAD\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ AUTOGRAD\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tensor_8h}{tensor.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classAutograd}{Autograd}}\ \{}
+\DoxyCodeLine{00010\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classAutograd_af829c54199e6473e4bcef2727487133b}{zero\_grad}}(std::vector<Tensor>\&\ tensors);}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classAutograd_a1d27c9e76efc834aeeeda67b7f938d0f}{backward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ output,\ std::vector<Tensor>\&\ inputs);}
+\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ AUTOGRAD\_H}}
+
+\end{DoxyCode}

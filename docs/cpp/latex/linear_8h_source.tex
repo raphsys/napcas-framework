@@ -1,0 +1,43 @@
+\doxysection{linear.\+h}
+\hypertarget{linear_8h_source}{}\label{linear_8h_source}\index{cpp/include/linear.h@{cpp/include/linear.h}}
+\mbox{\hyperlink{linear_8h}{Aller à la documentation de ce fichier.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ LINEAR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ LINEAR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{module_8h}{module.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tensor_8h}{tensor.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classLinear}{Linear}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classModule}{Module}}\ \{}
+\DoxyCodeLine{00010\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{classLinear_a6ce9ad9e3ffed2295b90ffe94e439c1f}{Linear}}(\textcolor{keywordtype}{int}\ in\_features,\ \textcolor{keywordtype}{int}\ out\_features);}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classLinear_a6005d718667cc979d2766805632889a2}{forward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ input,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ output)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classLinear_a7bcdf2b8d30304f030aa5fea96547fd1}{backward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_output,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_input)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classLinear_a93b65d8a6e6fc722bc10be48ebda1e18}{update}}(\textcolor{keywordtype}{float}\ lr)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\&\ \mbox{\hyperlink{classLinear_ab652828df21020c271e66c69296a8155}{get\_weights}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\&\ \mbox{\hyperlink{classLinear_ae09eb9c6865add59ab2c7d99279e8e63}{get\_grad\_weights}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classLinear_a135d2a1b14c324666653dc7d324c50ea}{set\_weights}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ weights)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classLinear_a7c3150664a9ae2fa61aa822f875f489b}{save}}(\textcolor{keyword}{const}\ std::string\&\ path);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classLinear_a43aa840ab3bd51a55a435dc265c0565e}{load}}(\textcolor{keyword}{const}\ std::string\&\ path);}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ weights\_;}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ bias\_;}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ grad\_weights\_;}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ grad\_bias\_;}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{float}\ learning\_rate\_;}
+\DoxyCodeLine{00054\ \};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ LINEAR\_H}}
+\DoxyCodeLine{00057\ }
+
+\end{DoxyCode}

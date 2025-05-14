@@ -1,0 +1,45 @@
+\doxysection{nncell.\+h}
+\hypertarget{nncell_8h_source}{}\label{nncell_8h_source}\index{cpp/include/nncell.h@{cpp/include/nncell.h}}
+\mbox{\hyperlink{nncell_8h}{Aller à la documentation de ce fichier.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ NNCELL\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ NNCELL\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{module_8h}{module.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tensor_8h}{tensor.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classNNCel}{NNCel}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classModule}{Module}}\ \{}
+\DoxyCodeLine{00009\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classNNCel_adc1d5c88722250fe82af568889e5a438}{NNCel}}(\textcolor{keywordtype}{int}\ in\_features,\ \textcolor{keywordtype}{int}\ out\_features);}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNNCel_a1db85974a20b950498a653679ba9e5a7}{forward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ input,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ output)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNNCel_ab3b7c92339be9d37646fc333ec60619f}{backward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_output,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_input)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNNCel_a99224c9086e28287109ae15320bdf16e}{update}}(\textcolor{keywordtype}{float}\ lr)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\&\ \mbox{\hyperlink{classNNCel_a104fe8086cf79814696ca58c735e817b}{get\_weights}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00030\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\&\ \mbox{\hyperlink{classNNCel_acd848aefdb3f468da8735d63f44984fa}{get\_grad\_weights}}()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNNCel_a35823f50f4f2ed2e1e18451bac7dbbbc}{set\_weights}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ weights)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNNCel_a2d92fa5460f2d3d4f66db269a321c935}{save}}(\textcolor{keyword}{const}\ std::string\&\ path)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classNNCel_ae42073311647b3f3042202c1c7e598a8}{load}}(\textcolor{keyword}{const}\ std::string\&\ path)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ weights\_;}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ bias\_;}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ grad\_weights\_;}
+\DoxyCodeLine{00045\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ grad\_bias\_;}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ connections\_;}
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ threshold\_;}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ alpha\_;}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ memory\_paths\_;}
+\DoxyCodeLine{00050\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ grad\_connections\_;}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ grad\_threshold\_;}
+\DoxyCodeLine{00052\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ grad\_alpha\_;}
+\DoxyCodeLine{00053\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ grad\_memory\_paths\_;}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{float}\ learning\_rate\_;}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#ifdef\ USE\_CUDA}}
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{void}\ forward\_cuda(\mbox{\hyperlink{classTensor}{Tensor}}\&\ input,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ output);}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ backward\_cuda(\mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_output,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_input);}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00059\ \};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ NNCELL\_H}}
+
+\end{DoxyCode}

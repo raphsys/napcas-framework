@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>NAPCAS Framework:  Fichier source de cpp/include/attention.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">NAPCAS Framework
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(0); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('attention_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">attention.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="attention_8h.html">Aller à la documentation de ce fichier.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// File: cpp/include/attention.h</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#ifndef ATTENTION_H</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#define ATTENTION_H</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="module_8h.html">module.h</a>&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="tensor_8h.html">tensor.h</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="linear_8h.html">linear.h</a>&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="foldopen" id="foldopen00014" data-start="{" data-end="};">
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="classMultiHeadAttention.html">   14</a></span><span class="keyword">class </span><a class="code hl_class" href="classMultiHeadAttention.html">MultiHeadAttention</a> : <span class="keyword">public</span> <a class="code hl_class" href="classModule.html">Module</a> {</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="classMultiHeadAttention.html#aa1aecfb653918f4ba0fdd03f4fd45971">   18</a></span>    <a class="code hl_function" href="classMultiHeadAttention.html#aa1aecfb653918f4ba0fdd03f4fd45971">MultiHeadAttention</a>(<span class="keywordtype">int</span> d_model, <span class="keywordtype">int</span> num_heads);</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classMultiHeadAttention.html#a8c88a48bb4d45b0f72bead15f38ba4fb">   21</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classMultiHeadAttention.html#a8c88a48bb4d45b0f72bead15f38ba4fb">forward</a>(<a class="code hl_class" href="classTensor.html">Tensor</a>&amp; input, <a class="code hl_class" href="classTensor.html">Tensor</a>&amp; output) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="classMultiHeadAttention.html#a1af4ff2e9f2541ff5eedc58541bcb4e7">   24</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classMultiHeadAttention.html#a1af4ff2e9f2541ff5eedc58541bcb4e7">forward</a>(<a class="code hl_class" href="classTensor.html">Tensor</a>&amp; query,</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>                 <a class="code hl_class" href="classTensor.html">Tensor</a>&amp; key,</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>                 <a class="code hl_class" href="classTensor.html">Tensor</a>&amp; value,</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>                 <a class="code hl_class" href="classTensor.html">Tensor</a>&amp; output);</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classMultiHeadAttention.html#ace2a7e78ddebff1da9c7680083706b83">   30</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classMultiHeadAttention.html#ace2a7e78ddebff1da9c7680083706b83">backward</a>(<a class="code hl_class" href="classTensor.html">Tensor</a>&amp; grad_output, <a class="code hl_class" href="classTensor.html">Tensor</a>&amp; grad_input) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classMultiHeadAttention.html#ad8c1572f6d3d3dec761ded4b4246657a">   33</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classMultiHeadAttention.html#ad8c1572f6d3d3dec761ded4b4246657a">update</a>(<span class="keywordtype">float</span> lr) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classMultiHeadAttention.html#af7dacb69f88980441e2240e59e31ca4c">   35</a></span>    <a class="code hl_class" href="classTensor.html">Tensor</a>&amp; <a class="code hl_function" href="classMultiHeadAttention.html#af7dacb69f88980441e2240e59e31ca4c">get_weights</a>()<span class="keyword"> override </span>{ <span class="keywordflow">return</span> weights_; }</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="classMultiHeadAttention.html#a194b5792bc0f34f7c50d3188f7d11724">   36</a></span>    <a class="code hl_class" href="classTensor.html">Tensor</a>&amp; <a class="code hl_function" href="classMultiHeadAttention.html#a194b5792bc0f34f7c50d3188f7d11724">get_grad_weights</a>()<span class="keyword"> override </span>{ <span class="keywordflow">return</span> grad_weights_; }</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="classMultiHeadAttention.html#a6dbbe962032f0d53726cba3c332f70b9">   37</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classMultiHeadAttention.html#a6dbbe962032f0d53726cba3c332f70b9">set_weights</a>(<span class="keyword">const</span> <a class="code hl_class" href="classTensor.html">Tensor</a>&amp; weights)<span class="keyword"> override </span>{ weights_ = weights; }</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="classMultiHeadAttention.html#ae8e1d6e71ff98d5d9a4e39900b9fb4bd">   39</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classMultiHeadAttention.html#ae8e1d6e71ff98d5d9a4e39900b9fb4bd">save</a>(<span class="keyword">const</span> std::string&amp; path) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="classMultiHeadAttention.html#a7460085fb474cf99f32713291708278a">   40</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classMultiHeadAttention.html#a7460085fb474cf99f32713291708278a">load</a>(<span class="keyword">const</span> std::string&amp; path) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">int</span> d_model_;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">int</span> num_heads_;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">int</span> d_k_;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">int</span> chunk_size_;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="comment">// projections Q/K/V et projection finale</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    std::vector&lt;std::shared_ptr&lt;Linear&gt;&gt; w_q_, w_k_, w_v_;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    std::shared_ptr&lt;Linear&gt; w_o_;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="comment">// placeholders pour sérialisation</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <a class="code hl_class" href="classTensor.html">Tensor</a> weights_;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <a class="code hl_class" href="classTensor.html">Tensor</a> grad_weights_;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="comment">// caches pour backward</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <a class="code hl_class" href="classTensor.html">Tensor</a> attention_weights_;           <span class="comment">// [seq_len, seq_len, batch, num_heads]</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    std::vector&lt;Tensor&gt; q_cache_,         <span class="comment">// un Tensor par tête: [seq_len, batch, d_k]</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                        k_cache_,</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                        v_cache_;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <a class="code hl_class" href="classTensor.html">Tensor</a> concat_cache_;                <span class="comment">// concaténation avant w_o_: [seq_len, batch, d_model]</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>};</div>
+</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="preprocessor">#endif </span><span class="comment">// ATTENTION_H</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="ttc" id="aclassModule_html"><div class="ttname"><a href="classModule.html">Module</a></div><div class="ttdoc">Base class for all neural network modules.</div><div class="ttdef"><b>Definition</b> module.h:9</div></div>
+<div class="ttc" id="aclassMultiHeadAttention_html"><div class="ttname"><a href="classMultiHeadAttention.html">MultiHeadAttention</a></div><div class="ttdoc">Multi-head self-attention module.</div><div class="ttdef"><b>Definition</b> attention.h:14</div></div>
+<div class="ttc" id="aclassMultiHeadAttention_html_a194b5792bc0f34f7c50d3188f7d11724"><div class="ttname"><a href="classMultiHeadAttention.html#a194b5792bc0f34f7c50d3188f7d11724">MultiHeadAttention::get_grad_weights</a></div><div class="ttdeci">Tensor &amp; get_grad_weights() override</div><div class="ttdoc">Gets gradient of weights tensor.</div><div class="ttdef"><b>Definition</b> attention.h:36</div></div>
+<div class="ttc" id="aclassMultiHeadAttention_html_a1af4ff2e9f2541ff5eedc58541bcb4e7"><div class="ttname"><a href="classMultiHeadAttention.html#a1af4ff2e9f2541ff5eedc58541bcb4e7">MultiHeadAttention::forward</a></div><div class="ttdeci">void forward(Tensor &amp;query, Tensor &amp;key, Tensor &amp;value, Tensor &amp;output)</div><div class="ttdoc">Forward (Q, K, V explicites, 4-args).</div></div>
+<div class="ttc" id="aclassMultiHeadAttention_html_a6dbbe962032f0d53726cba3c332f70b9"><div class="ttname"><a href="classMultiHeadAttention.html#a6dbbe962032f0d53726cba3c332f70b9">MultiHeadAttention::set_weights</a></div><div class="ttdeci">void set_weights(const Tensor &amp;weights) override</div><div class="ttdoc">Sets weights tensor.</div><div class="ttdef"><b>Definition</b> attention.h:37</div></div>
+<div class="ttc" id="aclassMultiHeadAttention_html_a7460085fb474cf99f32713291708278a"><div class="ttname"><a href="classMultiHeadAttention.html#a7460085fb474cf99f32713291708278a">MultiHeadAttention::load</a></div><div class="ttdeci">void load(const std::string &amp;path) override</div><div class="ttdoc">Loads module state from file.</div></div>
+<div class="ttc" id="aclassMultiHeadAttention_html_a8c88a48bb4d45b0f72bead15f38ba4fb"><div class="ttname"><a href="classMultiHeadAttention.html#a8c88a48bb4d45b0f72bead15f38ba4fb">MultiHeadAttention::forward</a></div><div class="ttdeci">void forward(Tensor &amp;input, Tensor &amp;output) override</div><div class="ttdoc">Forward (self-attention, 2-args).</div></div>
+<div class="ttc" id="aclassMultiHeadAttention_html_aa1aecfb653918f4ba0fdd03f4fd45971"><div class="ttname"><a href="classMultiHeadAttention.html#aa1aecfb653918f4ba0fdd03f4fd45971">MultiHeadAttention::MultiHeadAttention</a></div><div class="ttdeci">MultiHeadAttention(int d_model, int num_heads)</div></div>
+<div class="ttc" id="aclassMultiHeadAttention_html_ace2a7e78ddebff1da9c7680083706b83"><div class="ttname"><a href="classMultiHeadAttention.html#ace2a7e78ddebff1da9c7680083706b83">MultiHeadAttention::backward</a></div><div class="ttdeci">void backward(Tensor &amp;grad_output, Tensor &amp;grad_input) override</div><div class="ttdoc">Backward complet pour self-attention.</div></div>
+<div class="ttc" id="aclassMultiHeadAttention_html_ad8c1572f6d3d3dec761ded4b4246657a"><div class="ttname"><a href="classMultiHeadAttention.html#ad8c1572f6d3d3dec761ded4b4246657a">MultiHeadAttention::update</a></div><div class="ttdeci">void update(float lr) override</div><div class="ttdoc">Met à jour tous les poids internes.</div></div>
+<div class="ttc" id="aclassMultiHeadAttention_html_ae8e1d6e71ff98d5d9a4e39900b9fb4bd"><div class="ttname"><a href="classMultiHeadAttention.html#ae8e1d6e71ff98d5d9a4e39900b9fb4bd">MultiHeadAttention::save</a></div><div class="ttdeci">void save(const std::string &amp;path) override</div><div class="ttdoc">Saves module state to file.</div></div>
+<div class="ttc" id="aclassMultiHeadAttention_html_af7dacb69f88980441e2240e59e31ca4c"><div class="ttname"><a href="classMultiHeadAttention.html#af7dacb69f88980441e2240e59e31ca4c">MultiHeadAttention::get_weights</a></div><div class="ttdeci">Tensor &amp; get_weights() override</div><div class="ttdoc">Gets weights tensor.</div><div class="ttdef"><b>Definition</b> attention.h:35</div></div>
+<div class="ttc" id="aclassTensor_html"><div class="ttname"><a href="classTensor.html">Tensor</a></div><div class="ttdoc">Tensor class for multi-dimensional arrays.</div><div class="ttdef"><b>Definition</b> tensor.h:15</div></div>
+<div class="ttc" id="alinear_8h_html"><div class="ttname"><a href="linear_8h.html">linear.h</a></div></div>
+<div class="ttc" id="amodule_8h_html"><div class="ttname"><a href="module_8h.html">module.h</a></div></div>
+<div class="ttc" id="atensor_8h_html"><div class="ttname"><a href="tensor_8h.html">tensor.h</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_df511e5bd85cec96854b39d5e1c27aa8.html">cpp</a></li><li class="navelem"><a class="el" href="dir_07f37e320deb3031a60f4b23b9c60eb5.html">include</a></li><li class="navelem"><a class="el" href="attention_8h.html">attention.h</a></li>
+    <li class="footer">Généré par <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

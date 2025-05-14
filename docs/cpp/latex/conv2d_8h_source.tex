@@ -1,0 +1,56 @@
+\doxysection{conv2d.\+h}
+\hypertarget{conv2d_8h_source}{}\label{conv2d_8h_source}\index{cpp/include/conv2d.h@{cpp/include/conv2d.h}}
+\mbox{\hyperlink{conv2d_8h}{Aller à la documentation de ce fichier.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ CONV2D\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ CONV2D\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{module_8h}{module.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tensor_8h}{tensor.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <Eigen/Dense>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classConv2d}{Conv2d}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classModule}{Module}}\ \{}
+\DoxyCodeLine{00011\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classConv2d_ae0be3ae5d6b0bcea7ba91d3be8ec642c}{Conv2d}}(\textcolor{keywordtype}{int}\ in\_channels,}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ out\_channels,}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ kernel\_size,}
+\DoxyCodeLine{00020\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ stride\ =\ 1,}
+\DoxyCodeLine{00021\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ padding\ =\ 0);}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classConv2d_a5bfd11f2809b158ae656367412826130}{forward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ input,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ output)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classConv2d_a17fead795b34562a03cd890c768036c0}{backward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_output,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_input)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classConv2d_afcb023d908e27841eff86b2bfab5bf50}{update}}(\textcolor{keywordtype}{float}\ lr)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\&\ \mbox{\hyperlink{classConv2d_a7ebdb8b8dd53ee18c3cf9d65966b99a1}{get\_weights}}()\textcolor{keyword}{\ override\ }\{\ \textcolor{keywordflow}{return}\ weights\_;\ \}}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\&\ \mbox{\hyperlink{classConv2d_ae2977beaad59578ba899ea0a43988071}{get\_grad\_weights}}()\textcolor{keyword}{\ override\ }\{\ \textcolor{keywordflow}{return}\ grad\_weights\_;\ \}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classConv2d_a66a7ede5cd616143a1e74b94c187d7b4}{set\_weights}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ weights)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classConv2d_a61088d6d040bcb1b887db953cb528181}{save}}(\textcolor{keyword}{const}\ std::string\&\ path)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classConv2d_a65e9509dfe6f2d5b88a49a6802f17d32}{load}}(\textcolor{keyword}{const}\ std::string\&\ path)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{int}\ in\_channels\_;}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{int}\ out\_channels\_;}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{int}\ kernel\_size\_;}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{int}\ stride\_;}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{int}\ padding\_;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ weights\_;}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ bias\_;}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ grad\_weights\_;}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ grad\_bias\_;}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ input\_cache\_;\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00047\ \ \ \ \ Eigen::MatrixXf\ col\_cache\_;\ \ \ \ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ im2col(\textcolor{keyword}{const}\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ input,}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Eigen::MatrixXf\&\ col,}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ out\_height,}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ out\_width);}
+\DoxyCodeLine{00058\ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ CONV2D\_H}}
+\DoxyCodeLine{00061\ }
+
+\end{DoxyCode}

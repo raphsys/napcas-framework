@@ -1,0 +1,37 @@
+\doxysection{gan.\+h}
+\hypertarget{gan_8h_source}{}\label{gan_8h_source}\index{cpp/include/gan.h@{cpp/include/gan.h}}
+\mbox{\hyperlink{gan_8h}{Aller à la documentation de ce fichier.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GAN\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GAN\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{module_8h}{module.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tensor_8h}{tensor.h}}"{}}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{linear_8h}{linear.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{activation_8h}{activation.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classGAN}{GAN}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{classModule}{Module}}\ \{}
+\DoxyCodeLine{00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{classGAN_ab57699686ad158a6d6a7bd42eaa5df9f}{GAN}}(\textcolor{keyword}{const}\ std::vector<int>\&\ generator\_layers,\ \textcolor{keyword}{const}\ std::vector<int>\&\ discriminator\_layers);}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGAN_a20c2afa8df4e2d1ec8f62fe636134860}{forward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ input,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ output)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGAN_a60cd02ac9f4ec4871cba4e04e24f1235}{backward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_output,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ grad\_input)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGAN_a115c1b8d88de0dab4cb8b2b2dc825d95}{update}}(\textcolor{keywordtype}{float}\ lr)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\&\ \mbox{\hyperlink{classGAN_a68d4dae3d46c5667b12186824496bbc8}{get\_weights}}()\textcolor{keyword}{\ override\ }\{\ \textcolor{keywordflow}{return}\ weights\_;\ \}}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\&\ \mbox{\hyperlink{classGAN_aeba0b16811ca8a1e8fcac3b2b3a035d1}{get\_grad\_weights}}()\textcolor{keyword}{\ override\ }\{\ \textcolor{keywordflow}{return}\ grad\_weights\_;\ \}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGAN_a105ddc9da76e2e699eb1707a34bfcb50}{set\_weights}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ weights)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGAN_a42f9ad0e1061bc1d64fa3be6b4b70678}{save}}(\textcolor{keyword}{const}\ std::string\&\ path)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGAN_a16da500fe62eadd60554432ea1708285}{load}}(\textcolor{keyword}{const}\ std::string\&\ path)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classGAN_afa5f486191b94d4d61ffa1b3b61369fa}{train\_step}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ real\_data,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ noise,\ \textcolor{keywordtype}{float}\ lr,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ gen\_loss,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ disc\_loss);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00025\ \ \ \ \ std::vector<std::shared\_ptr<Module>>\ generator\_;}
+\DoxyCodeLine{00026\ \ \ \ \ std::vector<std::shared\_ptr<Module>>\ discriminator\_;}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ weights\_;}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ grad\_weights\_;}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,215 @@
+\doxysection{Référence de la classe Max\+Pool2d}
+\hypertarget{classMaxPool2d}{}\label{classMaxPool2d}\index{MaxPool2d@{MaxPool2d}}
+
+
+{\ttfamily \#include $<$pooling.\+h$>$}
+
+
+
+Graphe d\textquotesingle{}héritage de Max\+Pool2d\+:
+% FIG 0
+
+
+Graphe de collaboration de Max\+Pool2d\+:
+% FIG 1
+\doxysubsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMaxPool2d_acfe161f1b7760b068338ea0d0e6c0352}{Max\+Pool2d}} (int kernel\+\_\+size, int stride)
+\item 
+void \mbox{\hyperlink{classMaxPool2d_a9186b40521e562d898771fd37820ff42}{forward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&input, \mbox{\hyperlink{classTensor}{Tensor}} \&output) override
+\begin{DoxyCompactList}\small\item\em Performs forward pass. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxPool2d_a59bf7c1eacc0e737846b474482b158d9}{backward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+output, \mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+input) override
+\begin{DoxyCompactList}\small\item\em Performs backward pass (gradient computation). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxPool2d_af2dbcf5f892626b2cfc7aaddbc380642}{update}} (float lr) override
+\begin{DoxyCompactList}\small\item\em Updates parameters. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classMaxPool2d_ad021e4c614f6aeb49e37966de9fd9413}{get\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Gets weights tensor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classMaxPool2d_a74af5902a0d414520e1d97f317dc5ae7}{get\+\_\+grad\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Gets gradient of weights tensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxPool2d_a473b387369ed2de960040e010a95338b}{set\+\_\+weights}} (const \mbox{\hyperlink{classTensor}{Tensor}} \&weights) override
+\begin{DoxyCompactList}\small\item\em Sets weights tensor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxPool2d_a2dd24103ef04e430a5e6a0f951176af5}{save}} (const std\+::string \&path) override
+\begin{DoxyCompactList}\small\item\em Saves module state to file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMaxPool2d_ab6f8a7690c2814d9e30fc6f587ad4c06}{load}} (const std\+::string \&path) override
+\begin{DoxyCompactList}\small\item\em Loads module state from file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Fonctions membres publiques hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classModule_a4a48538d35a2da7fcc32d9f509034723}{\texorpdfstring{$\sim$}{\string~}\+Module}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Membres hérités additionnels}
+\doxysubsection*{Attributs protégés hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classModule_a648d6840cd912a7492ce7d53807d3e59}{input\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\Hypertarget{classMaxPool2d_acfe161f1b7760b068338ea0d0e6c0352}\label{classMaxPool2d_acfe161f1b7760b068338ea0d0e6c0352} 
+\index{MaxPool2d@{MaxPool2d}!MaxPool2d@{MaxPool2d}}
+\index{MaxPool2d@{MaxPool2d}!MaxPool2d@{MaxPool2d}}
+\doxysubsubsection{\texorpdfstring{MaxPool2d()}{MaxPool2d()}}
+{\footnotesize\ttfamily Max\+Pool2d\+::\+Max\+Pool2d (\begin{DoxyParamCaption}\item[{int}]{kernel\+\_\+size,  }\item[{int}]{stride }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Documentation des fonctions membres}
+\Hypertarget{classMaxPool2d_a59bf7c1eacc0e737846b474482b158d9}\label{classMaxPool2d_a59bf7c1eacc0e737846b474482b158d9} 
+\index{MaxPool2d@{MaxPool2d}!backward@{backward}}
+\index{backward@{backward}!MaxPool2d@{MaxPool2d}}
+\doxysubsubsection{\texorpdfstring{backward()}{backward()}}
+{\footnotesize\ttfamily void Max\+Pool2d\+::backward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+output,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+input }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Performs backward pass (gradient computation). 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em grad\+\_\+output} & Gradient of the output. \\
+\hline
+{\em grad\+\_\+input} & Gradient of the input. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_afd9b0211fb34658f3b709391c6ae479d}{Module}}.
+
+\Hypertarget{classMaxPool2d_a9186b40521e562d898771fd37820ff42}\label{classMaxPool2d_a9186b40521e562d898771fd37820ff42} 
+\index{MaxPool2d@{MaxPool2d}!forward@{forward}}
+\index{forward@{forward}!MaxPool2d@{MaxPool2d}}
+\doxysubsubsection{\texorpdfstring{forward()}{forward()}}
+{\footnotesize\ttfamily void Max\+Pool2d\+::forward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{input,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Performs forward pass. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em input} & Input tensor. \\
+\hline
+{\em output} & Output tensor. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ab480860c2b4d385a5d25d488ae216fc7}{Module}}.
+
+\Hypertarget{classMaxPool2d_a74af5902a0d414520e1d97f317dc5ae7}\label{classMaxPool2d_a74af5902a0d414520e1d97f317dc5ae7} 
+\index{MaxPool2d@{MaxPool2d}!get\_grad\_weights@{get\_grad\_weights}}
+\index{get\_grad\_weights@{get\_grad\_weights}!MaxPool2d@{MaxPool2d}}
+\doxysubsubsection{\texorpdfstring{get\_grad\_weights()}{get\_grad\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& Max\+Pool2d\+::get\+\_\+grad\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets gradient of weights tensor. 
+
+\begin{DoxyReturn}{Renvoie}
+Reference to gradient of weights tensor. 
+\end{DoxyReturn}
+
+
+Implémente \mbox{\hyperlink{classModule_a15fa8437ef5ebdebb2d4887105b3cc56}{Module}}.
+
+\Hypertarget{classMaxPool2d_ad021e4c614f6aeb49e37966de9fd9413}\label{classMaxPool2d_ad021e4c614f6aeb49e37966de9fd9413} 
+\index{MaxPool2d@{MaxPool2d}!get\_weights@{get\_weights}}
+\index{get\_weights@{get\_weights}!MaxPool2d@{MaxPool2d}}
+\doxysubsubsection{\texorpdfstring{get\_weights()}{get\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& Max\+Pool2d\+::get\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets weights tensor. 
+
+\begin{DoxyReturn}{Renvoie}
+Reference to weights tensor. 
+\end{DoxyReturn}
+
+
+Implémente \mbox{\hyperlink{classModule_a5fd2b886333928f321cb17554d7b28eb}{Module}}.
+
+\Hypertarget{classMaxPool2d_ab6f8a7690c2814d9e30fc6f587ad4c06}\label{classMaxPool2d_ab6f8a7690c2814d9e30fc6f587ad4c06} 
+\index{MaxPool2d@{MaxPool2d}!load@{load}}
+\index{load@{load}!MaxPool2d@{MaxPool2d}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily void Max\+Pool2d\+::load (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Loads module state from file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_a8455466e7aae6765f2c5c7bec4db6efe}{Module}}.
+
+\Hypertarget{classMaxPool2d_a2dd24103ef04e430a5e6a0f951176af5}\label{classMaxPool2d_a2dd24103ef04e430a5e6a0f951176af5} 
+\index{MaxPool2d@{MaxPool2d}!save@{save}}
+\index{save@{save}!MaxPool2d@{MaxPool2d}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily void Max\+Pool2d\+::save (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Saves module state to file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ae66a6e139971adb9375c94a88f86be99}{Module}}.
+
+\Hypertarget{classMaxPool2d_a473b387369ed2de960040e010a95338b}\label{classMaxPool2d_a473b387369ed2de960040e010a95338b} 
+\index{MaxPool2d@{MaxPool2d}!set\_weights@{set\_weights}}
+\index{set\_weights@{set\_weights}!MaxPool2d@{MaxPool2d}}
+\doxysubsubsection{\texorpdfstring{set\_weights()}{set\_weights()}}
+{\footnotesize\ttfamily void Max\+Pool2d\+::set\+\_\+weights (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classTensor}{Tensor}} \&}]{weights }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Sets weights tensor. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em weights} & New weights tensor. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_ac9fe3ade73ca62999e96f63947174f2e}{Module}}.
+
+\Hypertarget{classMaxPool2d_af2dbcf5f892626b2cfc7aaddbc380642}\label{classMaxPool2d_af2dbcf5f892626b2cfc7aaddbc380642} 
+\index{MaxPool2d@{MaxPool2d}!update@{update}}
+\index{update@{update}!MaxPool2d@{MaxPool2d}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Max\+Pool2d\+::update (\begin{DoxyParamCaption}\item[{float}]{lr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Updates parameters. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em lr} & Learning rate. \\
+\hline
+\end{DoxyParams}
+
+
+Implémente \mbox{\hyperlink{classModule_a877f73f8b1fd5422652cbd0d0331ac7c}{Module}}.
+
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/\mbox{\hyperlink{pooling_8h}{pooling.\+h}}\end{DoxyCompactItemize}

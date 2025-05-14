@@ -1,0 +1,126 @@
+\doxysection{Référence de la classe Adam}
+\hypertarget{classAdam}{}\label{classAdam}\index{Adam@{Adam}}
+
+
+\doxylink{classAdam}{Adam} optimizer.  
+
+
+
+
+{\ttfamily \#include $<$optimizer.\+h$>$}
+
+
+
+Graphe de collaboration de Adam\+:
+% FIG 0
+\doxysubsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classAdam_a8b4bca1e27adb7996c8921f614744c74}{Adam}} (float lr=0.\+001f, float beta1=0.\+9f, float beta2=0.\+999f, float epsilon=1e-\/8f)
+\begin{DoxyCompactList}\small\item\em Constructs an \doxylink{classAdam}{Adam} optimizer. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAdam_ab057f78adcb2c7e96696ad0b92d166ec}{Adam}} (const std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classModule}{Module}} $>$ $>$ \&modules, float lr=0.\+001f, float beta1=0.\+9f, float beta2=0.\+999f, float epsilon=1e-\/8f)
+\begin{DoxyCompactList}\small\item\em Constructs an \doxylink{classAdam}{Adam} optimizer with modules. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classAdam_a799f479790cd5b7718faa27da674ce0f}{step}} ()
+\begin{DoxyCompactList}\small\item\em Performs an optimization step. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classAdam_a564588c1e21562336e1031975996615a}{save}} (const std\+::string \&path)
+\begin{DoxyCompactList}\small\item\em Saves optimizer state to file. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classAdam_af9cf632116dc278ccb546d792d661b3a}{load}} (const std\+::string \&path)
+\begin{DoxyCompactList}\small\item\em Loads optimizer state from file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Description détaillée}
+\doxylink{classAdam}{Adam} optimizer. 
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\Hypertarget{classAdam_a8b4bca1e27adb7996c8921f614744c74}\label{classAdam_a8b4bca1e27adb7996c8921f614744c74} 
+\index{Adam@{Adam}!Adam@{Adam}}
+\index{Adam@{Adam}!Adam@{Adam}}
+\doxysubsubsection{\texorpdfstring{Adam()}{Adam()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Adam\+::\+Adam (\begin{DoxyParamCaption}\item[{float}]{lr = {\ttfamily 0.001f},  }\item[{float}]{beta1 = {\ttfamily 0.9f},  }\item[{float}]{beta2 = {\ttfamily 0.999f},  }\item[{float}]{epsilon = {\ttfamily 1e-\/8f} }\end{DoxyParamCaption})}
+
+
+
+Constructs an \doxylink{classAdam}{Adam} optimizer. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em lr} & Learning rate. \\
+\hline
+{\em beta1} & First moment decay rate. \\
+\hline
+{\em beta2} & Second moment decay rate. \\
+\hline
+{\em epsilon} & Small value for numerical stability. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classAdam_ab057f78adcb2c7e96696ad0b92d166ec}\label{classAdam_ab057f78adcb2c7e96696ad0b92d166ec} 
+\index{Adam@{Adam}!Adam@{Adam}}
+\index{Adam@{Adam}!Adam@{Adam}}
+\doxysubsubsection{\texorpdfstring{Adam()}{Adam()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Adam\+::\+Adam (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classModule}{Module}} $>$ $>$ \&}]{modules,  }\item[{float}]{lr = {\ttfamily 0.001f},  }\item[{float}]{beta1 = {\ttfamily 0.9f},  }\item[{float}]{beta2 = {\ttfamily 0.999f},  }\item[{float}]{epsilon = {\ttfamily 1e-\/8f} }\end{DoxyParamCaption})}
+
+
+
+Constructs an \doxylink{classAdam}{Adam} optimizer with modules. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em modules} & List of modules to optimize. \\
+\hline
+{\em lr} & Learning rate. \\
+\hline
+{\em beta1} & First moment decay rate. \\
+\hline
+{\em beta2} & Second moment decay rate. \\
+\hline
+{\em epsilon} & Small value for numerical stability. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Documentation des fonctions membres}
+\Hypertarget{classAdam_af9cf632116dc278ccb546d792d661b3a}\label{classAdam_af9cf632116dc278ccb546d792d661b3a} 
+\index{Adam@{Adam}!load@{load}}
+\index{load@{load}!Adam@{Adam}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily void Adam\+::load (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
+
+
+
+Loads optimizer state from file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classAdam_a564588c1e21562336e1031975996615a}\label{classAdam_a564588c1e21562336e1031975996615a} 
+\index{Adam@{Adam}!save@{save}}
+\index{save@{save}!Adam@{Adam}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily void Adam\+::save (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
+
+
+
+Saves optimizer state to file. 
+
+
+\begin{DoxyParams}{Paramètres}
+{\em path} & File path. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classAdam_a799f479790cd5b7718faa27da674ce0f}\label{classAdam_a799f479790cd5b7718faa27da674ce0f} 
+\index{Adam@{Adam}!step@{step}}
+\index{step@{step}!Adam@{Adam}}
+\doxysubsubsection{\texorpdfstring{step()}{step()}}
+{\footnotesize\ttfamily void Adam\+::step (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Performs an optimization step. 
+
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/\mbox{\hyperlink{optimizer_8h}{optimizer.\+h}}\end{DoxyCompactItemize}

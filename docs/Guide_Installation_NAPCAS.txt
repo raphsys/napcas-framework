@@ -1,0 +1,141 @@
+# Guide d'installation du framework NAPCAS
+
+Ce document explique pas à pas comment compiler, installer et utiliser le framework **NAPCAS** en environnement Python avec ses bindings C++ via Pybind11.
+
+---
+
+## Prérequis
+
+* **Linux** (Debian 12 recommandé)
+* **Python 3.10+** (via Anaconda ou autre)
+* **CMake >= 3.14**
+* **Compilateur C++ (GCC >= 9.0)**
+* **Paquets système** :
+
+```bash
+sudo apt-get update
+sudo apt-get install -y build-essential cmake libeigen3-dev libhdf5-dev python3-dev
+```
+
+* **Environnement Python** :
+
+```bash
+conda create -n napPy python=3.10 -y
+conda activate napPy
+pip install pybind11 pytest
+```
+
+---
+
+## Structure du projet
+
+```text
+napcas-framework/
+├── cpp/                # Code C++ du framework
+│   ├── include/       # En-têtes du framework
+│   ├── src/           # Sources C++ principales
+│   ├── tests/         # Tests unitaires C++
+│   └── CMakeLists.txt # Fichier de build C++
+├── python/            # Interface Python du projet
+│   ├── napcas/        # Package Python napcas
+│   ├── tests/         # Tests Python
+│   └── setup.py       # (ou pyproject.toml)
+├── CMakeLists.txt     # Build global
+└── build/             # (généré automatiquement)
+```
+
+---
+
+## Compilation du module
+
+1. Nettoyage et préparation du dossier de build :
+
+```bash
+cd ~/Mes_Projets/napcas-framework
+rm -rf build
+mkdir build && cd build
+```
+
+2. Configuration avec CMake :
+
+```bash
+cmake ..
+```
+
+3. Compilation :
+
+```bash
+make -j$(nproc)
+```
+
+4. Installation du module Python compilé :
+
+```bash
+make install
+```
+
+Vérifie que le fichier `_napcas.cpython-310-*.so` est bien copié dans :
+
+```bash
+python/napcas/_napcas.cpython-310-x86_64-linux-gnu.so
+```
+
+---
+
+## Installation Python du package
+
+Depuis le dossier `python/` :
+
+```bash
+cd ../python
+pip uninstall napcas -y
+pip install . -U
+```
+
+---
+
+## Test de bon fonctionnement
+
+```bash
+python -c "import napcas; print(napcas.Tensor)"
+```
+
+Et/ou
+
+```bash
+pytest tests/
+```
+
+---
+
+## Notes additionnelles
+
+* Pour installation développement (modifications sans réinstallation) :
+
+```bash
+pip install -e .
+```
+
+* Pour générer la documentation C++ avec Doxygen :
+
+```bash
+cd build
+make docs
+```
+
+---
+
+## En cas de problème
+
+* Assurez-vous que `_napcas.so` est présent dans `python/napcas/`
+* Vérifiez que les librairies liées à `stb_image`, `HDF5` et `Eigen` ont bien été trouvées par CMake
+* En cas d’erreur de lien `R_X86_64_TPOFF32`, assurez-vous que **toutes les cibles statiques** sont compilées avec `-fPIC` (ex : `stb_image_impl`)
+
+---
+
+## Auteur :
+
+Raphaël DOLEAGBENOU
+Version : 1.0
+Date : Mai 2025
+

@@ -1,0 +1,26 @@
+[build-system]
+requires = [
+    "scikit-build-core>=0.11",
+    "pybind11>=2.11",
+    "numpy>=1.26"
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "napcas"
+version = "0.1.0"
+description = "Neural Adaptive Processing and Connectivity Analysis System"
+authors = [{ name = "Raphael Doleagbenou", email = "raphael@example.com" }]
+requires-python = ">=3.9"
+readme = "README.md"
+license = { text = "MIT" }
+
+# ------------------------ scikit-build-core ------------------------
+[tool.scikit-build]                 # section racine
+wheel.packages = ["src/napcas"]     # empaqueter le code Python
+build-dir = "build"                 # dossier de build (optionnel)
+
+[tool.scikit-build.cmake]           # sous-table dédiée à CMake
+minimum-version = "3.15"            # exigence pour CMakeLists
+build-type = "Release"              # Release, RelWithDebInfo, …
+

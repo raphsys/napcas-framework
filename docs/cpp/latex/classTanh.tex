@@ -1,0 +1,183 @@
+\doxysection{Référence de la classe Tanh}
+\hypertarget{classTanh}{}\label{classTanh}\index{Tanh@{Tanh}}
+
+
+\doxylink{classTanh}{Tanh} activation function module.  
+
+
+
+
+{\ttfamily \#include $<$activation.\+h$>$}
+
+
+
+Graphe d\textquotesingle{}héritage de Tanh\+:
+% FIG 0
+
+
+Graphe de collaboration de Tanh\+:
+% FIG 1
+\doxysubsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classTanh_a3686698710a8ef5e016e005733f0897a}{Tanh}} ()=default
+\item 
+void \mbox{\hyperlink{classTanh_a283f766630181302ba5f7958438ef536}{forward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&input, \mbox{\hyperlink{classTensor}{Tensor}} \&output) override
+\begin{DoxyCompactList}\small\item\em Applies \doxylink{classTanh}{Tanh} activation\+: output = tanh(input). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTanh_ad78865ad7dd2053563358dce6ee17fc2}{backward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+output, \mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+input) override
+\begin{DoxyCompactList}\small\item\em Computes backward pass for \doxylink{classTanh}{Tanh}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTanh_af454530046e3123e7c85e65b24d7f32c}{update}} (float lr) override
+\begin{DoxyCompactList}\small\item\em Updates parameters (no-\/op for \doxylink{classTanh}{Tanh}). \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classTanh_a1e53fb234db8aa781431a8bb41705407}{get\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Gets weights (throws error for \doxylink{classTanh}{Tanh}). \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \& \mbox{\hyperlink{classTanh_a97eb3c0b539af96c2c7e589aa8499f8b}{get\+\_\+grad\+\_\+weights}} () override
+\begin{DoxyCompactList}\small\item\em Gets gradient of weights (throws error for \doxylink{classTanh}{Tanh}). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTanh_ac8dd719fd598320f7820d8315c28bfd3}{set\+\_\+weights}} (const \mbox{\hyperlink{classTensor}{Tensor}} \&weights) override
+\begin{DoxyCompactList}\small\item\em Sets weights (throws error for \doxylink{classTanh}{Tanh}). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTanh_a9d5f0ea9c503711c495e24b122734627}{save}} (const std\+::string \&path) override
+\begin{DoxyCompactList}\small\item\em No state to save for \doxylink{classTanh}{Tanh}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTanh_ac5992a258f1b8cb00df42195c11e244f}{load}} (const std\+::string \&path) override
+\begin{DoxyCompactList}\small\item\em No state to load for \doxylink{classTanh}{Tanh}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Fonctions membres publiques hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{classModule_a4a48538d35a2da7fcc32d9f509034723}{\texorpdfstring{$\sim$}{\string~}\+Module}} ()=default
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Membres hérités additionnels}
+\doxysubsection*{Attributs protégés hérités de \mbox{\hyperlink{classModule}{Module}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classModule_a648d6840cd912a7492ce7d53807d3e59}{input\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Description détaillée}
+\doxylink{classTanh}{Tanh} activation function module. 
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\Hypertarget{classTanh_a3686698710a8ef5e016e005733f0897a}\label{classTanh_a3686698710a8ef5e016e005733f0897a} 
+\index{Tanh@{Tanh}!Tanh@{Tanh}}
+\index{Tanh@{Tanh}!Tanh@{Tanh}}
+\doxysubsubsection{\texorpdfstring{Tanh()}{Tanh()}}
+{\footnotesize\ttfamily Tanh\+::\+Tanh (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+\doxysubsection{Documentation des fonctions membres}
+\Hypertarget{classTanh_ad78865ad7dd2053563358dce6ee17fc2}\label{classTanh_ad78865ad7dd2053563358dce6ee17fc2} 
+\index{Tanh@{Tanh}!backward@{backward}}
+\index{backward@{backward}!Tanh@{Tanh}}
+\doxysubsubsection{\texorpdfstring{backward()}{backward()}}
+{\footnotesize\ttfamily void Tanh\+::backward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+output,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+input }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Computes backward pass for \doxylink{classTanh}{Tanh}. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_afd9b0211fb34658f3b709391c6ae479d}{Module}}.
+
+\Hypertarget{classTanh_a283f766630181302ba5f7958438ef536}\label{classTanh_a283f766630181302ba5f7958438ef536} 
+\index{Tanh@{Tanh}!forward@{forward}}
+\index{forward@{forward}!Tanh@{Tanh}}
+\doxysubsubsection{\texorpdfstring{forward()}{forward()}}
+{\footnotesize\ttfamily void Tanh\+::forward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{input,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Applies \doxylink{classTanh}{Tanh} activation\+: output = tanh(input). 
+
+
+
+Implémente \mbox{\hyperlink{classModule_ab480860c2b4d385a5d25d488ae216fc7}{Module}}.
+
+\Hypertarget{classTanh_a97eb3c0b539af96c2c7e589aa8499f8b}\label{classTanh_a97eb3c0b539af96c2c7e589aa8499f8b} 
+\index{Tanh@{Tanh}!get\_grad\_weights@{get\_grad\_weights}}
+\index{get\_grad\_weights@{get\_grad\_weights}!Tanh@{Tanh}}
+\doxysubsubsection{\texorpdfstring{get\_grad\_weights()}{get\_grad\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& Tanh\+::get\+\_\+grad\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets gradient of weights (throws error for \doxylink{classTanh}{Tanh}). 
+
+
+
+Implémente \mbox{\hyperlink{classModule_a15fa8437ef5ebdebb2d4887105b3cc56}{Module}}.
+
+\Hypertarget{classTanh_a1e53fb234db8aa781431a8bb41705407}\label{classTanh_a1e53fb234db8aa781431a8bb41705407} 
+\index{Tanh@{Tanh}!get\_weights@{get\_weights}}
+\index{get\_weights@{get\_weights}!Tanh@{Tanh}}
+\doxysubsubsection{\texorpdfstring{get\_weights()}{get\_weights()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} \& Tanh\+::get\+\_\+weights (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Gets weights (throws error for \doxylink{classTanh}{Tanh}). 
+
+
+
+Implémente \mbox{\hyperlink{classModule_a5fd2b886333928f321cb17554d7b28eb}{Module}}.
+
+\Hypertarget{classTanh_ac5992a258f1b8cb00df42195c11e244f}\label{classTanh_ac5992a258f1b8cb00df42195c11e244f} 
+\index{Tanh@{Tanh}!load@{load}}
+\index{load@{load}!Tanh@{Tanh}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily void Tanh\+::load (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+No state to load for \doxylink{classTanh}{Tanh}. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_a8455466e7aae6765f2c5c7bec4db6efe}{Module}}.
+
+\Hypertarget{classTanh_a9d5f0ea9c503711c495e24b122734627}\label{classTanh_a9d5f0ea9c503711c495e24b122734627} 
+\index{Tanh@{Tanh}!save@{save}}
+\index{save@{save}!Tanh@{Tanh}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily void Tanh\+::save (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+No state to save for \doxylink{classTanh}{Tanh}. 
+
+
+
+Implémente \mbox{\hyperlink{classModule_ae66a6e139971adb9375c94a88f86be99}{Module}}.
+
+\Hypertarget{classTanh_ac8dd719fd598320f7820d8315c28bfd3}\label{classTanh_ac8dd719fd598320f7820d8315c28bfd3} 
+\index{Tanh@{Tanh}!set\_weights@{set\_weights}}
+\index{set\_weights@{set\_weights}!Tanh@{Tanh}}
+\doxysubsubsection{\texorpdfstring{set\_weights()}{set\_weights()}}
+{\footnotesize\ttfamily void Tanh\+::set\+\_\+weights (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classTensor}{Tensor}} \&}]{weights }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Sets weights (throws error for \doxylink{classTanh}{Tanh}). 
+
+
+
+Implémente \mbox{\hyperlink{classModule_ac9fe3ade73ca62999e96f63947174f2e}{Module}}.
+
+\Hypertarget{classTanh_af454530046e3123e7c85e65b24d7f32c}\label{classTanh_af454530046e3123e7c85e65b24d7f32c} 
+\index{Tanh@{Tanh}!update@{update}}
+\index{update@{update}!Tanh@{Tanh}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void Tanh\+::update (\begin{DoxyParamCaption}\item[{float}]{lr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Updates parameters (no-\/op for \doxylink{classTanh}{Tanh}). 
+
+
+
+Implémente \mbox{\hyperlink{classModule_a877f73f8b1fd5422652cbd0d0331ac7c}{Module}}.
+
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/\mbox{\hyperlink{activation_8h}{activation.\+h}}\end{DoxyCompactItemize}

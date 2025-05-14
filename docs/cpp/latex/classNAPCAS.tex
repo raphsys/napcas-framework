@@ -1,0 +1,161 @@
+\doxysection{Référence de la classe NAPCAS}
+\hypertarget{classNAPCAS}{}\label{classNAPCAS}\index{NAPCAS@{NAPCAS}}
+
+
+{\ttfamily \#include $<$napcas.\+h$>$}
+
+
+
+Graphe de collaboration de NAPCAS\+:
+% FIG 0
+\doxysubsubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classNAPCAS_a1228965673d0cb467eb42ea34635cb89}{NAPCAS}} (int input\+\_\+size, int output\+\_\+size)
+\item 
+virtual void \mbox{\hyperlink{classNAPCAS_ad5742bfb36515dba9dc91c314d56a5d5}{forward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&input, \mbox{\hyperlink{classTensor}{Tensor}} \&output)
+\item 
+virtual void \mbox{\hyperlink{classNAPCAS_a7de190256a68b70f93a5a72b4510fafe}{backward}} (\mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+output, \mbox{\hyperlink{classTensor}{Tensor}} \&grad\+\_\+input)
+\item 
+virtual void \mbox{\hyperlink{classNAPCAS_a10b695d03043c943ab4b78472ceec4a1}{update}} (float lr)
+\item 
+void \mbox{\hyperlink{classNAPCAS_a38c3d6390dfefdc39f734d9041ff9151}{set\+\_\+weights}} (const \mbox{\hyperlink{classTensor}{Tensor}} \&weights)
+\item 
+void \mbox{\hyperlink{classNAPCAS_a4e26107e7f4a530f9f0a0135e840e675}{save}} (const std\+::string \&path)
+\item 
+void \mbox{\hyperlink{classNAPCAS_abf70748161c163da7ad1fd169c8a278b}{load}} (const std\+::string \&path)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Fonctions membres protégées}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classNAPCAS_ad4f758f593f1fedadb27b35f62170cd1}{compute\+\_\+mask}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Attributs protégés}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{classNAPCAS_af172dbf629a8835c362057a3bfb71797}{input\+\_\+size\+\_\+}}
+\item 
+int \mbox{\hyperlink{classNAPCAS_af8eb7e1c5e34963d5dd9bc82db89bf9c}{output\+\_\+size\+\_\+}}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classNAPCAS_a0d34d15c549ad197a75b860c5ceabd67}{weights\+\_\+}}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classNAPCAS_a9669d3abd05dc2b4011fd0553f62b1dc}{alpha\+\_\+}}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classNAPCAS_ae6fad7867fab27c5007559dfe4da7e53}{grad\+\_\+weights\+\_\+}}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classNAPCAS_a9c5666b8f4610f8beac44b01615e802f}{grad\+\_\+alpha\+\_\+}}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classNAPCAS_a00f48b0fa23a199d4c14c5ccf27279da}{masked\+\_\+weights\+\_\+}}
+\item 
+\mbox{\hyperlink{classTensor}{Tensor}} \mbox{\hyperlink{classNAPCAS_aae8f11c87c8507e23228f6c675759bc9}{input\+\_\+}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\Hypertarget{classNAPCAS_a1228965673d0cb467eb42ea34635cb89}\label{classNAPCAS_a1228965673d0cb467eb42ea34635cb89} 
+\index{NAPCAS@{NAPCAS}!NAPCAS@{NAPCAS}}
+\index{NAPCAS@{NAPCAS}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{NAPCAS()}{NAPCAS()}}
+{\footnotesize\ttfamily NAPCAS\+::\+NAPCAS (\begin{DoxyParamCaption}\item[{int}]{input\+\_\+size,  }\item[{int}]{output\+\_\+size }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Documentation des fonctions membres}
+\Hypertarget{classNAPCAS_a7de190256a68b70f93a5a72b4510fafe}\label{classNAPCAS_a7de190256a68b70f93a5a72b4510fafe} 
+\index{NAPCAS@{NAPCAS}!backward@{backward}}
+\index{backward@{backward}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{backward()}{backward()}}
+{\footnotesize\ttfamily virtual void NAPCAS\+::backward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+output,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{grad\+\_\+input }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{classNAPCAS_ad4f758f593f1fedadb27b35f62170cd1}\label{classNAPCAS_ad4f758f593f1fedadb27b35f62170cd1} 
+\index{NAPCAS@{NAPCAS}!compute\_mask@{compute\_mask}}
+\index{compute\_mask@{compute\_mask}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{compute\_mask()}{compute\_mask()}}
+{\footnotesize\ttfamily void NAPCAS\+::compute\+\_\+mask (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classNAPCAS_ad5742bfb36515dba9dc91c314d56a5d5}\label{classNAPCAS_ad5742bfb36515dba9dc91c314d56a5d5} 
+\index{NAPCAS@{NAPCAS}!forward@{forward}}
+\index{forward@{forward}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{forward()}{forward()}}
+{\footnotesize\ttfamily virtual void NAPCAS\+::forward (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{input,  }\item[{\mbox{\hyperlink{classTensor}{Tensor}} \&}]{output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+\Hypertarget{classNAPCAS_abf70748161c163da7ad1fd169c8a278b}\label{classNAPCAS_abf70748161c163da7ad1fd169c8a278b} 
+\index{NAPCAS@{NAPCAS}!load@{load}}
+\index{load@{load}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily void NAPCAS\+::load (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
+
+\Hypertarget{classNAPCAS_a4e26107e7f4a530f9f0a0135e840e675}\label{classNAPCAS_a4e26107e7f4a530f9f0a0135e840e675} 
+\index{NAPCAS@{NAPCAS}!save@{save}}
+\index{save@{save}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily void NAPCAS\+::save (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})}
+
+\Hypertarget{classNAPCAS_a38c3d6390dfefdc39f734d9041ff9151}\label{classNAPCAS_a38c3d6390dfefdc39f734d9041ff9151} 
+\index{NAPCAS@{NAPCAS}!set\_weights@{set\_weights}}
+\index{set\_weights@{set\_weights}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{set\_weights()}{set\_weights()}}
+{\footnotesize\ttfamily void NAPCAS\+::set\+\_\+weights (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classTensor}{Tensor}} \&}]{weights }\end{DoxyParamCaption})}
+
+\Hypertarget{classNAPCAS_a10b695d03043c943ab4b78472ceec4a1}\label{classNAPCAS_a10b695d03043c943ab4b78472ceec4a1} 
+\index{NAPCAS@{NAPCAS}!update@{update}}
+\index{update@{update}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily virtual void NAPCAS\+::update (\begin{DoxyParamCaption}\item[{float}]{lr }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+\doxysubsection{Documentation des données membres}
+\Hypertarget{classNAPCAS_a9669d3abd05dc2b4011fd0553f62b1dc}\label{classNAPCAS_a9669d3abd05dc2b4011fd0553f62b1dc} 
+\index{NAPCAS@{NAPCAS}!alpha\_@{alpha\_}}
+\index{alpha\_@{alpha\_}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{alpha\_}{alpha\_}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} NAPCAS\+::alpha\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classNAPCAS_a9c5666b8f4610f8beac44b01615e802f}\label{classNAPCAS_a9c5666b8f4610f8beac44b01615e802f} 
+\index{NAPCAS@{NAPCAS}!grad\_alpha\_@{grad\_alpha\_}}
+\index{grad\_alpha\_@{grad\_alpha\_}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{grad\_alpha\_}{grad\_alpha\_}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} NAPCAS\+::grad\+\_\+alpha\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classNAPCAS_ae6fad7867fab27c5007559dfe4da7e53}\label{classNAPCAS_ae6fad7867fab27c5007559dfe4da7e53} 
+\index{NAPCAS@{NAPCAS}!grad\_weights\_@{grad\_weights\_}}
+\index{grad\_weights\_@{grad\_weights\_}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{grad\_weights\_}{grad\_weights\_}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} NAPCAS\+::grad\+\_\+weights\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classNAPCAS_aae8f11c87c8507e23228f6c675759bc9}\label{classNAPCAS_aae8f11c87c8507e23228f6c675759bc9} 
+\index{NAPCAS@{NAPCAS}!input\_@{input\_}}
+\index{input\_@{input\_}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{input\_}{input\_}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} NAPCAS\+::input\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classNAPCAS_af172dbf629a8835c362057a3bfb71797}\label{classNAPCAS_af172dbf629a8835c362057a3bfb71797} 
+\index{NAPCAS@{NAPCAS}!input\_size\_@{input\_size\_}}
+\index{input\_size\_@{input\_size\_}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{input\_size\_}{input\_size\_}}
+{\footnotesize\ttfamily int NAPCAS\+::input\+\_\+size\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classNAPCAS_a00f48b0fa23a199d4c14c5ccf27279da}\label{classNAPCAS_a00f48b0fa23a199d4c14c5ccf27279da} 
+\index{NAPCAS@{NAPCAS}!masked\_weights\_@{masked\_weights\_}}
+\index{masked\_weights\_@{masked\_weights\_}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{masked\_weights\_}{masked\_weights\_}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} NAPCAS\+::masked\+\_\+weights\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classNAPCAS_af8eb7e1c5e34963d5dd9bc82db89bf9c}\label{classNAPCAS_af8eb7e1c5e34963d5dd9bc82db89bf9c} 
+\index{NAPCAS@{NAPCAS}!output\_size\_@{output\_size\_}}
+\index{output\_size\_@{output\_size\_}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{output\_size\_}{output\_size\_}}
+{\footnotesize\ttfamily int NAPCAS\+::output\+\_\+size\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+\Hypertarget{classNAPCAS_a0d34d15c549ad197a75b860c5ceabd67}\label{classNAPCAS_a0d34d15c549ad197a75b860c5ceabd67} 
+\index{NAPCAS@{NAPCAS}!weights\_@{weights\_}}
+\index{weights\_@{weights\_}!NAPCAS@{NAPCAS}}
+\doxysubsubsection{\texorpdfstring{weights\_}{weights\_}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTensor}{Tensor}} NAPCAS\+::weights\+\_\+\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+cpp/include/\mbox{\hyperlink{napcas_8h}{napcas.\+h}}\end{DoxyCompactItemize}

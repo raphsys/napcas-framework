@@ -1,0 +1,25 @@
+\doxysection{gpu\+\_\+utils.\+h}
+\hypertarget{gpu__utils_8h_source}{}\label{gpu__utils_8h_source}\index{cpp/include/gpu\_utils.h@{cpp/include/gpu\_utils.h}}
+\mbox{\hyperlink{gpu__utils_8h}{Aller à la documentation de ce fichier.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GPU\_UTILS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GPU\_UTILS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tensor_8h}{tensor.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classGPUUtils}{GPUUtils}}\ \{}
+\DoxyCodeLine{00008\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ USE\_CUDA}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{float}*\ allocate\_cuda\_memory(\textcolor{keywordtype}{int}\ size);}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ free\_cuda\_memory(\textcolor{keywordtype}{float}*\ ptr);}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ copy\_to\_cuda(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}*\ src,\ \textcolor{keywordtype}{float}*\ dst,\ \textcolor{keywordtype}{int}\ size);}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ copy\_from\_cuda(\textcolor{keyword}{const}\ \textcolor{keywordtype}{float}*\ src,\ \textcolor{keywordtype}{float}*\ dst,\ \textcolor{keywordtype}{int}\ size);}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ USE\_OPENCL}}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{comment}{//\ OpenCL\ utilities\ (similar\ structure)}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{00031\ \};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ GPU\_UTILS\_H}}
+
+\end{DoxyCode}

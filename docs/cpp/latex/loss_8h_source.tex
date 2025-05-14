@@ -1,0 +1,26 @@
+\doxysection{loss.\+h}
+\hypertarget{loss_8h_source}{}\label{loss_8h_source}\index{cpp/include/loss.h@{cpp/include/loss.h}}
+\mbox{\hyperlink{loss_8h}{Aller à la documentation de ce fichier.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ LOSS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ LOSS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tensor_8h}{tensor.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classMSELoss}{MSELoss}}\ \{}
+\DoxyCodeLine{00008\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00009\ \ \ \ \ \mbox{\hyperlink{classMSELoss_a720c4dc70359fee146343ac138bdede3}{MSELoss}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{classMSELoss_a4ffd8adf71762faef9d49896ef66b9f8}{forward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ y\_pred,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ y\_true);}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ \mbox{\hyperlink{classMSELoss_a1ec43332f532dfa634ea191b8aaad9cb}{backward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ y\_pred,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ y\_true);}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classCrossEntropyLoss}{CrossEntropyLoss}}\ \{}
+\DoxyCodeLine{00024\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{classCrossEntropyLoss_ac1a6f40fabf077e54a805087a5a088a4}{CrossEntropyLoss}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{classCrossEntropyLoss_a58779cd0232f131207971cc3e6068e70}{forward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ y\_pred,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ y\_true);}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{classTensor}{Tensor}}\ \mbox{\hyperlink{classCrossEntropyLoss_ab632566560602a70262392ffd78f7aa2}{backward}}(\mbox{\hyperlink{classTensor}{Tensor}}\&\ y\_pred,\ \mbox{\hyperlink{classTensor}{Tensor}}\&\ y\_true);}
+\DoxyCodeLine{00036\ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ LOSS\_H}}
+
+\end{DoxyCode}
