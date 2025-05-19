@@ -1,3 +1,4 @@
+# setup.py
 from setuptools import setup, find_packages
 from pybind11.setup_helpers import Pybind11Extension, build_ext
 import os
@@ -29,4 +30,3 @@ setup(
     cmdclass={"build_ext": build_ext},
     zip_safe=False,
 )
-
