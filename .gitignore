@@ -1,0 +1,71 @@
+# -----------------------
+# General / OS
+# -----------------------
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+
+# -----------------------
+# C++ / CMake build
+# -----------------------
+# Build directory
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+cmake_install.cmake
+Makefile
+compile_commands.json
+Testing/
+
+# CMake helper files
+/*.cmake
+
+# Executables and libraries
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+
+# -----------------------
+# Python
+# -----------------------
+# Bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Extension modules (shared objects)
+*.so
+
+# Packaging
+*.egg-info/
+pip-wheel-metadata/
+dist/
+build/
+eggs/
+parts/
+var/
+*.egg
+
+# Virtual environments
+env/
+venv/
+ENV/
+.env/
+  
+# -----------------------
+# IDEs / Editors
+# -----------------------
+.vscode/
+.idea/
+*.iml
+
