@@ -1,202 +1,295 @@
-// tensor.cpp
 #include "napcas/tensor.h"
+#include <Eigen/Dense>
 #include <cstring>
-#include <algorithm>
-#include <queue>
+#include <stdexcept>
+#include <numeric>
+#include <iostream>
 
 namespace napcas {
 
-// ------ Constructeurs ------
-
-Tensor::Tensor(const std::vector<std::size_t>& shape,
-               DType dtype,
-               Device device)
-    : shape_(shape), dtype_(dtype), device_(device) {
-    if (shape_.empty())
-        throw Error("Tensor: empty shape");
-    std::size_t bytes = napcas::numel(shape_) * sizeof(float);
-    storage_ = Storage(::operator new(bytes),
-                       [](void* p){ ::operator delete(p); });
-    strides_.resize(shape_.size());
-    std::ptrdiff_t stride = 1;
-    for (int i = int(shape_.size()) - 1; i >= 0; --i) {
-        strides_[i] = stride;
-        stride *= static_cast<std::ptrdiff_t>(shape_[i]);
+namespace {
+    void default_deleter(void* ptr) {
+        std::free(ptr);
     }
+
+    size_t compute_numel(const std::vector<std::size_t>& shape) {
+        return std::accumulate(shape.begin(), shape.end(), 1UL, std::multiplies<>());
+    }
+
+    std::vector<std::ptrdiff_t> compute_strides_generic(const std::vector<std::size_t>& shape) {
+        std::vector<std::ptrdiff_t> strides(shape.size());
+        std::ptrdiff_t stride = 1;
+        for (int i = shape.size() - 1; i >= 0; --i) {
+            strides[i] = stride;
+            stride *= shape[i];
+        }
+        return strides;
+    }
+}
+
+// ===================== Constructeurs =====================
+
+Tensor::Tensor()
+    : dtype_(DType::Float32), device_(DeviceType::CPU, 0), storage_(nullptr, default_deleter) {}
+
+Tensor::Tensor(const std::vector<std::size_t>& shape, DType dtype, Device device)
+    : shape_(shape), dtype_(dtype), device_(device), storage_(nullptr, default_deleter) {
+    compute_strides();
+    size_t size_bytes = compute_numel(shape_) * dtype_size(dtype_);
+    void* raw = device_malloc(size_bytes, device_);
+    storage_ = std::unique_ptr<void, void(*)(void*)>(raw, default_deleter);
 }
 
 template<typename Scalar>
-Tensor::Tensor(const std::vector<std::size_t>& shape,
-               const std::vector<Scalar>& data,
-               Device device)
-    : Tensor(shape,
-             std::is_same<Scalar,float>::value ? DType::Float32 : DType::Float64,
-             device) {
-    if (data.size() != napcas::numel(shape))
-        throw Error("Tensor: data size != numel(shape)");
-    std::memcpy(storage_.get(), data.data(), data.size() * sizeof(Scalar));
+Tensor::Tensor(const std::vector<std::size_t>& shape, const std::vector<Scalar>& data, DType dtype, Device device)
+    : shape_(shape), dtype_(dtype), device_(device), storage_(nullptr, default_deleter) {
+    compute_strides();
+    size_t expected = compute_numel(shape);
+    if (data.size() != expected) throw std::runtime_error("Mismatch in shape and data size");
+    size_t size_bytes = expected * dtype_size(dtype_);
+    void* raw = device_malloc(size_bytes, device_);
+    std::memcpy(raw, data.data(), size_bytes);
+    storage_ = std::unique_ptr<void, void(*)(void*)>(raw, default_deleter);
 }
 
-// ------ Transformations ------
+Tensor::Tensor(Tensor&& other) noexcept
+    : shape_(std::move(other.shape_)), strides_(std::move(other.strides_)),
+      dtype_(other.dtype_), device_(other.device_), storage_(std::move(other.storage_)),
+      grad_ptr_(std::move(other.grad_ptr_)), grad_fn_(std::move(other.grad_fn_)),
+      requires_grad_flag_(other.requires_grad_flag_) {}
 
-Tensor Tensor::to(Device new_device) const {
-    if (new_device == device_) return *this;
-    Tensor out(*this);
-    out.device_ = new_device;
-    // TODO: GPU<->CPU copy
+Tensor& Tensor::operator=(Tensor&& other) noexcept {
+    if (this != &other) {
+        shape_ = std::move(other.shape_);
+        strides_ = std::move(other.strides_);
+        dtype_ = other.dtype_;
+        device_ = other.device_;
+        storage_ = std::move(other.storage_);
+        grad_ptr_ = std::move(other.grad_ptr_);
+        grad_fn_ = std::move(other.grad_fn_);
+        requires_grad_flag_ = other.requires_grad_flag_;
+    }
+    return *this;
+}
+
+// ===================== Métadonnées =====================
+
+std::size_t Tensor::numel() const noexcept {
+    return compute_numel(shape_);
+}
+
+bool Tensor::is_contiguous() const noexcept {
+    return strides_ == compute_strides_generic(shape_);
+}
+
+void Tensor::compute_strides() {
+    strides_ = compute_strides_generic(shape_);
+}
+
+void Tensor::check_device_consistency(const Tensor& other) const {
+    if (device_ != other.device_)
+        throw std::runtime_error("Device mismatch");
+}
+
+void Tensor::check_shape_broadcast(const Tensor& other) const {
+    if (shape_ != other.shape_)
+        throw std::runtime_error("Shape mismatch: broadcasting not yet supported");
+}
+
+// ===================== Manipulations =====================
+
+Tensor Tensor::clone() const {
+    Tensor out(shape_, dtype_, device_);
+    std::memcpy(out.storage_.get(), storage_.get(), numel() * dtype_size(dtype_));
     return out;
 }
 
-Tensor Tensor::astype(DType new_type) const {
-    if (new_type == dtype_) return *this;
-    Tensor out(shape_, new_type, device_);
-    if (dtype_ == DType::Float32 && new_type == DType::Float64) {
-        const float* src = data<float>();
-        double*       dst = out.data<double>();
-        std::transform(src, src + numel(), dst,
-                       [](float v){ return static_cast<double>(v); });
-    } else if (dtype_ == DType::Float64 && new_type == DType::Float32) {
-        const double* src = data<double>();
-        float*        dst = out.data<float>();
-        std::transform(src, src + numel(), dst,
-                       [](double v){ return static_cast<float>(v); });
-    } else {
-        throw Error("astype: unsupported cast");
-    }
+Tensor Tensor::detach() const {
+    Tensor out = clone();
+    out.requires_grad_flag_ = false;
+    return out;
+}
+
+Tensor Tensor::astype(DType new_dtype) const {
+    Tensor out(shape_, new_dtype, device_);
+    if (dtype_ != new_dtype) throw std::runtime_error("astype not implemented yet");
+    std::memcpy(out.storage_.get(), storage_.get(), numel() * dtype_size(dtype_));
+    return out;
+}
+
+Tensor Tensor::to(Device new_device) const {
+    if (new_device == device_) return clone();
+    Tensor out(shape_, dtype_, new_device);
+    std::memcpy(out.storage_.get(), storage_.get(), numel() * dtype_size(dtype_));
     return out;
 }
 
 Tensor Tensor::reshape(const std::vector<std::size_t>& new_shape) const {
-    if (napcas::numel(new_shape) != napcas::numel(shape_))
-        throw Error("reshape: incompatible numel");
-    Tensor out(*this);
+    if (compute_numel(new_shape) != numel()) throw std::runtime_error("Invalid reshape");
+    Tensor out = clone();
     out.shape_ = new_shape;
-    out.strides_.resize(new_shape.size());
-    std::ptrdiff_t stride = 1;
-    for (int i = int(new_shape.size()) - 1; i >= 0; --i) {
-        out.strides_[i] = stride;
-        stride *= static_cast<std::ptrdiff_t>(new_shape[i]);
+    out.compute_strides();
+    return out;
+}
+
+Tensor Tensor::view(const std::vector<std::size_t>& new_shape) const {
+    return reshape(new_shape);
+}
+
+Tensor Tensor::permute(const std::vector<int>& dims) const {
+    if (dims.size() != shape_.size()) throw std::runtime_error("Invalid permutation");
+    Tensor out = clone();
+    std::vector<std::size_t> new_shape(shape_.size());
+    std::vector<std::ptrdiff_t> new_strides(strides_.size());
+    for (size_t i = 0; i < dims.size(); ++i) {
+        new_shape[i] = shape_[dims[i]];
+        new_strides[i] = strides_[dims[i]];
     }
+    out.shape_ = new_shape;
+    out.strides_ = new_strides;
+    return out;
+}
+
+Tensor Tensor::transpose(int dim0, int dim1) const {
+    std::vector<int> dims(shape_.size());
+    std::iota(dims.begin(), dims.end(), 0);
+    std::swap(dims[dim0], dims[dim1]);
+    return permute(dims);
+}
+
+Tensor Tensor::squeeze(int dim) const {
+    Tensor out = clone();
+    if (dim >= 0 && shape_[dim] == 1) {
+        out.shape_.erase(out.shape_.begin() + dim);
+        out.compute_strides();
+    }
+    return out;
+}
+
+Tensor Tensor::unsqueeze(int dim) {
+    Tensor out = clone();
+    out.shape_.insert(out.shape_.begin() + dim, 1);
+    out.compute_strides();
     return out;
 }
 
 Tensor Tensor::contiguous() const {
-    return *this;
+    if (is_contiguous()) return clone();
+    return clone();  // NOTE: view-compatible in future
 }
 
-// ------ Opérations binaires + Autograd ------
+// ===================== Initialisateurs =====================
 
-template<typename Functor>
-Tensor Tensor::binary_op(const Tensor& rhs,
-                         Functor fn,
-                         std::function<void(const Tensor&)> backward_fn) const {
-    // Forward
-    Tensor out(shape_, dtype_, device_);
-    if (dtype_ == DType::Float32) {
-        const auto* a = data<float>();
-        const auto* b = rhs.data<float>();
-              auto* c = out.data<float>();
-        std::transform(a, a + numel(), b, c, fn);
-    } else {
-        const auto* a = data<double>();
-        const auto* b = rhs.data<double>();
-              auto* c = out.data<double>();
-        std::transform(a, a + numel(), b, c, fn);
-    }
+Tensor Tensor::zeros(const std::vector<std::size_t>& shape, DType dtype, Device device) {
+    Tensor out(shape, dtype, device);
+    std::memset(out.storage_.get(), 0, out.numel() * dtype_size(dtype));
+    return out;
+}
 
-    // Autograd
-    if (requires_grad_flag_ || rhs.requires_grad_flag_) {
-        out.requires_grad_(true);
-        struct OpFn : Function {
-            std::function<void(const Tensor&)> backward_fn_;
-            OpFn(std::function<void(const Tensor&)> bf)
-              : backward_fn_(std::move(bf)) {}
-            void backward(const Tensor& grad_output) override {
-                backward_fn_(grad_output);
-            }
-        };
-        auto fn_ptr = std::make_shared<OpFn>(backward_fn);
-        if (requires_grad_flag_)     fn_ptr->next_functions_.push_back(grad_fn_);
-        if (rhs.requires_grad_flag_) fn_ptr->next_functions_.push_back(rhs.grad_fn_);
-        out.grad_fn_ = fn_ptr;
+Tensor Tensor::ones(const std::vector<std::size_t>& shape, DType dtype, Device device) {
+    Tensor out(shape, dtype, device);
+    if (dtype == DType::Float32) {
+        float* ptr = static_cast<float*>(out.storage_.get());
+        std::fill(ptr, ptr + out.numel(), 1.0f);
     }
     return out;
 }
 
+// ===================== Opérations =====================
+
 Tensor Tensor::operator+(const Tensor& rhs) const {
-    return binary_op(rhs, std::plus<>{}, [&](const Tensor& g){
-        if (requires_grad_flag_)    *grad_ptr_ = *grad_ptr_ + g;
-        if (rhs.requires_grad_flag_) *rhs.grad_ptr_ = *rhs.grad_ptr_ + g;
-    });
-}
-Tensor Tensor::operator-(const Tensor& rhs) const {
-    return binary_op(rhs, std::minus<>{}, [&](const Tensor& g){
-        if (requires_grad_flag_)    *grad_ptr_ = *grad_ptr_ + g;
-        if (rhs.requires_grad_flag_) *rhs.grad_ptr_ = *rhs.grad_ptr_ - g;
-    });
-}
-Tensor Tensor::operator*(const Tensor& rhs) const {
-    return binary_op(rhs, std::multiplies<>{}, [&](const Tensor& g){
-        if (requires_grad_flag_)    *grad_ptr_ = *grad_ptr_ + (g * rhs);
-        if (rhs.requires_grad_flag_) *rhs.grad_ptr_ = *rhs.grad_ptr_ + (g * *this);
-    });
-}
-Tensor Tensor::operator/(const Tensor& rhs) const {
-    return binary_op(rhs, std::divides<>{}, [&](const Tensor& g){
-        if (requires_grad_flag_)    *grad_ptr_ = *grad_ptr_ + (g / rhs);
-        if (rhs.requires_grad_flag_) *rhs.grad_ptr_ = *rhs.grad_ptr_ - (g * *this) / (rhs * rhs);
-    });
+    check_device_consistency(rhs);
+    check_shape_broadcast(rhs);
+    Tensor out(shape_, dtype_, device_);
+    float* a = static_cast<float*>(storage_.get());
+    float* b = static_cast<float*>(rhs.storage_.get());
+    float* c = static_cast<float*>(out.storage_.get());
+    for (size_t i = 0; i < numel(); ++i) c[i] = a[i] + b[i];
+    return out;
 }
 
-// ------ Matmul + Autograd ------
+Tensor Tensor::operator-(const Tensor& rhs) const {
+    check_device_consistency(rhs);
+    check_shape_broadcast(rhs);
+    Tensor out(shape_, dtype_, device_);
+    float* a = static_cast<float*>(storage_.get());
+    float* b = static_cast<float*>(rhs.storage_.get());
+    float* c = static_cast<float*>(out.storage_.get());
+    for (size_t i = 0; i < numel(); ++i) c[i] = a[i] - b[i];
+    return out;
+}
+
+Tensor Tensor::operator*(const Tensor& rhs) const {
+    check_device_consistency(rhs);
+    check_shape_broadcast(rhs);
+    Tensor out(shape_, dtype_, device_);
+    float* a = static_cast<float*>(storage_.get());
+    float* b = static_cast<float*>(rhs.storage_.get());
+    float* c = static_cast<float*>(out.storage_.get());
+    for (size_t i = 0; i < numel(); ++i) c[i] = a[i] * b[i];
+    return out;
+}
+
+Tensor Tensor::operator/(const Tensor& rhs) const {
+    check_device_consistency(rhs);
+    check_shape_broadcast(rhs);
+    Tensor out(shape_, dtype_, device_);
+    float* a = static_cast<float*>(storage_.get());
+    float* b = static_cast<float*>(rhs.storage_.get());
+    float* c = static_cast<float*>(out.storage_.get());
+    for (size_t i = 0; i < numel(); ++i) c[i] = a[i] / b[i];
+    return out;
+}
 
 Tensor Tensor::matmul(const Tensor& rhs) const {
-    if (ndim()!=2 || rhs.ndim()!=2 || size(1)!=rhs.size(0))
-        throw Error("matmul: shape mismatch");
-    Tensor out({ size(0), rhs.size(1) }, dtype_, device_);
-    if (dtype_ == DType::Float32) {
-        Eigen::Map<const Eigen::Matrix<float,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>
-            A(data<float>(), size(0), size(1));
-        Eigen::Map<const Eigen::Matrix<float,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>
-            B(rhs.data<float>(), rhs.size(0), rhs.size(1));
-        Eigen::Map<Eigen::Matrix<float,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>
-            C(out.data<float>(), out.size(0), out.size(1));
-        C.noalias() = A * B;
-    } else {
-        Eigen::Map<const Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>
-            A(data<double>(), size(0), size(1));
-        Eigen::Map<const Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>
-            B(rhs.data<double>(), rhs.size(0), rhs.size(1));
-        Eigen::Map<Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic,Eigen::RowMajor>>
-            C(out.data<double>(), out.size(0), out.size(1));
-        C.noalias() = A * B;
-    }
-    return binary_op(rhs, std::plus<>{}, [&](const Tensor& g){
-        if (requires_grad_flag_)    *grad_ptr_ = *grad_ptr_ + g.matmul(rhs);
-        if (rhs.requires_grad_flag_) *rhs.grad_ptr_ = *rhs.grad_ptr_ + (*this).matmul(g);
-    });
+    if (shape_.size() != 2 || rhs.shape_.size() != 2)
+        throw std::runtime_error("matmul: only 2D supported");
+    if (shape_[1] != rhs.shape_[0])
+        throw std::runtime_error("matmul: shape mismatch");
+
+    size_t m = shape_[0], k = shape_[1], n = rhs.shape_[1];
+    Tensor out({m, n}, dtype_, device_);
+
+    Eigen::Map<Eigen::MatrixXf> A(static_cast<float*>(storage_.get()), m, k);
+    Eigen::Map<Eigen::MatrixXf> B(static_cast<float*>(rhs.storage_.get()), k, n);
+    Eigen::Map<Eigen::MatrixXf> C(static_cast<float*>(out.storage_.get()), m, n);
+    C.noalias() = A * B;
+
+    return out;
 }
 
-// ------ backward global ------
-
-void Tensor::backward() {
-    if (!requires_grad_flag_) requires_grad_(true);
-    *grad_ptr_ = Tensor(shape_, dtype_, device_);
-    if (numel()==1) (*grad_ptr_).data<float>()[0] = 1.0f;
-
-    std::queue<std::shared_ptr<Function>> q;
-    if (grad_fn_) q.push(grad_fn_);
-    while (!q.empty()) {
-        auto fn = q.front(); q.pop();
-        fn->backward(*grad_ptr_);
-        for (auto& nxt : fn->next_functions_)
-            if (nxt) q.push(nxt);
+// ===================== Affichage =====================
+void Tensor::print_summary() const {
+    std::cout << "Tensor(";
+    std::cout << "shape=[";
+    for (size_t i = 0; i < shape_.size(); ++i) {
+        std::cout << shape_[i];
+        if (i < shape_.size() - 1) std::cout << ", ";
     }
+    std::cout << "], dtype=";
+    switch (dtype_) {
+        case DType::Float32: std::cout << "float32"; break;
+        default: std::cout << "unknown"; break;
+    }
+    std::cout << ", device=";
+    switch (device_.type) {
+        case DeviceType::CPU: std::cout << "cpu"; break;
+        default: std::cout << "unknown"; break;
+    }
+    std::cout << ")" << std::endl;
 }
 
-// Explicit instantiation
-template Tensor::Tensor<float>(const std::vector<std::size_t>&, const std::vector<float>&, Device);
-template Tensor::Tensor<double>(const std::vector<std::size_t>&, const std::vector<double>&, Device);
+void Tensor::print_shape() const {
+    std::cout << "[";
+    for (size_t i = 0; i < shape_.size(); ++i) {
+        std::cout << shape_[i];
+        if (i < shape_.size() - 1) std::cout << ", ";
+    }
+    std::cout << "]" << std::endl;
+}
 
-} // namespace napcas :contentReference[oaicite:10]{index=10}
+// Instantiate template constructor
+template Tensor::Tensor(const std::vector<std::size_t>&, const std::vector<float>&, DType, Device);
+
+} // namespace napcas
 
