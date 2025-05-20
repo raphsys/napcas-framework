@@ -41,7 +41,10 @@ Tensor::Tensor(const std::vector<std::size_t>& shape, DType dtype, Device device
 }
 
 template<typename Scalar>
-Tensor::Tensor(const std::vector<std::size_t>& shape, const std::vector<Scalar>& data, DType dtype, Device device)
+Tensor::Tensor(const std::vector<std::size_t>& shape,
+               const std::vector<Scalar>& data,
+               DType dtype,
+               Device device)
     : shape_(shape), dtype_(dtype), device_(device), storage_(nullptr, default_deleter) {
     compute_strides();
     size_t expected = compute_numel(shape);
@@ -142,19 +145,19 @@ Tensor Tensor::permute(const std::vector<int>& dims) const {
     std::vector<std::size_t> new_shape(shape_.size());
     std::vector<std::ptrdiff_t> new_strides(strides_.size());
     for (size_t i = 0; i < dims.size(); ++i) {
-        new_shape[i] = shape_[dims[i]];
+        new_shape[i]   = shape_[dims[i]];
         new_strides[i] = strides_[dims[i]];
     }
-    out.shape_ = new_shape;
+    out.shape_   = new_shape;
     out.strides_ = new_strides;
     return out;
 }
 
 Tensor Tensor::transpose(int dim0, int dim1) const {
-    std::vector<int> dims(shape_.size());
-    std::iota(dims.begin(), dims.end(), 0);
-    std::swap(dims[dim0], dims[dim1]);
-    return permute(dims);
+    std::vector<int> idx(shape_.size());
+    std::iota(idx.begin(), idx.end(), 0);
+    std::swap(idx[dim0], idx[dim1]);
+    return permute(idx);
 }
 
 Tensor Tensor::squeeze(int dim) const {
@@ -175,18 +178,22 @@ Tensor Tensor::unsqueeze(int dim) {
 
 Tensor Tensor::contiguous() const {
     if (is_contiguous()) return clone();
-    return clone();  // NOTE: view-compatible in future
+    return clone();  // view-compatible placeholder
 }
 
 // ===================== Initialisateurs =====================
 
-Tensor Tensor::zeros(const std::vector<std::size_t>& shape, DType dtype, Device device) {
+Tensor Tensor::zeros(const std::vector<std::size_t>& shape,
+                     DType dtype,
+                     Device device) {
     Tensor out(shape, dtype, device);
     std::memset(out.storage_.get(), 0, out.numel() * dtype_size(dtype));
     return out;
 }
 
-Tensor Tensor::ones(const std::vector<std::size_t>& shape, DType dtype, Device device) {
+Tensor Tensor::ones(const std::vector<std::size_t>& shape,
+                    DType dtype,
+                    Device device) {
     Tensor out(shape, dtype, device);
     if (dtype == DType::Float32) {
         float* ptr = static_cast<float*>(out.storage_.get());
@@ -195,7 +202,7 @@ Tensor Tensor::ones(const std::vector<std::size_t>& shape, DType dtype, Device d
     return out;
 }
 
-// ===================== Opérations =====================
+// ===================== Opérations élémentaires =====================
 
 Tensor Tensor::operator+(const Tensor& rhs) const {
     check_device_consistency(rhs);
@@ -249,16 +256,15 @@ Tensor Tensor::matmul(const Tensor& rhs) const {
 
     size_t m = shape_[0], k = shape_[1], n = rhs.shape_[1];
     Tensor out({m, n}, dtype_, device_);
-
     Eigen::Map<Eigen::MatrixXf> A(static_cast<float*>(storage_.get()), m, k);
     Eigen::Map<Eigen::MatrixXf> B(static_cast<float*>(rhs.storage_.get()), k, n);
     Eigen::Map<Eigen::MatrixXf> C(static_cast<float*>(out.storage_.get()), m, n);
     C.noalias() = A * B;
-
     return out;
 }
 
 // ===================== Affichage =====================
+
 void Tensor::print_summary() const {
     std::cout << "Tensor(";
     std::cout << "shape=[";

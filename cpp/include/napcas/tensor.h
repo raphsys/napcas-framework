@@ -17,10 +17,15 @@ class Tensor {
 public:
     // ----- Constructeurs -----
     Tensor();
-    Tensor(const std::vector<std::size_t>& shape, DType dtype = DType::Float32, Device device = Device{DeviceType::CPU, 0});
+    Tensor(const std::vector<std::size_t>& shape,
+           DType dtype = DType::Float32,
+           Device device = Device{DeviceType::CPU, 0});
 
     template<typename Scalar>
-    Tensor(const std::vector<std::size_t>& shape, const std::vector<Scalar>& data, DType dtype = DType::Float32, Device device = Device{DeviceType::CPU, 0});
+    Tensor(const std::vector<std::size_t>& shape,
+           const std::vector<Scalar>& data,
+           DType dtype = DType::Float32,
+           Device device = Device{DeviceType::CPU, 0});
 
     Tensor(const Tensor&) = delete;
     Tensor& operator=(const Tensor&) = delete;
@@ -60,8 +65,12 @@ public:
     Tensor contiguous() const;
 
     // ----- Initialisateurs -----
-    static Tensor zeros(const std::vector<std::size_t>& shape, DType dtype = DType::Float32, Device device = Device{DeviceType::CPU, 0});
-    static Tensor ones(const std::vector<std::size_t>& shape, DType dtype = DType::Float32, Device device = Device{DeviceType::CPU, 0});
+    static Tensor zeros(const std::vector<std::size_t>& shape,
+                        DType dtype = DType::Float32,
+                        Device device = Device{DeviceType::CPU, 0});
+    static Tensor ones(const std::vector<std::size_t>& shape,
+                       DType dtype = DType::Float32,
+                       Device device = Device{DeviceType::CPU, 0});
 
     // ----- Opérations élémentaires -----
     Tensor operator+(const Tensor& other) const;

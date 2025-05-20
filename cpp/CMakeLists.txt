@@ -3,11 +3,18 @@ find_package(pybind11 REQUIRED)
 find_package(Eigen3 REQUIRED)
 
 set(SOURCES
-    src/python_bindings.cpp
     src/tensor.cpp
+    src/module.cpp
+    src/autograd.cpp
+    src/python_bindings.cpp
 )
 
 pybind11_add_module(_napcas MODULE ${SOURCES})
+
+set_target_properties(_napcas PROPERTIES
+  LIBRARY_OUTPUT_DIRECTORY
+    "${CMAKE_SOURCE_DIR}/python/napcas"
+)
 
 target_include_directories(_napcas PRIVATE
     ${PROJECT_SOURCE_DIR}/cpp/include

@@ -9,8 +9,9 @@ namespace py = pybind11;
 using namespace napcas;
 
 PYBIND11_MODULE(_napcas, m) {
+
     // --- Tensor ---
-    py::class_<Tensor>(m, "Tensor")
+    py::class_<Tensor, std::shared_ptr<Tensor>>(m, "Tensor")
         .def_static("ones", &Tensor::ones)
         .def_static("zeros", &Tensor::zeros)
         .def("shape", &Tensor::shape)
@@ -51,19 +52,24 @@ PYBIND11_MODULE(_napcas, m) {
         .def("to_string", &Device::to_string)
         .def("__str__",     &Device::to_string);
         
-    // --- Expose Module ---
+    // Expose Module
     py::class_<Module, std::shared_ptr<Module>>(m, "Module")
-        .def("forward", &Module::forward)
-        .def("train",   &Module::train)
-        .def("eval",    &Module::eval)
+        .def(py::init<>())
+        .def("register_parameter", &Module::register_parameter,
+             py::arg("name"), py::arg("tensor"))
+        .def("register_module", &Module::register_module,
+             py::arg("name"), py::arg("module"))
         .def("parameters", &Module::parameters)
-        .def("__call__", &Module::operator())
-        ;
+        .def("modules", &Module::modules)
+        .def("state_dict", &Module::state_dict)
+        .def("load_state_dict", &Module::load_state_dict);
 
-    // --- Expose Autograd ---
-    py::class_<Autograd>(m, "Autograd")
-        .def_static("backward", &Autograd::backward,
-                py::arg("tensor"), py::arg("retain_graph") = false)
-        ;
+
+    // --- Autograd ---
+    py::class_<Autograd, std::shared_ptr<Autograd>>(m, "Autograd")
+        .def(py::init<>())
+        .def("backward", &Autograd::backward,
+             py::arg("tensor"), py::arg("retain_graph") = false);
+                    
 }
 
