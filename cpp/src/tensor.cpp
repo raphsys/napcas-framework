@@ -75,6 +75,7 @@ Tensor& Tensor::operator=(Tensor&& other) noexcept {
     return *this;
 }
 
+
 // ===================== Métadonnées =====================
 
 std::size_t Tensor::numel() const noexcept {
@@ -292,6 +293,37 @@ void Tensor::print_shape() const {
         if (i < shape_.size() - 1) std::cout << ", ";
     }
     std::cout << "]" << std::endl;
+}
+
+// ===================== Autograd access & backward =====================
+
+Tensor& Tensor::grad() {
+    if (!grad_ptr_) {
+        // initialize grad to ones of same shape
+        grad_ptr_.reset(new Tensor(Tensor::ones(shape_, dtype_, device_)));
+    }
+    return *grad_ptr_;
+}
+
+const Tensor& Tensor::grad() const {
+    if (!grad_ptr_) {
+        throw std::runtime_error("Gradient has not been initialized");
+    }
+    return *grad_ptr_;
+}
+
+void Tensor::backward() {
+    if (!requires_grad_flag_) {
+        throw std::runtime_error(
+            "Cannot call backward() on a tensor that does not require grad");
+    }
+    // seed gradient if not set
+    if (!grad_ptr_) {
+        grad_ptr_.reset(new Tensor(Tensor::ones(shape_, dtype_, device_)));
+    }
+    if (grad_fn_) {
+        grad_fn_->backward();
+    }
 }
 
 // Instantiate template constructor
