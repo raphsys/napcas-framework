@@ -31,13 +31,15 @@ public:
            DType dtype = DType::Float32,
            Device device = Device{DeviceType::CPU, 0});
 
-    Tensor(const Tensor&) = delete;
-    Tensor& operator=(const Tensor&) = delete;
+    // **ON PERMET LA COPIE PROFONDE**
+    Tensor(const Tensor& other);
+    Tensor& operator=(const Tensor& other);
+
     Tensor(Tensor&&) noexcept;
     Tensor& operator=(Tensor&&) noexcept;
 
     // ----- Accès aux métadonnées -----
-    const std::vector<std::size_t>& shape()   const noexcept { return shape_; }
+    const std::vector<std::size_t>&    shape()   const noexcept { return shape_; }
     const std::vector<std::ptrdiff_t>& strides() const noexcept { return strides_; }
     DType   dtype()   const noexcept { return dtype_; }
     Device  device()  const noexcept { return device_; }
@@ -46,15 +48,12 @@ public:
     bool    is_contiguous() const noexcept;
 
     // ----- Autograd interface -----
-    // Active ou désactive le calcul du gradient
     void    requires_grad_(bool flag) noexcept { requires_grad_flag_ = flag; }
     bool    requires_grad() const noexcept    { return requires_grad_flag_; }
 
-    // Accès au gradient (initialisé à ones() si nécessaire)
     Tensor&       grad();
     const Tensor& grad() const;
 
-    // Lance la rétropropagation
     void    backward();
 
     // ----- Accès aux données -----
@@ -71,8 +70,11 @@ public:
     Tensor permute(const std::vector<int>& dims) const;
     Tensor transpose(int dim0, int dim1) const;
     Tensor squeeze(int dim = -1) const;
-    Tensor unsqueeze(int dim);
+    Tensor unsqueeze(int dim) const;
     Tensor contiguous() const;
+
+    // setter pour le gradient function
+    void set_grad_fn(std::shared_ptr<GradFn> fn);
 
     // ----- Initialisateurs statiques -----
     static Tensor zeros(const std::vector<std::size_t>& shape,

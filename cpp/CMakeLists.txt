@@ -18,6 +18,7 @@ set(SOURCES
     src/module.cpp
     src/autograd.cpp
     src/grad_fn.cpp
+    src/architecture/linear.cpp
     src/python_bindings.cpp
 )
 
@@ -49,3 +50,4 @@ set_target_properties(_napcas PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/python/napcas"
     OUTPUT_NAME "_napcas"
 )
+

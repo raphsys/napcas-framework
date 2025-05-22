@@ -7,6 +7,7 @@
 #include "napcas/autograd.h"
 #include "napcas/grad_fn.h"
 #include "napcas/device.h"
+#include "napcas/architecture/linear.h"
 
 namespace py = pybind11;
 using namespace napcas;
@@ -84,7 +85,7 @@ PYBIND11_MODULE(_napcas, m) {
 
     // --- Module ---
     py::class_<Module, std::shared_ptr<Module>>(m, "Module")
-        .def(py::init<>())
+        //.def(py::init<>())
         .def("register_parameter", &Module::register_parameter,
              py::arg("name"), py::arg("tensor"))
         .def("register_module",    &Module::register_module,
@@ -101,5 +102,30 @@ PYBIND11_MODULE(_napcas, m) {
         .def("backward", &Autograd::backward,
              py::arg("tensor"), py::arg("retain_graph") = false)
         ;
+        
+        
+    // --- architecture submodule ---
+     auto m_arch = m.def_submodule("architecture");
+ 
+     // Linear
+     py::class_<napcas::architecture::Linear,
+                Module,
+                std::shared_ptr<architecture::Linear>>(m_arch, "Linear")
+        .def(py::init<int,int,bool, DType,Device>(),
+             py::arg("in_features"),
+             py::arg("out_features"),
+             py::arg("bias")   = true,
+             py::arg("dtype")  = DType::Float32,
+             py::arg("device") = Device{DeviceType::CPU,0})
+        .def("forward",        &architecture::Linear::forward)
+        .def("__call__",       &architecture::Linear::operator())
+        .def("reset_parameters",&architecture::Linear::reset_parameters)
+        .def_property_readonly("in_features",  &architecture::Linear::in_features)
+        .def_property_readonly("out_features", &architecture::Linear::out_features)
+        .def_property_readonly("weight",       &architecture::Linear::weight)
+        .def_property_readonly("bias",         &architecture::Linear::bias)
+         ;    
+        
 }
+
 
